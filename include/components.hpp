@@ -17,7 +17,7 @@ struct point_t {
         return x_ != NAN && y_ != NAN && z_ != NAN;
     };
 
-    bool operator==(const point_t& other) const noexcept {
+    bool operator==(const point_t& other) const {
         return is_equal(x_, other.x_) &&
                is_equal(y_, other.y_) &&
                is_equal(z_, other.z_);
@@ -27,7 +27,7 @@ struct point_t {
         return !(*this == other);
     }
     
-    void print() {
+    void print() const {
         std::cout << "x = " << x_ << " y = " << y_ << " z = " << z_ << std::endl;
     }
 //--------------------------------------------------------//    
@@ -63,12 +63,12 @@ struct line_t {     // line view:   a_x + b_y + c_z + d_ = 0
         
     }*/
     
-    bool contains(const point_t& pt) {
+    bool contains(const point_t& pt) const {
         double expr = a_ * pt.x_ + b_ * pt.y_ + c_ * pt.z_ + d_;
         return is_equal(expr, 0);
     }
 
-    void print() {
+    void print() const {
         std::cout << "a = " << a_ << " b = " << b_ << " c = " << c_
                 << " d = " << d_ << std::endl;
     };
@@ -142,6 +142,7 @@ struct plane_t { // plane equation: Ax + By + Cz + D = 0
         } else {
             comp_koeffs.push_back(other.C_ / C_);
         }
+        //if all coeffs are equal -> planes are parallel
         bool is_par = std::all_of(comp_koeffs.begin(), comp_koeffs.end(),
                 [&](auto val) {
                     return is_equal(val, comp_koeffs.front());
@@ -152,7 +153,7 @@ struct plane_t { // plane equation: Ax + By + Cz + D = 0
                                               // the plane's normal vectors(useful when pair.first = true)
     };
 
-    bool operator==(const plane_t& other) {
+    bool operator==(const plane_t& other) const {
         auto result = is_parallel(other);
         if (!result.first) {
             return false;
@@ -167,7 +168,7 @@ struct plane_t { // plane equation: Ax + By + Cz + D = 0
         return true;
     };
 
-    void print() {
+    void print() const {
         std::cout << A_ << "x + " << B_ << "y + " << C_ << "z + " << D_ << " = 0\n";
     };
 //------------------------------------------------------------------// 
