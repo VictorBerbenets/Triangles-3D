@@ -51,18 +51,55 @@ struct line_t {     // line view:   a_x + b_y + c_z + d_ = 0
         }
         d_ = -(a_ * pt1.x_ + b_ * pt1.y_ + c_ * pt1.z_);
     };
-
+    
     ~line_t() = default;
+
+    /*... intersect(const line_t& other) const {
+        
+    }*/
+    
+    bool contains(const point_t& pt) {
+        double expr = a_ * pt.x_ + b_ * pt.y_ + c_ * pt.z_ + d_;
+        return is_equal(expr, 0);
+    }
 
     void print() {
         std::cout << "a = " << a_ << " b = " << b_ << " c = " << c_
                 << " d = " << d_ << std::endl;
-    }
+    };
 //------------------------------------------------------------------// 
     double a_ = NAN, b_ = NAN, c_ = NAN, d_ = NAN;
 };
 
+struct plane_t {
+    plane_t(const line_t& line, const point_t& pt) {
+    
+    }
 
+    plane_t(const point_t& pt1, const point_t& pt2, const point_t& pt3) {
+        line_t ln(pt1, pt2);
+        if (ln.contains(pt3)) {
+            throw std::invalid_argument{"can't create a plane by noncolinear points"};
+        }
+        A_ = determ(pt2.y_ - pt1.y_, pt2.z_ - pt1.z_,
+                    pt3.y_ - pt1.y_, pt3.z_ - pt1.z_);
+        B_ = -determ(pt2.x_ - pt1.x_, pt2.z_ - pt1.z_,
+                    pt3.x_ - pt1.x_, pt3.z_ - pt1.z_);
+        C_ = determ(pt2.x_ - pt1.x_, pt2.y_ - pt1.y_,
+                    pt3.x_ - pt1.x_, pt3.y_ - pt1.y_);
+        D_ = -(pt1.y_ * B_ + pt1.x_ * A_ + pt1.z_ * C_);
+    }
+    ~plane_t() = default;
+    
+    double determ(double a, double b, double c, double d) { //|a b|
+        return a * d - c * b;                               //|c d| = a * d - c * b
+    }
+    void print() {
+        std::cout << A_ << "x + " << B_ << "y + " << C_ << "z + " << D_ << " = 0\n";
+    };
+//------------------------------------------------------------------// 
+    double A_ = NAN, B_ = NAN, C_ = NAN, D_ = NAN;
+};
 
 } // <-- namespace yLAB
 
