@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 namespace yLAB {
 
@@ -22,6 +23,10 @@ struct point_t {
                is_equal(z_, other.z_);
     };
 
+    bool operator!=(const point_t& other) {
+        return !(*this == other);
+    }
+    
     void print() {
         std::cout << "x = " << x_ << " y = " << y_ << " z = " << z_ << std::endl;
     }
@@ -71,9 +76,28 @@ struct line_t {     // line view:   a_x + b_y + c_z + d_ = 0
     double a_ = NAN, b_ = NAN, c_ = NAN, d_ = NAN;
 };
 
-struct plane_t {
-    plane_t(const line_t& line, const point_t& pt) {
+struct segment {
     
+    segment(const point_t& pt1, const point_t& pt2):
+        point1_{pt1}, point2_{pt2} {};
+    ~segment() = default;
+
+    double length() const {
+        return std::sqrt( std::pow(point1_.x_ - point2_.x_, 2) + 
+                          std::pow(point1_.y_ - point2_.y_, 2) + 
+                          std::pow(point1_.z_ - point2_.z_, 2) );
+    };
+
+    bool is_intersect() const {
+    
+    }
+//------------------------------------------------------------------// 
+    point_t point1_, point2_;
+};
+
+struct plane_t { // plane equation: Ax + By + Cz + D = 0
+    plane_t(const line_t& line, const point_t& pt) {
+
     }
 
     plane_t(const point_t& pt1, const point_t& pt2, const point_t& pt3) {
@@ -90,10 +114,59 @@ struct plane_t {
         D_ = -(pt1.y_ * B_ + pt1.x_ * A_ + pt1.z_ * C_);
     }
     ~plane_t() = default;
-    
+
     double determ(double a, double b, double c, double d) { //|a b|
         return a * d - c * b;                               //|c d| = a * d - c * b
-    }
+    };
+
+    bool is_parallel(const plane_t& other) const {
+        std::vector<double> comp_koeffs{};
+        if (is_equal(A_, 0)) {
+            if (!is_equal(other.A_, 0)) {
+                return false;
+            }
+        } else {
+            comp_koeffs.push_back(other.A_ / A_);
+        }
+        if (is_equal(B_, 0)) {
+            if (!is_equal(other.B_, 0)) {
+                return false;
+            }
+        } else {
+            comp_koeffs.push_back(other.B_ / B_);
+        }
+        if (is_equal(C_, 0)) {
+            if (!is_equal(other.C_, 0)) {
+                return false;
+            }
+        } else {
+            comp_koeffs.push_back(other.C_ / C_);
+        }
+        return std::all_of(comp_koeffs.begin(), comp_koeffs.end(),
+                [&](auto val) {
+                    return is_equal(val, comp_koeffs.front());
+                }
+                );
+    };
+
+    bool operator==(const plane_t& other) {
+        if (!is_parallel(other)) {
+            return false;
+        }
+        if (is_equal(D_, 0)) {
+            if (!is_equal(other.D_, 0)) {
+                return false;
+            }
+        } else {
+            comp_koeffs.push_back(other.D_ / D_);
+        }
+        return std::all_of(comp_koeffs.begin(), comp_koeffs.end(),
+                [&](auto val) {
+                    return is_equal(val, comp_koeffs.front());
+                }
+                );
+    };
+
     void print() {
         std::cout << A_ << "x + " << B_ << "y + " << C_ << "z + " << D_ << " = 0\n";
     };
