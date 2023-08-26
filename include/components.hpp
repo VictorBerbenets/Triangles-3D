@@ -200,12 +200,14 @@ private:
 };
 
 class intersector {
-    using size_type  = std::size_t;
-    using data_val   = std::pair<triangle_t, size_type>; // saving triangle and his order number
-    using printPair = std::pair<size_type, size_type>;
-
+    using size_type   = std::size_t;
+    using data_val    = std::pair<triangle_t, size_type>; // saving triangle and his order number
+    using printPair   = std::pair<size_type, size_type>;
+    using solveData   = std::array<double, 8>;  // each plane contains A, B, C, D --> two planes contain 8 arguments
     static constexpr size_type SET_POINTS_SIZE = 9;
-
+    
+    
+    point_t solve_linear_equations(const solveData& data) const;
     line_t get_intersection_line(const plane_t& plane1, const plane_t plane2) const;
 public:
     intersector(std::istream& is);
@@ -295,12 +297,15 @@ line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t p
     } else {
         std::cerr << "from 'get_intersection_line()': couldn't create line\n";
     }
-
-
-    
+     
 
 }
 
+point_t intersector::solve_linear_equations(const solveData& data) const {
+    // the Gauss algorithm (matrix size is 2 * 4)
+    
+
+}
 
 }; // <-- namespace yLAB
 
