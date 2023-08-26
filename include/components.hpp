@@ -284,7 +284,7 @@ line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t p
     double minor1 = determ(plane1.B_, plane1.C_, plane2.B_, plane2.C_);
     double minor2 = determ(plane1.A_, plane1.C_, plane2.A_, plane2.C_);
     double minor3 = determ(plane1.A_, plane1.B_, plane2.A_, plane2.B_);
-
+    double a{}, b{}, c{};
     if (!is_equal(minor1, 0)) {
         a = minor2 / minor1 - minor3/ minor1;
         b = c = 1;
