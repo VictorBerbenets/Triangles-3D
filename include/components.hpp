@@ -2,7 +2,7 @@
 #include <cmath>
 #include <vector>
 #include <array>
-
+#include <unordered_set>
 
 namespace yLAB {
 
@@ -25,10 +25,6 @@ struct point_t {
                is_equal(z_, other.z_);
     };
 
-    bool operator!=(const point_t& other) {
-        return !(*this == other);
-    }
-    
     void print() const {
         std::cout << "x = " << x_ << " y = " << y_ << " z = " << z_ << std::endl;
     }
@@ -170,12 +166,6 @@ struct plane_t { // plane equation: Ax + By + Cz + D = 0
         return true;
     };
 
-    bool operator!=(const plane_t& other) const {
-        return !(*this == other);
-    }
-
-
-
     void print() const {
         std::cout << A_ << "x + " << B_ << "y + " << C_ << "z + " << D_ << " = 0\n";
     };
@@ -183,20 +173,20 @@ struct plane_t { // plane equation: Ax + By + Cz + D = 0
     double A_ = NAN, B_ = NAN, C_ = NAN, D_ = NAN;
 };
 
-class triangle {
+class triangle_t {
     static constexpr std::size_t VERTICES_NUMBER = 3;
 public:
-    triangle(const point_t& pt1, const point_t& pt2, const point_t& pt3):
+    triangle_t(const point_t& pt1, const point_t& pt2, const point_t& pt3):
         vertices_{pt1, pt2, pt3} {};
-    triangle( double val1, double val2, double val3,
-              double val4, double val5, double val6,
-              double val7, double val8, double val9 ):
+    triangle_t( double val1, double val2, double val3,
+                double val4, double val5, double val6,
+                double val7, double val8, double val9 ):
         vertices_{ point_t{val1, val2, val3},
                    point_t{val4, val5, val6},
                    point_t{val7, val8, val9} } {};
     
 
-    ~triangle() = default;
+    ~triangle_t() = default;
 
     plane_t get_plane() const {
         return plane_t{vertices_[0], vertices_[1], vertices_[2]};
@@ -207,59 +197,81 @@ private:
 };
 
 class intersector {
-    using size_type = std::size_t; 
-    using data_val  = std::pair<triangle, size_type>; // saving triangle and his order number
-    
+    using size_type  = std::size_t;
+    using data_val   = std::pair<triangle_t, size_type>; // saving triangle and his order number
+    using printPair = std::pair<size_type, size_type>;
+
     static constexpr size_type SET_POINTS_SIZE = 9;
+
+    line_t get_intersection_line(const plane_t& plane1, const plane_t plane2) const;
 public:
-    intersector(std::istream& is):
-        stream_{is} {
-        size_type data_size{};
-        stream_ >> data_size;
-        if (!stream_.good()) {
-            throw std::runtime_error{"data size reading error\n"};
-        }
-        data_.reserve(data_size);
+    intersector(std::istream& is);
+    ~intersector() = default;
 
-        std::vector<double> tmp_points{};
-        tmp_points.reserve(SET_POINTS_SIZE);
-        for (size_type count = 1; count <= data_size; ++count) {
-            double tmp_value{};
-            for (size_type points_number = 0; points_number < SET_POINTS_SIZE; ++points_number) {
-                stream_ >> tmp_value;
-                if (!stream_.good()) {
-                    throw std::runtime_error{"data reading error\n"};
-                }
-                tmp_points.push_back(tmp_value);
-            }
-            data_.emplace_back( triangle{ {tmp_points[0], tmp_points[1], tmp_points[2]}, 
-                                          {tmp_points[3], tmp_points[4], tmp_points[5]},
-                                          {tmp_points[6], tmp_points[7], tmp_points[8]} }, count );
-            tmp_points.clear();
-        };
-    };
-    
-    void print_intersected_triangles() {
-        for (auto iter1 = data_.begin(); iter1 != data_.end(); ++iter1) {
-            auto comp_plane = iter1->first.get_plane();
-            for (auto iter2 = (iter1 + 1); iter2 != data_.end(); ++iter2) {
-                auto tmp_plane = iter2->first.get_plane();
-                if (comp_plane == tmp_plane) { // both triangles lies in one plane
-
-                } else if (comp_plane.is_parallel(tmp_plane).first) {
-                    // these pair of triangles can't intersect each other
-                    continue;
-                } else { // both triangles lies in different planes
-
-                }
-            }
-        }
-    };
-
+    void print_intersected_triangles() const;
+    printPair different_intersection(const triangle_t& tria1, const plane_t& plane1
+                                     const triangle_t& tria2, const plane_t& plane2) const;
 private:
     std::vector<data_val> data_;
     std::istream& stream_;
 };
+
+intersector::intersector(std::istream& is):
+    stream_{is} {
+    size_type data_size{};
+    stream_ >> data_size;
+    if (!stream_.good()) {
+        throw std::runtime_error{"data size reading error\n"};
+    }
+    data_.reserve(data_size);
+
+    std::vector<double> tmp_points{};
+    tmp_points.reserve(SET_POINTS_SIZE);
+    //  processing of input data 
+    for (size_type count = 1; count <= data_size; ++count) {
+        double tmp_value{};
+        for (size_type points_number = 0; points_number < SET_POINTS_SIZE; ++points_number) {
+            stream_ >> tmp_value;
+            if (!stream_.good()) {
+                throw std::runtime_error{"data reading error\n"};
+            }
+            tmp_points.push_back(tmp_value);
+        }
+        data_.emplace_back(triangle_t { {tmp_points[0], tmp_points[1], tmp_points[2]},
+                                        {tmp_points[3], tmp_points[4], tmp_points[5]},
+                                        {tmp_points[6], tmp_points[7], tmp_points[8]} }, count);
+        tmp_points.clear();
+    };
+};
+
+void intersector::print_intersected_triangles() const {
+    std::unordered_set<size_type> intersec_triangles{};
+    for (auto iter1 = data_.begin(); iter1 != data_.end(); ++iter1) {
+        auto comp_plane = iter1->first.get_plane();
+        for (auto iter2 = (iter1 + 1); iter2 != data_.end(); ++iter2) {
+            auto tmp_plane = iter2->first.get_plane();
+            if (comp_plane == tmp_plane) { // both triangles lies in one plane
+
+            } else if (comp_plane.is_parallel(tmp_plane).first) {
+                // these pair of triangles can't intersect each other
+                continue;
+            } else { // both triangles lies in different planes
+               auto pair = different_intersection(iter1->first, comp_plane,
+                                                  iter2->first, tmp_plane); 
+            }
+        }
+    }
+};
+
+intersector::printPair intersector::different_intersection(const triangle_t& tria1, const plane_t& plane1
+                                     const triangle_t& tria2, const plane_t& plane2) const {
+    auto intersec_line = get_intersection_line(plane1, plane2);
+
+}
+
+line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t plane2) const {
+    
+}
 
 
 }; // <-- namespace yLAB
