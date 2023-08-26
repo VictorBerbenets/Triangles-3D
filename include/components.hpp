@@ -168,12 +168,39 @@ struct plane_t { // plane equation: Ax + By + Cz + D = 0
         return true;
     };
 
+    bool operator!=(const plane_t& other) const {
+        return !(*this == other);
+    }
+
+
+
     void print() const {
         std::cout << A_ << "x + " << B_ << "y + " << C_ << "z + " << D_ << " = 0\n";
     };
 //------------------------------------------------------------------// 
     double A_ = NAN, B_ = NAN, C_ = NAN, D_ = NAN;
 };
+
+class triangle {
+    //...
+};
+
+class intersector {
+    using data_val = std::pair<triangle, std::size_t>; // saving triangle and his order number
+public:
+    intersector(std::istream& is):
+        stream_{is} {
+        is >> data_size_;
+        data_.reserve(data_size_);
+
+        //...
+    }
+private:
+    std::vector<data_val> data_;
+    std::size_t data_size_;
+    std::istream& stream_;
+};
+
 
 } // <-- namespace yLAB
 
