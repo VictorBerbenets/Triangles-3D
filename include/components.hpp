@@ -119,52 +119,52 @@ struct plane_t { // plane equation: Ax + By + Cz + D = 0
         return a * d - c * b;                               //|c d| = a * d - c * b
     };
 
-    bool is_parallel(const plane_t& other) const {
+    std::pair<bool, double> is_parallel(const plane_t& other) const {
         std::vector<double> comp_koeffs{};
         if (is_equal(A_, 0)) {
             if (!is_equal(other.A_, 0)) {
-                return false;
+                return {false, 0};
             }
         } else {
             comp_koeffs.push_back(other.A_ / A_);
         }
         if (is_equal(B_, 0)) {
             if (!is_equal(other.B_, 0)) {
-                return false;
+                return {false, 0};
             }
         } else {
             comp_koeffs.push_back(other.B_ / B_);
         }
         if (is_equal(C_, 0)) {
             if (!is_equal(other.C_, 0)) {
-                return false;
+                return {false, 0};
             }
         } else {
             comp_koeffs.push_back(other.C_ / C_);
         }
-        return std::all_of(comp_koeffs.begin(), comp_koeffs.end(),
+        bool is_par = std::all_of(comp_koeffs.begin(), comp_koeffs.end(),
                 [&](auto val) {
                     return is_equal(val, comp_koeffs.front());
                 }
                 );
+        return {is_par, comp_koeffs.front()}; // pair.first - is parallel or not
+                                              // pain.second - koeff. of  proporcionality of 
+                                              // the plane's normal vectors(useful when pair.first = true)
     };
 
     bool operator==(const plane_t& other) {
-        if (!is_parallel(other)) {
+        auto result = is_parallel(other);
+        if (!result.first) {
             return false;
         }
         if (is_equal(D_, 0)) {
             if (!is_equal(other.D_, 0)) {
                 return false;
             }
-        } else {
-            comp_koeffs.push_back(other.D_ / D_);
+        } else if (!is_equal(other.D_ / D_, result.second)) {
+            return false;
         }
-        return std::all_of(comp_koeffs.begin(), comp_koeffs.end(),
-                [&](auto val) {
-                    return is_equal(val, comp_koeffs.front());
-                }
-                );
+        return true;
     };
 
     void print() {
