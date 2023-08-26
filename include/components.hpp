@@ -93,6 +93,10 @@ struct segment {
     point_t point1_, point2_;
 };
 
+double determ(double a, double b, double c, double d) { //|a b|
+    return a * d - c * b;                               //|c d| = a * d - c * b
+};
+
 struct plane_t { // plane equation: Ax + By + Cz + D = 0
     plane_t(const line_t& line, const point_t& pt) {
 
@@ -113,40 +117,36 @@ struct plane_t { // plane equation: Ax + By + Cz + D = 0
     }
     ~plane_t() = default;
 
-    double determ(double a, double b, double c, double d) { //|a b|
-        return a * d - c * b;                               //|c d| = a * d - c * b
-    };
-
     std::pair<bool, double> is_parallel(const plane_t& other) const {
-        std::vector<double> comp_koeffs{};
+        std::vector<double> comp_coeffs{};
         if (is_equal(A_, 0)) {
             if (!is_equal(other.A_, 0)) {
                 return {false, 0};
             }
         } else {
-            comp_koeffs.push_back(other.A_ / A_);
+            comp_coeffs.push_back(other.A_ / A_);
         }
         if (is_equal(B_, 0)) {
             if (!is_equal(other.B_, 0)) {
                 return {false, 0};
             }
         } else {
-            comp_koeffs.push_back(other.B_ / B_);
+            comp_coeffs.push_back(other.B_ / B_);
         }
         if (is_equal(C_, 0)) {
             if (!is_equal(other.C_, 0)) {
                 return {false, 0};
             }
         } else {
-            comp_koeffs.push_back(other.C_ / C_);
+            comp_coeffs.push_back(other.C_ / C_);
         }
         //if all coeffs are equal -> planes are parallel
-        bool is_par = std::all_of(comp_koeffs.begin(), comp_koeffs.end(),
-                [&](auto val) {
-                    return is_equal(val, comp_koeffs.front());
+        bool is_par = std::all_of(comp_coeffs.begin(), comp_coeffs.end(),
+                [&comp_coeffs](auto val) {
+                    return is_equal(val, comp_coeffs.front());
                 }
                 );
-        return {is_par, comp_koeffs.front()}; // pair.first - is parallel or not
+        return {is_par, comp_coeffs.front()}; // pair.first - is parallel or not
                                               // pair.second - koeff. of  proporcionality of 
                                               // the plane's normal vectors(useful when pair.first = true)
     };
@@ -209,7 +209,7 @@ public:
     ~intersector() = default;
 
     void print_intersected_triangles() const;
-    printPair different_intersection(const triangle_t& tria1, const plane_t& plane1
+    printPair different_intersection(const triangle_t& tria1, const plane_t& plane1,
                                      const triangle_t& tria2, const plane_t& plane2) const;
 private:
     std::vector<data_val> data_;
@@ -263,14 +263,15 @@ void intersector::print_intersected_triangles() const {
     }
 };
 
-intersector::printPair intersector::different_intersection(const triangle_t& tria1, const plane_t& plane1
+intersector::printPair intersector::different_intersection(const triangle_t& tria1, const plane_t& plane1,
                                      const triangle_t& tria2, const plane_t& plane2) const {
     auto intersec_line = get_intersection_line(plane1, plane2);
 
 }
 
 line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t plane2) const {
-    
+   //finding normal vector of the intersec line solving determinant square
+       
 }
 
 
