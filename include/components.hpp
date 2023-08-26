@@ -54,6 +54,9 @@ struct line_t {     // line view:   a_x + b_y + c_z + d_ = 0
         }
         d_ = -(a_ * pt1.x_ + b_ * pt1.y_ + c_ * pt1.z_);
     };
+
+    line_t(double a, double b, double c, double d):
+        a_{a}, b_{b}, c_{c}, d_{d} {};
     
     ~line_t() = default;
 
@@ -271,7 +274,31 @@ intersector::printPair intersector::different_intersection(const triangle_t& tri
 
 line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t plane2) const {
    //finding normal vector of the intersec line solving determinant square
-       
+   //-----------------------------------------------------------------------------------------//
+   //|a  b  c |
+   //|A1 B1 C1| = 0  ---> a * minor1 - b * minor2 + c * minor3 = 0 ---> solving this equation
+   //|A2 B2 C2|
+   //-----------------------------------------------------------------------------------------//
+    double minor1 = determ(plane1.B_, plane1.C_, plane2.B_, plane2.C_);
+    double minor2 = determ(plane1.A_, plane1.C_, plane2.A_, plane2.C_);
+    double minor3 = determ(plane1.A_, plane1.B_, plane2.A_, plane2.B_);
+
+    if (!is_equal(minor1, 0)) {
+        a = minor2 / minor1 - minor3/ minor1;
+        b = c = 1;
+    } else if (!is_equal(minor2, 0)) {
+        b = minor1 / minor2 + minor3/ minor2;
+        a = c = 1;
+    } else if (!is_equal(minor3, 0)) {
+        c = minor2 / minor3 - minor1/ minor3;
+        a = b = 1;
+    } else {
+        std::cerr << "from 'get_intersection_line()': couldn't create line\n";
+    }
+
+
+    
+
 }
 
 
