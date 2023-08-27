@@ -1,5 +1,7 @@
 #include "line.hpp"
 
+namespace yLAB {
+
 line_t::line_t(const point_t& pt1, const point_t& pt2) {
     if (pt1 == pt2) {
         throw std::invalid_argument{"points are equal, can't create 'line_t'"};
@@ -48,4 +50,5 @@ bool segment::is_intersect() const {
 
 }
 
+};
 

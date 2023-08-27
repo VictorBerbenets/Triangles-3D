@@ -1,5 +1,7 @@
 #include "intersector.hpp"
 
+namespace yLAB {
+
 intersector::intersector(std::istream& is):
     stream_{is} {
     size_type data_size{};
@@ -26,7 +28,7 @@ intersector::intersector(std::istream& is):
                                         {tmp_points[6], tmp_points[7], tmp_points[8]} }, count);
         tmp_points.clear();
     };
-};
+}
 
 void intersector::print_intersected_triangles() const {
     std::unordered_set<size_type> intersec_triangles{};
@@ -45,5 +47,7 @@ void intersector::print_intersected_triangles() const {
             }
         }
     }
+}
+
 };
 

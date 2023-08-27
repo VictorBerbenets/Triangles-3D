@@ -1,5 +1,6 @@
 #include "intersector.hpp"
 
+namespace yLAB {
 
 intersector::printPair intersector::different_intersection(const triangle_t& tria1, const plane_t& plane1,
                                      const triangle_t& tria2, const plane_t& plane2) const {
@@ -31,10 +32,10 @@ line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t p
         std::cerr << "from 'get_intersection_line()': couldn't create line\n";
     }
     
-    auto line_point = solve_linear_equations({ solvePair{plane1.A_, Coeffs::A}, solvePair{plane1.B_, Coeffs::B},
-                                               solvePair{plane1.C_, Coeffs::C}, solvePair{plane1.D_, Coeffs::D},
-                                               solvePair{plane2.A_, Coeffs::A}, solvePair{plane2.B_, Coeffs::B},
-                                               solvePair{plane2.C_, Coeffs::C}, solvePair{plane2.D_, Coeffs::D} });
+    auto line_point = solve_linear_equations({ solvePair{plane1.A_, A}, solvePair{plane1.B_, B},
+                                               solvePair{plane1.C_, C}, solvePair{plane1.D_, D},
+                                               solvePair{plane2.A_, A}, solvePair{plane2.B_, B},
+                                               solvePair{plane2.C_, C}, solvePair{plane2.D_, D} });
 
 }
 
@@ -88,3 +89,6 @@ void intersector::swap_columns(const solvePair& up_column1, const solvePair& dow
     std::swap(up_column1, up_column2);
     std::swap(down_column1, down_column2);
 }
+
+};
+

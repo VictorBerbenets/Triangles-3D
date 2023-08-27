@@ -1,5 +1,7 @@
 #include "point.hpp"
 
+namespace yLAB {
+
 point_t::point_t(double x, double y, double z):
         x_{x}, y_{y}, z_{z} {};
 
@@ -17,3 +19,4 @@ void point_t::print() const {
     std::cout << "x = " << x_ << " y = " << y_ << " z = " << z_ << std::endl;
 }
 
+};

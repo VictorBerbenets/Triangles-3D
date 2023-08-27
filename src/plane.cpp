@@ -1,5 +1,6 @@
 #include "plane.hpp"
 
+namespace yLAB {
 
 plane_t::plane_t(const line_t& line, const point_t& pt) {
 
@@ -71,3 +72,6 @@ bool plane_t::operator==(const plane_t& other) const {
 void plane_t::print() const {
     std::cout << A_ << "x + " << B_ << "y + " << C_ << "z + " << D_ << " = 0\n";
 };
+
+};
+

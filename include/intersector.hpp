@@ -19,11 +19,11 @@ class intersector {
     static constexpr size_type VARIABLES_NUMBER = 8;
     static constexpr size_type SET_POINTS_SIZE  = 9;
 
-    enum class Coeffs: char {A = 0, B = 1, C = 2, D = 3}; // Ax + By + Cz + D = 0 - plane's equation
+    enum Coeffs: char {A = 0, B = 1, C = 2, D = 3}; // Ax + By + Cz + D = 0 - plane's equation
 
     using data_val    = std::pair<triangle_t, size_type>; // saving triangle and his order number
     using printPair   = std::pair<size_type, size_type>;
-    using solvePair   = std::pair<double, Coeffs>;
+    using solvePair   = std::pair<double, char>;
     using solveData   = std::array<solvePair, VARIABLES_NUMBER>;  // each plane contains A, B, C, D --> two planes contain 8 arguments
 
     point_t solve_linear_equations(const solveData& data) const;

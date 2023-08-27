@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 
 project(triangles)
 
-set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
+set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(SOURCES
         src/main.cpp
         src/point.cpp
