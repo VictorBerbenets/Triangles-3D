@@ -9,9 +9,9 @@ set(SOURCES
         src/line.cpp
         src/plane.cpp
         src/triangle.cpp
-        src/diff_intersections.cpp
-        src/same_intersections.cpp
-        src/interface_intersections.cpp
+        src/intersections/diff_intersections.cpp
+        src/intersections/same_intersections.cpp
+        src/intersections/interface_intersections.cpp
     )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
