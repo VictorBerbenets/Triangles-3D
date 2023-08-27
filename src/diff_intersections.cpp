@@ -31,15 +31,15 @@ line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t p
     } else {
         std::cerr << "from 'get_intersection_line()': couldn't create line\n";
     }
-    
-    auto line_point = solve_linear_equations({ solvePair{plane1.A_, A}, solvePair{plane1.B_, B},
-                                               solvePair{plane1.C_, C}, solvePair{plane1.D_, D},
-                                               solvePair{plane2.A_, A}, solvePair{plane2.B_, B},
-                                               solvePair{plane2.C_, C}, solvePair{plane2.D_, D} });
-
+    solveData data = { solvePair{plane1.A_, Coeffs::A}, solvePair{plane1.B_, Coeffs::B},
+                       solvePair{plane1.C_, Coeffs::C}, solvePair{plane1.D_, Coeffs::D},
+                       solvePair{plane2.A_, Coeffs::A}, solvePair{plane2.B_, Coeffs::B},
+                       solvePair{plane2.C_, Coeffs::C}, solvePair{plane2.D_, Coeffs::D} };
+    auto line_point = solve_linear_equations(data);                           
+                                                                              
 }
 
-point_t intersector::solve_linear_equations(const solveData& data) const {
+point_t intersector::solve_linear_equations(solveData& data) const {
     // the Gauss algorithm (matrix size is 2 * 4)
     //----------------------------------//
     // ||A1 B1 C1|-D1|| //
@@ -54,7 +54,7 @@ point_t intersector::solve_linear_equations(const solveData& data) const {
 
 }
 
-void intersector::swap_first_column(const solveData& data) const {
+void intersector::swap_first_column(solveData& data) const {
     static constexpr size_type FINDING_OFFSET = 3; // for defining right range for data iterator 
     static constexpr size_type COLUMN_OFFSET  = 4;
 
@@ -69,7 +69,7 @@ void intersector::swap_first_column(const solveData& data) const {
                 *up_begin_iter, *(up_begin_iter + COLUMN_OFFSET)); // the first column       
 }
 
-void intersector::swap_second_column(const solveData& data) const {
+void intersector::swap_second_column(solveData& data) const {
     static constexpr size_type FINDING_OFFSET = 2; // for defining right range for data iterator 
     static constexpr size_type COLUMN_OFFSET  = 4;
 
@@ -84,8 +84,8 @@ void intersector::swap_second_column(const solveData& data) const {
                 *down_begin_iter, *(down_begin_iter - COLUMN_OFFSET)); // the first column       
 }
 // swaping two columns for linear system (matrix 2 * N)
-void intersector::swap_columns(const solvePair& up_column1, const solvePair& down_column1,   // ||...  up_column1...  up_column2...||       
-                  const solvePair& up_column2, const solvePair& down_column2) const {        // ||...down_column1...down_column2...||
+void intersector::swap_columns(solvePair& up_column1, solvePair& down_column1,           // ||...  up_column1...  up_column2...||       
+                               solvePair& up_column2, solvePair& down_column2) const {   // ||...down_column1...down_column2...||
     std::swap(up_column1, up_column2);
     std::swap(down_column1, down_column2);
 }
