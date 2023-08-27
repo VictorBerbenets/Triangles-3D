@@ -3,7 +3,7 @@
 namespace yLAB {
 
 intersector::printPair intersector::different_intersection(const triangle_t& tria1, const triangle_t& tria2) const {
-    auto intersec_line = get_intersection_line(tria1.get_plane(), tria2.get_plane());
+    line_t intersec_line = get_intersection_line(tria1.get_plane(), tria2.get_plane());
     
 
 }
