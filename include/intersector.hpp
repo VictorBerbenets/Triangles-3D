@@ -20,12 +20,14 @@ class intersector {
     static constexpr size_type SET_POINTS_SIZE  = 9;
 
     enum class Coeffs: char {A = 0, B = 1, C = 2, D = 3}; // Ax + By + Cz + D = 0 - plane's equation
-
+    
     using data_val    = std::pair<triangle_t, size_type>; // saving triangle and his order number
     using printPair   = std::pair<size_type, size_type>;
     using solvePair   = std::pair<double, Coeffs>;
     using solveData   = std::array<solvePair, VARIABLES_NUMBER>;  // each plane contains A, B, C, D --> two planes contain 8 arguments
 
+    printPair different_intersection(const triangle_t& tria1, const plane_t& plane1,
+                                     const triangle_t& tria2, const plane_t& plane2) const;
     line_t get_intersection_line(const plane_t& plane1, const plane_t plane2) const;
     point_t solve_linear_equations(solveData& data) const;
     void swap_first_column(solveData& data) const;
@@ -37,8 +39,6 @@ public:
     ~intersector() = default;
 
     void print_intersected_triangles() const;
-    printPair different_intersection(const triangle_t& tria1, const plane_t& plane1,
-                                     const triangle_t& tria2, const plane_t& plane2) const;
 private:
     std::vector<data_val> data_;
     std::istream& stream_;
