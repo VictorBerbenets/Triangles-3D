@@ -214,6 +214,8 @@ class intersector {
 
     point_t solve_linear_equations(const solveData& data) const;
     line_t get_intersection_line(const plane_t& plane1, const plane_t plane2) const;
+    void swap_first_column(const solveData& data) const;
+    void swap_second_column(const solveData& data) const;
     void swap_columns(const solvePair& up_column1, const solvePair& down_column1,
                       const solvePair& up_column2, const solvePair& down_column2) const; 
 public:
@@ -314,35 +316,53 @@ line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t p
 
 point_t intersector::solve_linear_equations(const solveData& data) const {
     // the Gauss algorithm (matrix size is 2 * 4)
-    //------------------//
+    //----------------------------------//
     // ||A1 B1 C1|-D1|| //
     // ||A2 B2 C2|-D2|| //
-    //------------------//
-    static constexpr size_type FINDING_OFFSET = 3; // for defining right range for data iterator 
-    static constexpr size_type COLUMN_OFFSET  = 4;
-    
-    // iterators for the up line ( A1 B1 C1 -D1)
-    auto up_begin_iter = data.begin(), up_end_iter = data.begin(); // points to A1
-    std::advance(up_end_iter, FINDING_OFFSET); // points to -D1
-   
-    auto first_nzero = std::find_if(up_begin_iter, up_end_iter, 
-                                    [](auto&& value) { return !is_equal(value.first, 0); }
-                                    );
-    auto column_neighbor = first_nzero;
-    std::advance(first_nzero, COLUMN_OFFSET);
-    
-    std::swap(*data.begin(), 
+    // we want to get such matrix veiw:
+    // ||1 0..|..|| //
+    // ||0 1..|..|| //
+    //----------------------------------//
+    swap_first_column(data); 
+    swap_second_column(data);
 
-    // iterators for the down line ( A2 B2 C2 -D2)
-    auto down_end_iter = std::next(up_end_iter); // points to A2
-    auto down_end_iter = std::advance(up_begin_iter, FINDING_OFFSET);// points  to -D2
 
 }
 
+void intersector::swap_first_column(const solveData& data) const {
+    static constexpr size_type FINDING_OFFSET = 3; // for defining right range for data iterator 
+    static constexpr size_type COLUMN_OFFSET  = 4;
+
+    // iterators for the up line ( A1 B1 C1 |-D1)
+    auto up_begin_iter = data.begin();// points to A1
+    auto first_nzero = std::find_if(up_begin_iter, up_begin_iter + FINDING_OFFSET,
+                                    [](auto&& value) { return !is_equal(value.first, 0); }
+                                    );
+    auto column_neighbor = first_nzero + COLUMN_OFFSET;
+    
+    swap_columns(*first_nzero, *column_neighbor,                 // made not zero elem of
+                *up_begin_iter, *(up_begin_iter + COLUMN_OFFSET)); // the first column       
+}
+
+void intersector::swap_second_column(const solveData& data) const {
+    static constexpr size_type FINDING_OFFSET = 2; // for defining right range for data iterator 
+    static constexpr size_type COLUMN_OFFSET  = 4;
+
+    // iterators for the down line ( A2 B2 C2 |-D2)
+    auto down_begin_iter = data.begin() + (COLUMN_OFFSET + 1); // points to B2
+    auto first_nzero = std::find_if(down_begin_iter, down_begin_iter + FINDING_OFFSET,
+                                    [](auto&& value) { return !is_equal(value.first, 0); }
+                                    );
+    auto column_neighbor = first_nzero - COLUMN_OFFSET;
+    
+    swap_columns(*first_nzero, *column_neighbor,                 // made not zero elem of
+                *down_begin_iter, *(down_begin_iter - COLUMN_OFFSET)); // the first column       
+}
 // swaping two columns for linear system (matrix 2 * N)
 void intersector::swap_columns(const solvePair& up_column1, const solvePair& down_column1,   // ||...  up_column1...  up_column2...||       
-                  const solvePair& up_column2, const solvePair& down_column2) { // ||...down_column1...down_column2...||
-    std::swap()
+                  const solvePair& up_column2, const solvePair& down_column2) const {        // ||...down_column1...down_column2...||
+    std::swap(up_column1, up_column2);
+    std::swap(down_column1, down_column2);
 }
 
 
