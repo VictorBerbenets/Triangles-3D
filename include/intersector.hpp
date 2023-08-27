@@ -26,8 +26,7 @@ class intersector {
     using solvePair   = std::pair<double, Coeffs>;
     using solveData   = std::array<solvePair, VARIABLES_NUMBER>;  // each plane contains A, B, C, D --> two planes contain 8 arguments
 
-    printPair different_intersection(const triangle_t& tria1, const plane_t& plane1,
-                                     const triangle_t& tria2, const plane_t& plane2) const;
+    printPair different_intersection(const triangle_t& tria1, const triangle_t& tria2) const;
     line_t get_intersection_line(const plane_t& plane1, const plane_t plane2) const;
     point_t solve_linear_equations(solveData& data) const;
     void swap_first_column(solveData& data) const;
