@@ -2,13 +2,25 @@ cmake_minimum_required(VERSION 3.15)
 
 project(triangles)
 
-add_executable(main src/main.cpp)
+set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
+set(SOURCES
+        src/main.cpp
+        src/point.cpp
+        src/line.cpp
+        src/plane.cpp
+        src/triangle.cpp
+        src/diff_intersections.cpp
+        src/same_intersections.cpp
+        src/interface_intersections.cpp
+    )
 
-target_include_directories( main
+add_executable(${PROJECT_NAME} ${SOURCES})
+
+target_include_directories( ${PROJECT_NAME}
                             PRIVATE
-                            include/)
+                            ${INCLUDE_DIR})
 set_target_properties(
-    main PROPERTIES
+    ${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
     COMPILE_FLAGS " -Wall -Wextra "
