@@ -96,7 +96,7 @@ struct segment {
     point_t point1_, point2_;
 };
 
-double determ(double a, double b, double c, double d) { //|a b|
+inline double determ(double a, double b, double c, double d) { //|a b|
     return a * d - c * b;                               //|c d| = a * d - c * b
 };
 
