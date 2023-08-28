@@ -15,7 +15,7 @@ triangle_t::triangle_t( double val1, double val2, double val3,
                point_t{val7, val8, val9} } {};
 
 plane_t triangle_t::get_plane() const {
-    return plane_t{vertices_[0], vertices_[1], vertices_[2]};
+    return {vertices_[0], vertices_[1], vertices_[2]};
 }
 
 }
