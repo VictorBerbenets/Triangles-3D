@@ -16,6 +16,7 @@ inline bool is_equal(double val1, double val2) {
 }
 
 using coords_t = std::array<double, 3>; // each vector has three coordinates
+
 inline coords_t calc_vects_product(const coords_t& vec1, const coords_t& vec2) {
     //    -> -> ->
     // || i  j  k||   ->                    ->                    ->
@@ -24,6 +25,12 @@ inline coords_t calc_vects_product(const coords_t& vec1, const coords_t& vec2) {
     return { determ(vec1[1], vec1[2], vec2[1], vec2[2]),
             -determ(vec1[0], vec1[2], vec2[0], vec2[2]),
              determ(vec1[0], vec1[1], vec2[0], vec2[1]), };
+}
+
+inline is_null_vector(const coords_t& vector) {
+    return is_equal(vector[0], 0) &&
+           is_equal(vector[0], 0) &&
+           is_equal(vector[0], 0);
 }
 
 inline coords_t get_vector(const point_t& pt1, const point_t& pt2) {
