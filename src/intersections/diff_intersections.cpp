@@ -1,4 +1,5 @@
 #include <iostream>
+#include <utility>
 
 #include "intersector.hpp"
 #include "utils.hpp"
@@ -9,9 +10,22 @@
 
 namespace yLAB {
 //bool intersector::
-intersector::printPair intersector::different_intersection(const triangle_t& tria1, const triangle_t& tria2) const {
-    line_t intersec_line = get_intersection_line(tria1.get_plane(), tria2.get_plane());
+bool intersector::different_intersection(const triangle_t& tria1, const triangle_t& tria2) const {
+    line_t intsec_line = get_intersection_line(tria1.get_plane(), tria2.get_plane());
     
+    auto points = get_line_points(intsec_line);
+    // now check whether each triangle intersects intsec line
+
+}
+
+intersector::points intersector::get_line_points(const line_t& intsec_line) const {
+    point_t pt1 = intsec_line.get_random_point();
+    point_t pt2 = intsec_line.get_random_point();
+    // if generated points are equal
+    while (pt1 == pt2) {
+        pt2 = intsec_line.get_random_point();
+    }
+    return {pt1, pt2};
 }
 
 line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t plane2) const {

@@ -20,25 +20,32 @@ class intersector {
 
     enum class Coeffs: char {A = 0, B = 1, C = 2, D = 3}; // Ax + By + Cz + D = 0 - plane's equation
     
-    using data_val    = std::pair<triangle_t, size_type>; // saving triangle and his order number
-    using printPair   = std::pair<size_type, size_type>;
-    using solvePair   = std::pair<double, Coeffs>;
-    using solveData   = std::array<solvePair, VARIABLES_NUMBER>;  // each plane contains A, B, C, D --> two planes contain 8 arguments
+    using dataVal   = std::pair<triangle_t, size_type>; // saving triangle and his order number
+    using points    = std::pair<point_t, point_t>;
+    using solvePair = std::pair<double, Coeffs>;
+    using solveData = std::array<solvePair, VARIABLES_NUMBER>;  // each plane contains A, B, C, D --> two planes contain 8 arguments
 
-    printPair different_intersection(const triangle_t& tria1, const triangle_t& tria2) const;
+//--------------------------------triangles in different planes--------------------------------//
+    bool different_intersection(const triangle_t& tria1, const triangle_t& tria2) const;
+
     line_t get_intersection_line(const plane_t& plane1, const plane_t plane2) const;
+    points get_line_points(const line_t& intsec_line) const;
+
     point_t solve_linear_equations(solveData& data) const;
+
     void swap_first_column(solveData& data) const;
     void swap_second_column(solveData& data) const;
     void swap_columns(solvePair& up_column1, solvePair& down_column1,
                       solvePair& up_column2, solvePair& down_column2) const; 
+//--------------------------------triangles in one plane--------------------------------------//
+
 public:
     intersector(std::istream& stream);
     ~intersector() = default;
 
     void print_intersected_triangles() const;
 private:
-    std::vector<data_val> data_;
+    std::vector<dataVal> data_;
 };
 
 } 
