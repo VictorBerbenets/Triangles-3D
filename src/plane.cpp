@@ -27,51 +27,28 @@ plane_t::plane_t(const point_t& pt1, const point_t& pt2, const point_t& pt3) {
     D_ = -(pt1.y_ * B_ + pt1.x_ * A_ + pt1.z_ * C_);
 }
 
-std::pair<bool, double> plane_t::is_parallel(const plane_t& other) const {
-    std::vector<double> comp_coeffs{};
-    if (is_equal(A_, 0)) {
-        if (!is_equal(other.A_, 0)) {
-            return {false, 0};
-        }
-    } else {
-        comp_coeffs.push_back(other.A_ / A_);
+coords_t plane_t::get_coords() const {
+    return {A_, B_, C_};
+}
+
+bool plane_t::is_parallel(const plane_t& other) const {
+    coords_t vec_product = calc_vects_product(get_coords(), other.get_coords());
+    if ( is_equal(vec_product[0], 0) &&
+         is_equal(vec_product[1], 0) &&
+         is_equal(vec_product[2], 0) ) {
+        return true;
     }
-    if (is_equal(B_, 0)) {
-        if (!is_equal(other.B_, 0)) {
-            return {false, 0};
-        }
-    } else {
-        comp_coeffs.push_back(other.B_ / B_);
-    }
-    if (is_equal(C_, 0)) {
-        if (!is_equal(other.C_, 0)) {
-            return {false, 0};
-        }
-    } else {
-        comp_coeffs.push_back(other.C_ / C_);
-    }
-    //if all coeffs are equal -> planes are parallel
-    bool is_par = std::all_of(comp_coeffs.begin(), comp_coeffs.end(),
-            [&comp_coeffs](auto val) {
-                return is_equal(val, comp_coeffs.front());
-            }
-            );
-    return {is_par, comp_coeffs.front()}; // pair.first - is parallel or not
-                                          // pair.second - koeff. of  proporcionality of 
-                                          // the plane's normal vectors(useful when pair.first = true)
+    return false; 
 };
 
 bool plane_t::operator==(const plane_t& other) const {
     auto result = is_parallel(other);
-    if (!result.first) {
+    if (!result) {
         return false;
     }
-    if (is_equal(D_, 0)) {
-        if (!is_equal(other.D_, 0)) {
-            return false;
-        }
-    } else if (!is_equal(other.D_ / D_, result.second)) {
-        return false;
+
+    if (is_equal(other.A_ / A_, other.D_ / D_)) {
+        return true;
     }
     return true;
 };

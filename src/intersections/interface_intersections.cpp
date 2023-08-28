@@ -44,7 +44,7 @@ void intersector::print_intersected_triangles() const {
             auto tmp_plane = iter2->first.get_plane();
             if (comp_plane == tmp_plane) { // both triangles lies in one plane
 
-            } else if (comp_plane.is_parallel(tmp_plane).first) {
+            } else if (comp_plane.is_parallel(tmp_plane)) {
                 // these pair of triangles can't intersect each other
                 continue;
             } else { // both triangles lies in different planes

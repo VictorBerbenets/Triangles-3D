@@ -3,6 +3,7 @@
 
 #include "point.hpp"
 #include "line.hpp"
+#include "utils.hpp"
 
 namespace yLAB {
 
@@ -12,7 +13,8 @@ struct plane_t { // plane equation: Ax + By + Cz + D = 0
     ~plane_t() = default;
 
     bool operator==(const plane_t& other) const;
-    std::pair<bool, double> is_parallel(const plane_t& other) const;
+    coords_t get_coords() const;
+    bool is_parallel(const plane_t& other) const;
     void print() const;
 //------------------------------------------------------------------// 
     double A_ = NAN, B_ = NAN, C_ = NAN, D_ = NAN;
