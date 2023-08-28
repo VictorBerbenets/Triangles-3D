@@ -17,6 +17,6 @@ struct point_t {
     double x_ = NAN, y_ = NAN, z_ = NAN;
 };
 
-};
+}
 
 #endif

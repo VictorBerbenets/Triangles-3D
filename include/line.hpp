@@ -33,5 +33,6 @@ struct segment {
     point_t point1_, point2_;
 };
 
-};
+}
+
 #endif

@@ -14,6 +14,6 @@ inline bool is_equal(double val1, double val2) {
     return std::fabs(val1 - val2) < std::numeric_limits<double>::epsilon();
 }
 
-};
+}
 
 #endif

@@ -11,8 +11,8 @@ namespace yLAB {
 
 intersector::intersector(std::istream& stream) {
     size_type data_size{};
-    stream_ >> data_size;
-    if (!stream_.good()) {
+    stream >> data_size;
+    if (!stream.good()) {
         throw std::runtime_error{"data size reading error\n"};
     }
     data_.reserve(data_size);
@@ -23,8 +23,8 @@ intersector::intersector(std::istream& stream) {
     for (size_type count = 1; count <= data_size; ++count) {
         double tmp_value{};
         for (size_type points_number = 0; points_number < SET_POINTS_SIZE; ++points_number) {
-            stream_ >> tmp_value;
-            if (!stream_.good()) {
+            stream >> tmp_value;
+            if (!stream.good()) {
                 throw std::runtime_error{"data reading error\n"};
             }
             tmp_points.push_back(tmp_value);
