@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "triangle.hpp"
 
 namespace yLAB {
@@ -16,4 +18,4 @@ plane_t triangle_t::get_plane() const {
     return plane_t{vertices_[0], vertices_[1], vertices_[2]};
 }
 
-};
+}

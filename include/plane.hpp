@@ -1,10 +1,6 @@
 #ifndef PLANE_TYPE_
 #define PLANE_TYPE_
 
-#include <iostream>
-#include <vector>
-
-#include "utils.hpp"
 #include "point.hpp"
 #include "line.hpp"
 
@@ -22,5 +18,5 @@ struct plane_t { // plane equation: Ax + By + Cz + D = 0
     double A_ = NAN, B_ = NAN, C_ = NAN, D_ = NAN;
 };
 
-};
+}
 #endif

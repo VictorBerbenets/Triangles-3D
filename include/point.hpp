@@ -1,9 +1,7 @@
 #ifndef POINT_TYPE_
 #define POINT_TYPE_
 
-#include <iostream>
-
-#include "utils.hpp"
+#include <cmath>
 
 namespace yLAB {
 

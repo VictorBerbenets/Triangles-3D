@@ -1,11 +1,10 @@
 #ifndef INTERSECTOR_TYPE_
 #define INTERSECTOR_TYPE_
 
-#include <iostream>
+#include <istream>
 #include <vector>
-#include <unordered_set>
+#include <utility>
 
-#include "utils.hpp"
 #include "point.hpp"
 #include "line.hpp"
 #include "plane.hpp"
@@ -34,15 +33,14 @@ class intersector {
     void swap_columns(solvePair& up_column1, solvePair& down_column1,
                       solvePair& up_column2, solvePair& down_column2) const; 
 public:
-    intersector(std::istream& is);
+    intersector(std::istream& stream);
     ~intersector() = default;
 
     void print_intersected_triangles() const;
 private:
     std::vector<data_val> data_;
-    std::istream& stream_;
 };
 
-}; 
+} 
 
 #endif

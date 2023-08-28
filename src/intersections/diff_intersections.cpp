@@ -1,11 +1,17 @@
+#include <iostream>
+
 #include "intersector.hpp"
+#include "utils.hpp"
+#include "point.hpp"
+#include "line.hpp"
+#include "plane.hpp"
+#include "triangle.hpp"
 
 namespace yLAB {
-
+//bool intersector::
 intersector::printPair intersector::different_intersection(const triangle_t& tria1, const triangle_t& tria2) const {
     line_t intersec_line = get_intersection_line(tria1.get_plane(), tria2.get_plane());
     
-
 }
 
 line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t plane2) const {
@@ -187,5 +193,5 @@ void intersector::swap_columns(solvePair& up_column1, solvePair& down_column1,  
     std::swap(down_column1, down_column2);
 }
 
-};
+}
 

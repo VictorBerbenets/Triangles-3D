@@ -1,5 +1,6 @@
-#include "intersector.hpp"
+#include <iostream>
 
+#include "intersector.hpp"
 
 int main() {
     using namespace yLAB;

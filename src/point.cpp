@@ -1,4 +1,8 @@
+#include <iostream>
+#include <cmath>
+
 #include "point.hpp"
+#include "utils.hpp"
 
 namespace yLAB {
 
@@ -19,4 +23,4 @@ void point_t::print() const {
     std::cout << "x = " << x_ << " y = " << y_ << " z = " << z_ << std::endl;
 }
 
-};
+}

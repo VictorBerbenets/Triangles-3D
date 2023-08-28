@@ -1,9 +1,15 @@
+#include <istream>
+#include <vector>
+#include <unordered_set>
+#include <stdexcept>
+
 #include "intersector.hpp"
+#include "plane.hpp"
+#include "triangle.hpp"
 
 namespace yLAB {
 
-intersector::intersector(std::istream& is):
-    stream_{is} {
+intersector::intersector(std::istream& stream) {
     size_type data_size{};
     stream_ >> data_size;
     if (!stream_.good()) {
@@ -48,5 +54,5 @@ void intersector::print_intersected_triangles() const {
     }
 }
 
-};
+}
 

@@ -1,4 +1,11 @@
+#include <iostream>
+#include <vector>
+#include <stdexcept>
+
 #include "plane.hpp"
+#include "utils.hpp"
+#include "point.hpp"
+#include "line.hpp"
 
 namespace yLAB {
 
@@ -73,5 +80,5 @@ void plane_t::print() const {
     std::cout << A_ << "x + " << B_ << "y + " << C_ << "z + " << D_ << " = 0\n";
 };
 
-};
+}
 

@@ -1,7 +1,6 @@
 #ifndef TRIANGLE_TYPE_
 #define TRIANGLE_TYPE_
 
-#include <iostream>
 #include <array>
 
 #include "point.hpp"
@@ -10,7 +9,6 @@
 namespace yLAB {
 
 class triangle_t {
-    static constexpr std::size_t VERTICES_NUMBER = 3;
 public:
     triangle_t(const point_t& pt1, const point_t& pt2, const point_t& pt3);
     triangle_t( double val1, double val2, double val3,
@@ -20,8 +18,8 @@ public:
 
     plane_t get_plane() const;
 private:
-    std::array<point_t, VERTICES_NUMBER> vertices_;
+    std::array<point_t, 3> vertices_;
 };
 
-};
+}
 #endif

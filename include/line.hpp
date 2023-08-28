@@ -1,9 +1,9 @@
 #ifndef LINE_TYPE_
 #define LINE_TYPE_
-#include <iostream>
+
+#include <cmath>
 
 #include "point.hpp"
-#include "utils.hpp"
 
 namespace yLAB {
 

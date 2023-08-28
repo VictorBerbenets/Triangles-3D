@@ -1,7 +1,7 @@
 #ifndef UTILS_
 #define UTILS_
 
-#include <iostream>
+#include <limits>
 #include <cmath>
 
 namespace yLAB {

@@ -1,4 +1,8 @@
+#include <iostream>
+#include <cmath>
+
 #include "line.hpp"
+#include "utils.hpp"
 
 namespace yLAB {
 
@@ -36,6 +40,7 @@ void line_t::print() const {
     std::cout << "a = " << a_ << " b = " << b_ << " c = " << c_
             << " d = " << d_ << std::endl;
 }
+//----------------------------------------------------------------------//
 
 segment::segment(const point_t& pt1, const point_t& pt2):
         point1_{pt1}, point2_{pt2} {};
@@ -50,5 +55,5 @@ bool segment::is_intersect() const {
 
 }
 
-};
+}
 
