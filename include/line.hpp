@@ -4,6 +4,7 @@
 #include <cmath>
 
 #include "point.hpp"
+#include "utils.hpp"
 
 namespace yLAB {
 
@@ -15,7 +16,8 @@ struct line_t {     // line view:   a_x + b_y + c_z + d_ = 0
     /*... intersect(const line_t& other) const {
         
     }*/
-
+    point_t get_random_point() const;
+    coords_t get_dirr_vec() const;
     bool contains(const point_t& pt) const;
     void print() const;
 //------------------------------------------------------------------//

@@ -11,7 +11,7 @@ line_t::line_t(const point_t& pt1, const point_t& pt2) {
     if (pt1 == pt2) {
         throw std::invalid_argument{"points are equal, can't create 'line_t'"};
     }
-    // finding cordinates of the dirrecting vector
+    // finding cordinates of the dirrecting vector 
     double a_dirr = pt1.x_ - pt2.x_;
     double b_dirr = pt1.y_ - pt2.y_;
     double c_dirr = pt1.z_ - pt2.z_;
@@ -30,7 +30,29 @@ line_t::line_t(const point_t& pt1, const point_t& pt2) {
 }
 
 line_t::line_t(double a, double b, double c, double d):
-    a_{a}, b_{b}, c_{c}, d_{d} {};
+    a_{a}, b_{b}, c_{c}, d_{d} {}
+
+coords_t line_t::get_dirr_vec() const {
+    coords_t dirr_vec{};
+    if (!is_equal(a_, 0)) {
+        dirr_vec[0] = -(b_ / a_ + c_ / a_);
+        dirr_vec[1] = 1;
+        dirr_vec[2] = 1;
+    } else if (!is_equal(b_, 0)) {
+        dirr_vec[0] = 1;
+        dirr_vec[1] = -(a_ / b_ + c_ / b_);
+        dirr_vec[2] = 1;
+    } else {
+        dirr_vec[0] = 1;
+        dirr_vec[1] = 1;
+        dirr_vec[2] = -(a_ / c_ + b_ / c_);
+    }
+    return dirr_vec;
+}
+
+point_t line_t::get_random_point() const {
+    
+}
 
 bool line_t::contains(const point_t& pt) const {
     double expr = a_ * pt.x_ + b_ * pt.y_ + c_ * pt.z_ + d_;
