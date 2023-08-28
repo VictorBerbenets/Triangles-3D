@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdexcept>
 #include <cmath>
 
 #include "line.hpp"
@@ -30,7 +31,7 @@ line_t::line_t(const point_t& pt1, const point_t& pt2) {
 
 line_t::line_t(double a, double b, double c, double d):
     a_{a}, b_{b}, c_{c}, d_{d} {};
-    
+
 bool line_t::contains(const point_t& pt) const {
     double expr = a_ * pt.x_ + b_ * pt.y_ + c_ * pt.z_ + d_;
     return is_equal(expr, 0);
