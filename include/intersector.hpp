@@ -21,7 +21,6 @@ class intersector {
     enum class Coeffs: char {A = 0, B = 1, C = 2, D = 3}; // Ax + By + Cz + D = 0 - plane's equation
     
     using dataVal   = std::pair<triangle_t, size_type>; // saving triangle and his order number
-    using points    = std::pair<point_t, point_t>;
     using solvePair = std::pair<double, Coeffs>;
     using solveData = std::array<solvePair, VARIABLES_NUMBER>;  // each plane contains A, B, C, D --> two planes contain 8 arguments
 
@@ -29,7 +28,7 @@ class intersector {
     bool different_intersection(const triangle_t& tria1, const triangle_t& tria2) const;
 
     line_t get_intersection_line(const plane_t& plane1, const plane_t plane2) const;
-    points get_line_points(const line_t& intsec_line) const;
+    point_t get_line_points(const line_t& intsec_line) const;
 
     point_t solve_linear_equations(solveData& data) const;
 
