@@ -13,24 +13,12 @@ namespace yLAB {
 bool intersector::different_intersection(const triangle_t& tria1, const triangle_t& tria2) const {
     line_t intsec_line = get_intersection_line(tria1.get_plane(), tria2.get_plane());
     
-    point_t line_point = get_line_point(intsec_line);
+    point_t line_point = intsec_line.get_random_point();
     // now check whether each triangle intersects intsec line
     //for tria1:
     line_t tr1_line1(line_point, tria1.vertices_[0]);
     line_t tr1_line2(line_point, tria1.vertices_[1]);
     line_t tr1_line3(line_point, tria1.vertices_[2]);
-}
-
-
-
-point_t intersector::get_line_point(const line_t& intsec_line) const {
-    point_t pt1 = intsec_line.get_random_point();
-    point_t pt2 = intsec_line.get_random_point();
-    // if generated points are equal
-    while (pt1 == pt2) {
-        pt2 = intsec_line.get_random_point();
-    }
-    return {pt1, pt2};
 }
 
 line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t plane2) const {
