@@ -42,7 +42,7 @@ bool plane_t::is_parallel(const plane_t& other) const {
 };
 
 bool plane_t::operator==(const plane_t& other) const {
-    auto result = is_parallel(other);
+    bool result = is_parallel(other);
     if (!result) {
         return false;
     }
@@ -50,7 +50,7 @@ bool plane_t::operator==(const plane_t& other) const {
     if (is_equal(other.A_ / A_, other.D_ / D_)) {
         return true;
     }
-    return true;
+    return false;
 };
 
 void plane_t::print() const {
