@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <utility>
 
 #include "intersector.hpp"
@@ -13,28 +14,61 @@ namespace yLAB {
 bool intersector::different_intersection(const triangle_t& tria1, const triangle_t& tria2) const {
     line_t intsec_line = get_intersection_line(tria1.get_plane(), tria2.get_plane());
     
-    // now check whether each triangle intersects intsec_line
-    if (!is_intersects(intsec_line, tria1) ||
-        !is_intersects(intsec_line, tria2)) {
+    // finding intersection between triangles
+    segment_t tr1_segment = get_segment(intsec_line, tria1);
+    if (!tr1_segment.is_valid()) {
         return false;
     }
-    // finding intersection between triangles
+    segment_t tr2_segment = get_segment(intsec_line, tria2);
+    if (!tr2_segment.is_valid()) {
+        return false;
+    }
 
 }
 
-bool intersector::is_intersects(const line_t& intsec_line, const triangle_t& tria) const {
-    static constexpr int VECTORS_NUMBER = 3;    
+segment_t intersector::get_segment(line_t& intsec_line, const triangle_t& tria) const {
+    std::vector<point_t> intsec_points{};
+    for (int index = 0; index < 3; ++index) {
+        find_intsec_points(intsec_points, intsec_line, tria.vertices_[index], tria.vertices_[(index + 1) % 3]);
+    }
+    if (intsec_points.size() == 1) {
+        return {intsec_points.front()};
+    }
+    if (intsec_points.size() == 2) {
+        return {intsec_points.front(), intsec_points.back()};
+    }
+    return {};
+}
 
-    point_t line_point = intsec_line.get_random_point();
-    coords_t line_vec  = intsec_line.get_dirr_vec();
+void intersector::find_intsec_points(std::vector<point_t>& intsec_points, line_t& intsec_line,
+                                    const point_t& pt1, const point_t& pt2) const {
+    coords_t line_vec = intsec_line.get_dirr_vec();
+    coords_t segm_vec = get_vector(pt1, pt2);
     
-    coords_t vec1 = get_vector(line_point, tria.vertices_[0]);
-    coords_t vec2 = get_vector(line_point, tria.vertices_[1]);
-    coords_t vec3 = get_vector(line_point, tria.vertices_[2]);
-    
-    return scalar_multiply( calc_vects_product(vec1, line_vec), calc_vects_product(vec2, line_vec) ) <= 0 ||
-           scalar_multiply( calc_vects_product(vec1, line_vec), calc_vects_product(vec3, line_vec) ) <= 0 ||
-           scalar_multiply( calc_vects_product(vec2, line_vec), calc_vects_product(vec3, line_vec) ) <= 0 ;
+    if (is_null_vector(calc_vects_product(line_vec, segm_vec))) {
+        // if both parallels each other and line contains one segment's point
+        // then sigment lies on the line
+        if (intsec_line.contains(pt1)) {
+            intsec_points.insert(intsec_points.end(), {pt1, pt2});
+        }
+    } else {
+        line_t pts_line(pt1, pt2);
+        solveData data = { solvePair{pts_line.a_, Coeffs::A},    solvePair{pts_line.b_, Coeffs::B},
+                           solvePair{pts_line.c_, Coeffs::C},    solvePair{pts_line.d_, Coeffs::D},
+                           solvePair{intsec_line.a_, Coeffs::A}, solvePair{intsec_line.b_, Coeffs::B},
+                           solvePair{intsec_line.c_, Coeffs::C}, solvePair{intsec_line.d_, Coeffs::D} 
+                         };
+        point_t pt = solve_linear_equations(data);
+        if (inside_segment(pt, {pt1, pt2})) {
+            intsec_points.push_back(pt);
+        }
+    }
+}
+
+bool intersector::inside_segment(const point_t& pt, const segment_t& segm) const {
+    segment_t segm_part1(pt, segm.pt1_);
+    segment_t segm_part2(pt, segm.pt2_);
+    return is_equal(segm.length(), segm_part1.length() + segm_part2.length());
 }
 
 line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t plane2) const {

@@ -93,16 +93,23 @@ void line_t::print() const {
 }
 //----------------------------------------------------------------------//
 
-segment::segment(const point_t& pt1, const point_t& pt2):
-        point1_{pt1}, point2_{pt2} {};
+segment_t::segment_t(const point_t& pt1, const point_t& pt2):
+        pt1_{pt1}, pt2_{pt2} {};
 
-double segment::length() const {
-    return std::sqrt( std::pow(point1_.x_ - point2_.x_, 2) + 
-                      std::pow(point1_.y_ - point2_.y_, 2) + 
-                      std::pow(point1_.z_ - point2_.z_, 2) );
+segment_t::segment_t(const point_t& pt):
+        pt1_{pt}, pt2_{pt} {};
+
+double segment_t::length() const {
+    return std::sqrt( std::pow(pt1_.x_ - pt2_.x_, 2) + 
+                      std::pow(pt1_.y_ - pt2_.y_, 2) + 
+                      std::pow(pt1_.z_ - pt2_.z_, 2) );
 }
 
-bool segment::is_intersect() const {
+bool segment_t::is_valid() const {
+    return pt1_.is_valid() && pt2_.is_valid();
+}
+
+bool segment_t::is_intersect() const {
 
 }
 

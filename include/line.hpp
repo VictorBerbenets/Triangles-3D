@@ -34,15 +34,18 @@ public:
     double a_ = NAN, b_ = NAN, c_ = NAN, d_ = NAN;
 };
 
-struct segment {
+struct segment_t {
 
-    segment(const point_t& pt1, const point_t& pt2);
-    ~segment() = default;
-
+    segment_t(const point_t& pt1, const point_t& pt2);
+    segment_t(const point_t& pt);
+    segment_t()  = default;
+    ~segment_t() = default;
+    
+    bool is_valid() const;
     double length() const;
     bool is_intersect() const;
 //------------------------------------------------------------------//
-    point_t point1_, point2_;
+    point_t pt1_{}, pt2_{};
 };
 
 }

@@ -27,7 +27,7 @@ inline coords_t calc_vects_product(const coords_t& vec1, const coords_t& vec2) {
              determ(vec1[0], vec1[1], vec2[0], vec2[1]), };
 }
 
-inline is_null_vector(const coords_t& vector) {
+inline bool is_null_vector(const coords_t& vector) {
     return is_equal(vector[0], 0) &&
            is_equal(vector[0], 0) &&
            is_equal(vector[0], 0);
