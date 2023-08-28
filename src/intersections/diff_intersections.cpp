@@ -63,8 +63,9 @@ point_t intersector::solve_linear_equations(solveData& data) const {
     double x{}, y{}, z{}; // point coordinates
     auto first_it  = data.begin();
     auto second_it = first_it + 5;
-    double coord1 = -(data[2].first + data[3].first);
-    double coord2 = -(data[6].first + data[7].first);
+    double coord1  = -(data[2].first + data[3].first);
+    double coord2  = -(data[6].first + data[7].first);
+    char error_key = static_cast<char>(second_it->second);
     switch(first_it->second) {
         case Coeffs::A:
             switch(second_it->second) {
@@ -79,7 +80,7 @@ point_t intersector::solve_linear_equations(solveData& data) const {
                     z = coord2;
                     break;
                 default:
-                    std::cerr << "invalid key: " << static_cast<char>(second_it->second) <<
+                    std::cerr << "invalid key: " << error_key <<
                         ". Expected B or C\n";
             }
             break;
@@ -95,7 +96,7 @@ point_t intersector::solve_linear_equations(solveData& data) const {
                     y = coord1;
                     z = coord2;
                     break;
-                default: std::cerr << "invalid key: " << static_cast<char>(second_it->second) <<
+                default: std::cerr << "invalid key: " << error_key <<
                         ". Expected A or C\n";
             }
             break;
@@ -111,7 +112,7 @@ point_t intersector::solve_linear_equations(solveData& data) const {
                     y = coord2;
                     z = coord1;
                     break;
-                default: std::cerr << "invalid key: " << static_cast<char>(second_it->second) <<
+                default: std::cerr << "invalid key: " << error_key <<
                      ". Expected A or B\n";
             }
             break;
