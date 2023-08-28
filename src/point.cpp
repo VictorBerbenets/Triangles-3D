@@ -10,7 +10,7 @@ point_t::point_t(double x, double y, double z):
         x_{x}, y_{y}, z_{z} {};
 
 bool point_t::is_valid() const noexcept {
-    return x_ != NAN && y_ != NAN && z_ != NAN;
+    return is_equal(x_, NAN) && is_equal(y_, NAN) && is_equal(z_, NAN);
 };
 
 bool point_t::operator==(const point_t& other) const {
