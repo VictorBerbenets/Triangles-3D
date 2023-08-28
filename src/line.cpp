@@ -1,5 +1,7 @@
 #include <iostream>
 #include <stdexcept>
+#include <random>
+#include <ctime>
 #include <cmath>
 
 #include "line.hpp"
@@ -36,22 +38,48 @@ coords_t line_t::get_dirr_vec() const {
     coords_t dirr_vec{};
     if (!is_equal(a_, 0)) {
         dirr_vec[0] = -(b_ / a_ + c_ / a_);
-        dirr_vec[1] = 1;
-        dirr_vec[2] = 1;
+        dirr_vec[1] = dirr_vec[2] = 1; 
     } else if (!is_equal(b_, 0)) {
-        dirr_vec[0] = 1;
-        dirr_vec[1] = -(a_ / b_ + c_ / b_);
-        dirr_vec[2] = 1;
+        dirr_vec[0] = dirr_vec[2] = 1;
+        dirr_vec[1] = -(a_ / b_ + c_ / b_);      
     } else {
-        dirr_vec[0] = 1;
-        dirr_vec[1] = 1;
+        dirr_vec[0] = dirr_vec[1] = 1;
         dirr_vec[2] = -(a_ / c_ + b_ / c_);
     }
     return dirr_vec;
 }
 
+void line_t::init_generator(gener_type& generator) const {
+    const u_int seed = static_cast<u_int>(std::time(nullptr));
+    generator.seed(seed);
+}
+
+std::size_t line_t::random(gener_type& generator) const {
+    std::uniform_int_distribution<std::size_t> distribution(MIN_VALUE, MAX_VALUE);
+    return distribution(generator);
+}
+
 point_t line_t::get_random_point() const {
-    
+    // solving linear equation: ||a b c|-d|| - matrix form
+    double x{}, y{}, z{};
+
+    gener_type generator;
+    init_generator(generator);
+
+    if (!is_equal(a_, 0)) {
+        y = random(generator);
+        z = random(generator);
+        x = -((b_ / a_) * y + (c_ / a_) * z + d_ / a_);
+    } else if (!is_equal(b_, 0)) {
+        x = random(generator);
+        z = random(generator);
+        y = -((a_ / b_) * x + (c_ / b_) * z + d_ / b_);      
+    } else {
+        x = random(generator);
+        y = random(generator);
+        z = -((a_ / c_) * x + (b_ / c_) * y + d_ / c_);
+    }
+    return {x, y, z};
 }
 
 bool line_t::contains(const point_t& pt) const {
