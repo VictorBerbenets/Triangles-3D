@@ -13,12 +13,12 @@ namespace yLAB {
 bool intersector::different_intersection(const triangle_t& tria1, const triangle_t& tria2) const {
     line_t intsec_line = get_intersection_line(tria1.get_plane(), tria2.get_plane());
     
-    // now check whether each triangle intersects intsec line
-    //for tria1:
+    // now check whether each triangle intersects intsec_line
     if (!is_intersects(intsec_line, tria1) ||
         !is_intersects(intsec_line, tria2)) {
         return false;
     }
+    // finding intersection between triangles
 
 }
 
@@ -32,8 +32,8 @@ bool intersector::is_intersects(const line_t& intsec_line, const triangle_t& tri
     coords_t vec2 = get_vector(line_point, tria.vertices_[1]);
     coords_t vec3 = get_vector(line_point, tria.vertices_[2]);
     
-    return scalar_multiply( calc_vects_product(vec1, line_vec), calc_vects_product(vec2, line_vec) ) <= 0 &&
-           scalar_multiply( calc_vects_product(vec1, line_vec), calc_vects_product(vec3, line_vec) ) <= 0 &&
+    return scalar_multiply( calc_vects_product(vec1, line_vec), calc_vects_product(vec2, line_vec) ) <= 0 ||
+           scalar_multiply( calc_vects_product(vec1, line_vec), calc_vects_product(vec3, line_vec) ) <= 0 ||
            scalar_multiply( calc_vects_product(vec2, line_vec), calc_vects_product(vec3, line_vec) ) <= 0 ;
 }
 
