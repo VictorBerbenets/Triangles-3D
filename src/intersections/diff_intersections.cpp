@@ -13,12 +13,28 @@ namespace yLAB {
 bool intersector::different_intersection(const triangle_t& tria1, const triangle_t& tria2) const {
     line_t intsec_line = get_intersection_line(tria1.get_plane(), tria2.get_plane());
     
-    point_t line_point = intsec_line.get_random_point();
     // now check whether each triangle intersects intsec line
     //for tria1:
-    line_t tr1_line1(line_point, tria1.vertices_[0]);
-    line_t tr1_line2(line_point, tria1.vertices_[1]);
-    line_t tr1_line3(line_point, tria1.vertices_[2]);
+    if (!is_intersects(intsec_line, tria1) ||
+        !is_intersects(intsec_line, tria2)) {
+        return false;
+    }
+
+}
+
+bool intersector::is_intersects(const line_t& intsec_line, const triangle_t& tria) const {
+    static constexpr int VECTORS_NUMBER = 3;    
+
+    point_t line_point = intsec_line.get_random_point();
+    coords_t line_vec  = intsec_line.get_dirr_vec();
+    
+    coords_t vec1 = get_vector(line_point, tria.vertices_[0]);
+    coords_t vec2 = get_vector(line_point, tria.vertices_[1]);
+    coords_t vec3 = get_vector(line_point, tria.vertices_[2]);
+    
+    return scalar_multiply( calc_vects_product(vec1, line_vec), calc_vects_product(vec2, line_vec) ) <= 0 &&
+           scalar_multiply( calc_vects_product(vec1, line_vec), calc_vects_product(vec3, line_vec) ) <= 0 &&
+           scalar_multiply( calc_vects_product(vec2, line_vec), calc_vects_product(vec3, line_vec) ) <= 0 ;
 }
 
 line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t plane2) const {

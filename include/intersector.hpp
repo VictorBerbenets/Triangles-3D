@@ -28,6 +28,7 @@ class intersector {
     bool different_intersection(const triangle_t& tria1, const triangle_t& tria2) const;
 
     line_t get_intersection_line(const plane_t& plane1, const plane_t plane2) const;
+    bool is_intersects(const line_t& intsec_line, const triangle_t& tria) const;
 
     point_t solve_linear_equations(solveData& data) const;
 
