@@ -19,12 +19,20 @@ using vector_t = std::array<double, 3>; // each vector has three coordinates
 
 inline vector_t calc_vects_product(const vector_t& vec1, const vector_t& vec2) {
     //    -> -> ->
-    // || i  j  k||   ->                    ->                    ->
-    // ||a1 b1 c1|| = i * (b1*c2 - c1*b2) - j * (a1*c2 - a2*c1) + k * (a1*b2 - b1*a2)
-    // ||a2 b2 c2||
+    // ||  i  j  k ||   ->                    ->                    ->
+    // || a1 b1 c1 || = i * (b1*c2 - c1*b2) - j * (a1*c2 - a2*c1) + k * (a1*b2 - b1*a2)
+    // || a2 b2 c2 ||
     return { determ(vec1[1], vec1[2], vec2[1], vec2[2]),
             -determ(vec1[0], vec1[2], vec2[0], vec2[2]),
              determ(vec1[0], vec1[1], vec2[0], vec2[1]), };
+}
+inline bool is_complanar(const vector_t& vec1, const vector_t& vec2, const vector_t& vec3) {
+    // | a1 a2 a3 |
+    // | b1 b2 b3 | = 0
+    // | c1 c2 c3 |
+    return is_equal( vec1[0] * determ(vec2[1], vec2[2], vec3[1], vec3[2]) -
+                     vec1[1] * determ(vec2[0], vec2[2], vec3[0], vec3[2]) +
+                     vec1[2] * determ(vec2[0], vec2[1], vec3[0], vec3[1]), 0 );
 }
 
 inline bool is_null_vector(const vector_t& vector) {

@@ -67,12 +67,13 @@ point_t line_t::get_intersec_point(const line_t& other) const {
 
     //check whether lines lie in one plane}
     if (!is_complanar(get_coords(), other.get_coords(), get_vector(this_pt, other_pt))) {
-        return {}
+        return {};
     }
     // can't get point if lines are parallel or equal
     if (is_parallel(other) || *this == other) {
         return {};
     }
+}
 
 vector_t line_t::get_dirr_vec() const {
     vector_t dirr_vec{};
