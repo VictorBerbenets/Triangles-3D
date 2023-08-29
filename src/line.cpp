@@ -57,6 +57,22 @@ bool line_t::operator==(const line_t& other) const {
     }
     return false;
 }
+// if lines don't intersects or they equal then return NAN point_t
+point_t line_t::get_intersec_point(const line_t& other) const {
+    gener_type generator;
+    init_generator(generator);
+    
+    point_t this_pt  = get_random_point();       // random this-line's point
+    point_t other_pt = other.get_random_point(); // random other-line's point
+
+    //check whether lines lie in one plane}
+    if (!is_complanar(get_coords(), other.get_coords(), get_vector(this_pt, other_pt))) {
+        return {}
+    }
+    // can't get point if lines are parallel or equal
+    if (is_parallel(other) || *this == other) {
+        return {};
+    }
 
 vector_t line_t::get_dirr_vec() const {
     vector_t dirr_vec{};
