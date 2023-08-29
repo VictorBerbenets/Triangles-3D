@@ -13,10 +13,13 @@ struct line_t {     // line view:   a_x + b_y + c_z + d_ = 0
     line_t(const point_t& pt1, const point_t& pt2);
     line_t(double a, double b, double c, double d);
     ~line_t() = default;
-
+ 
+    bool operator==(const line_t& other) const;
+    bool is_parallel(const line_t& other) const;
     /*... intersect(const line_t& other) const {
         
     }*/
+    vector_t get_coords() const noexcept;
     vector_t get_dirr_vec() const;
     bool contains(const point_t& pt) const;
     void print() const;

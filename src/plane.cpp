@@ -33,9 +33,7 @@ vector_t plane_t::get_coords() const {
 
 bool plane_t::is_parallel(const plane_t& other) const {
     vector_t vec_product = calc_vects_product(get_coords(), other.get_coords());
-    if ( is_equal(vec_product[0], 0) &&
-         is_equal(vec_product[1], 0) &&
-         is_equal(vec_product[2], 0) ) {
+    if (is_null_vector(vec_product)) {
         return true;
     }
     return false; 

@@ -34,6 +34,30 @@ line_t::line_t(const point_t& pt1, const point_t& pt2) {
 line_t::line_t(double a, double b, double c, double d):
     a_{a}, b_{b}, c_{c}, d_{d} {}
 
+vector_t line_t::get_coords() const noexcept {
+    return {a_, b_, c_};
+}
+
+bool line_t::is_parallel(const line_t& other) const {
+    vector_t vec_product = calc_vects_product(get_coords(), other.get_coords());
+    if (is_null_vector(vec_product)) {
+        return true;
+    }
+    return false; 
+}
+
+bool line_t::operator==(const line_t& other) const {
+    bool result = is_parallel(other);
+    if (!result) {
+        return false;
+    }
+
+    if (is_equal(other.a_ / a_, other.d_ / d_)) {
+        return true;
+    }
+    return false;
+}
+
 vector_t line_t::get_dirr_vec() const {
     vector_t dirr_vec{};
     if (!is_equal(a_, 0)) {
