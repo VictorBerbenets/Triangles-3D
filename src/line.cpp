@@ -34,8 +34,8 @@ line_t::line_t(const point_t& pt1, const point_t& pt2) {
 line_t::line_t(double a, double b, double c, double d):
     a_{a}, b_{b}, c_{c}, d_{d} {}
 
-coords_t line_t::get_dirr_vec() const {
-    coords_t dirr_vec{};
+vector_t line_t::get_dirr_vec() const {
+    vector_t dirr_vec{};
     if (!is_equal(a_, 0)) {
         dirr_vec[0] = -(b_ / a_ + c_ / a_);
         dirr_vec[1] = dirr_vec[2] = 1; 

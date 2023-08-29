@@ -27,12 +27,12 @@ plane_t::plane_t(const point_t& pt1, const point_t& pt2, const point_t& pt3) {
     D_ = -(pt1.y_ * B_ + pt1.x_ * A_ + pt1.z_ * C_);
 }
 
-coords_t plane_t::get_coords() const {
+vector_t plane_t::get_coords() const {
     return {A_, B_, C_};
 }
 
 bool plane_t::is_parallel(const plane_t& other) const {
-    coords_t vec_product = calc_vects_product(get_coords(), other.get_coords());
+    vector_t vec_product = calc_vects_product(get_coords(), other.get_coords());
     if ( is_equal(vec_product[0], 0) &&
          is_equal(vec_product[1], 0) &&
          is_equal(vec_product[2], 0) ) {

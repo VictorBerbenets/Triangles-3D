@@ -13,7 +13,7 @@ struct plane_t { // plane equation: Ax + By + Cz + D = 0
     ~plane_t() = default;
 
     bool operator==(const plane_t& other) const;
-    coords_t get_coords() const;
+    vector_t get_coords() const;
     bool is_parallel(const plane_t& other) const;
     void print() const;
 //------------------------------------------------------------------// 
