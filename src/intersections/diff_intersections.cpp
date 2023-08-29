@@ -72,37 +72,7 @@ bool intersector::inside_segment(const point_t& pt, const segment_t& segm) const
 }
 
 line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t plane2) const {
-   //finding normal vector of the intersec line solving determinant square
-   //------------------------------------------------------------------------------------------//
-   // |a  b  c |                                                                               //  
-   // |A1 B1 C1| = 0  ---> a * minor1 - b * minor2 + c * minor3 = 0 ---> solving this equation //
-   // |A2 B2 C2|                                                                               //
-   //------------------------------------------------------------------------------------------//
-    double minor1 = determ(plane1.B_, plane1.C_, plane2.B_, plane2.C_);
-    double minor2 = determ(plane1.A_, plane1.C_, plane2.A_, plane2.C_);
-    double minor3 = determ(plane1.A_, plane1.B_, plane2.A_, plane2.B_);
-    double a{}, b{}, c{}, d{}; // line's components
-    if (!is_equal(minor1, 0)) {
-        a = minor2 / minor1 - minor3/ minor1;
-        b = c = 1;
-    } else if (!is_equal(minor2, 0)) {
-        b = minor1 / minor2 + minor3/ minor2;
-        a = c = 1;
-    } else if (!is_equal(minor3, 0)) {
-        c = minor2 / minor3 - minor1/ minor3;
-        a = b = 1;
-    } else {
-        std::cerr << "from 'get_intersection_line()': couldn't create line\n";
-    }
-    solveData data = { solvePair{plane1.A_, Coeffs::A}, solvePair{plane1.B_, Coeffs::B},
-                       solvePair{plane1.C_, Coeffs::C}, solvePair{plane1.D_, Coeffs::D},
-                       solvePair{plane2.A_, Coeffs::A}, solvePair{plane2.B_, Coeffs::B},
-                       solvePair{plane2.C_, Coeffs::C}, solvePair{plane2.D_, Coeffs::D} };
-    // getting a point that belongs to both planes --> belongs our line
-    point_t point = solve_linear_equations(data);
-    //finding d line coeff (ax + by + cz + d = 0 - line equation)
-    d = -(a * point.x_ + b * point.y_ + c * point.z_);
-    return {a, b, c, d};                                                                      
+    return {plane1.A_ - plane2.A_, plane1.B_ - plane2.B_, plane1.C_ - plane2.C_, plane1.D_ - plane2.D_};
 }
 
 point_t intersector::solve_linear_equations(solveData& data) const {
