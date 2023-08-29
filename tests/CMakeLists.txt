@@ -5,14 +5,19 @@ project("gtest")
 enable_testing()
 add_subdirectory(googletest)
 
-set(SOURCES 
-            unit/main.cpp
-            unit/linear_eq_solver.cpp
-            unit/point.cpp
-            ../src/point.cpp
-   )
-
-add_executable(test_app ${SOURCES})
+aux_source_directory(./unit TEST_SOURCES)
+set(TESTING_FILES 
+                ../src/point.cpp
+                ../src/line.cpp
+                ../src/plane.cpp
+                ../src/triangle.cpp
+                ../src/intersections/diff_intersections.cpp
+                ../src/intersections/same_intersections.cpp
+                ../src/intersections/interface_intersections.cpp
+                        )
+add_executable(test_app ${TEST_SOURCES}
+                        ${TESTING_FILES}
+              )
 
 target_include_directories(test_app
                            PRIVATE googletest/

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <utility>
+#include <algorithm>
 
 #include "intersector.hpp"
 #include "utils.hpp"
