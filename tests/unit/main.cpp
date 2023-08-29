@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "point.hpp"
 
 int main(int argc, char** argv) {
 
