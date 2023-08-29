@@ -18,16 +18,10 @@ line_t::line_t(const point_t& pt1, const point_t& pt2) {
     double b_dirr = pt1.y_ - pt2.y_;
     double c_dirr = pt1.z_ - pt2.z_;
     //finding cordinates of the normal vector
-    if (!is_equal(a_dirr, 0)) {
-        a_ = -(b_dirr/a_dirr + c_dirr/a_dirr);
-        b_ = c_ = 1;
-    } else if (!is_equal(b_dirr, 0)) {
-        b_ = -(a_dirr/b_dirr + c_dirr/b_dirr);
-        a_ = c_ = 1;
-    } else {
-        c_ = -(a_dirr/c_dirr + b_dirr/c_dirr);
-        a_ = b_ = 1;
-    }
+    vector_t coords = solve_equation(a_dirr, b_dirr, c_dirr, 0);
+    a_ = coords[0];
+    b_ = coords[1];
+    c_ = coords[2];
     d_ = -(a_ * pt1.x_ + b_ * pt1.y_ + c_ * pt1.z_);
 }
 
@@ -36,6 +30,21 @@ line_t::line_t(double a, double b, double c, double d):
 
 vector_t line_t::get_coords() const noexcept {
     return {a_, b_, c_};
+}
+
+vector_t line_t::solve_equation(double a, double b, double c, double d) const {
+    vector_t ret_val{};
+    if (!is_equal(a, 0)) {
+        ret_val[0] = -(b / a + c / a + d / a);
+        ret_val[1] = ret_val[2] = 1;
+    } else if (!is_equal(b, 0)) {
+        ret_val[1] = -(a / b  + c / b + d / a);
+        ret_val[0] = ret_val[2] = 1;
+    } else {
+        ret_val[2] = -(a / c + b / c + d / a);
+        ret_val[0] = ret_val[1] = 1;
+    }
+    return ret_val;
 }
 
 bool line_t::is_parallel(const line_t& other) const {
@@ -73,21 +82,13 @@ point_t line_t::get_intersec_point(const line_t& other) const {
     if (is_parallel(other) || *this == other) {
         return {};
     }
+
+    //vector_t coords = solve_equation(a_ - other.a_, b_ - other.b_, c_ - other.c_, d_ - other.d_);
+    //return {coords[0], coords[1], coords[2]};
 }
 
 vector_t line_t::get_dirr_vec() const {
-    vector_t dirr_vec{};
-    if (!is_equal(a_, 0)) {
-        dirr_vec[0] = -(b_ / a_ + c_ / a_);
-        dirr_vec[1] = dirr_vec[2] = 1; 
-    } else if (!is_equal(b_, 0)) {
-        dirr_vec[0] = dirr_vec[2] = 1;
-        dirr_vec[1] = -(a_ / b_ + c_ / b_);      
-    } else {
-        dirr_vec[0] = dirr_vec[1] = 1;
-        dirr_vec[2] = -(a_ / c_ + b_ / c_);
-    }
-    return dirr_vec;
+    return solve_equation(a_, b_, c_, 0);
 }
 
 void line_t::init_generator(gener_type& generator) const {

@@ -31,6 +31,8 @@ private:
 
     void init_generator(gener_type& generator) const;
     std::size_t random(gener_type& generator) const;
+
+    vector_t solve_equation(double a, double b, double c, double d) const;
 public:
 //------------------------------------------------------------------//
     double a_ = NAN, b_ = NAN, c_ = NAN, d_ = NAN;

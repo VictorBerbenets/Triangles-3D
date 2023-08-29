@@ -52,15 +52,9 @@ void intersector::find_intsec_points(std::vector<point_t>& intsec_points, line_t
             intsec_points.insert(intsec_points.end(), {pt1, pt2});
         }
     } else {
-        line_t pts_line(pt1, pt2);
-        solveData data = { solvePair{pts_line.a_, Coeffs::A},    solvePair{pts_line.b_, Coeffs::B},
-                           solvePair{pts_line.c_, Coeffs::C},    solvePair{pts_line.d_, Coeffs::D},
-                           solvePair{intsec_line.a_, Coeffs::A}, solvePair{intsec_line.b_, Coeffs::B},
-                           solvePair{intsec_line.c_, Coeffs::C}, solvePair{intsec_line.d_, Coeffs::D} 
-                         };
-        point_t pt = solve_linear_equations(data);
-        if (inside_segment(pt, {pt1, pt2})) {
-            intsec_points.push_back(pt);
+        point_t common_point = intsec_line.get_intersec_point({pt1, pt2}); 
+        if (inside_segment(common_point, {pt1, pt2})) {
+            intsec_points.push_back(common_point);
         }
     }
 }
