@@ -38,10 +38,10 @@ vector_t line_t::solve_equation(double a, double b, double c, double d) const {
         ret_val[0] = -(b / a + c / a + d / a);
         ret_val[1] = ret_val[2] = 1;
     } else if (!is_equal(b, 0)) {
-        ret_val[1] = -(a / b  + c / b + d / a);
+        ret_val[1] = -(a / b  + c / b + d / c);
         ret_val[0] = ret_val[2] = 1;
     } else {
-        ret_val[2] = -(a / c + b / c + d / a);
+        ret_val[2] = -(a / c + b / c + d / c);
         ret_val[0] = ret_val[1] = 1;
     }
     return ret_val;
