@@ -29,8 +29,8 @@ inline vector_t calc_vects_product(const vector_t& vec1, const vector_t& vec2) {
 
 inline bool is_null_vector(const vector_t& vector) {
     return is_equal(vector[0], 0) &&
-           is_equal(vector[0], 0) &&
-           is_equal(vector[0], 0);
+           is_equal(vector[1], 0) &&
+           is_equal(vector[2], 0);
 }
 
 inline vector_t get_vector(const point_t& pt1, const point_t& pt2) {
