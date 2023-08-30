@@ -2,6 +2,7 @@
 #define LINE_TYPE_
 
 #include <cmath>
+#include <utility>
 #include <random>
 
 #include "point.hpp"
@@ -10,27 +11,29 @@
 namespace yLAB {
 
 struct line_t {     // line view:   a_x + b_y + c_z + d_ = 0
+    using two_pts = std::pair<point_t, point_t>;
+
     line_t(const point_t& pt1, const point_t& pt2);
     line_t(double a, double b, double c, double d);
     ~line_t() = default;
  
     bool operator==(const line_t& other) const;
-
+    bool contains(const point_t& pt) const;
     bool is_parallel(const line_t& other) const;
+
     point_t get_intersec_point(const line_t& other) const;
     vector_t get_coords() const noexcept;
     vector_t get_dirr_vec() const;
-    bool contains(const point_t& pt) const;
+    point_t get_point() const;
+    two_pts get_points() const;
+
     void print() const;
-    point_t get_random_point() const;
 private:
-    static constexpr std::size_t MAX_VALUE = 50;
-    static constexpr std::size_t MIN_VALUE = -50;
+    static constexpr std::size_t MAX_VALUE = 100;
+    static constexpr std::size_t MIN_VALUE = -100;
 
     using gener_type = std::mt19937;
-
-    void init_generator(gener_type& generator) const;
-    std::size_t random(gener_type& generator) const;
+    int random(gener_type& generator) const;
 
     vector_t solve_equation(double a, double b, double c, double d) const;
 public:

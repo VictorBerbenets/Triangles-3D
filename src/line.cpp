@@ -49,6 +49,10 @@ vector_t line_t::solve_equation(double a, double b, double c, double d) const {
 
 bool line_t::is_parallel(const line_t& other) const {
     vector_t vec_product = calc_vects_product(get_coords(), other.get_coords());
+    /*std::cout << "vec product:\n";
+    std::cout << "[0] = " << vec_product[0] << '\n';
+    std::cout << "[1] = " << vec_product[1] << '\n';
+    std::cout << "[2] = " << vec_product[2] << '\n';*/
     if (is_null_vector(vec_product)) {
         return true;
     }
@@ -58,22 +62,43 @@ bool line_t::is_parallel(const line_t& other) const {
 bool line_t::operator==(const line_t& other) const {
     bool result = is_parallel(other);
     if (!result) {
+        std::cout << "NOT PARALLEL\n\n";
         return false;
     }
+    
+    //point_t this_point1 = get_random_point();
+    //point_t this_point2 = get_random_point();
+    auto [this_point1, this_point2] = get_points();
 
-    if (is_equal(other.a_ / a_, other.d_ / d_)) {
+    std::cout << "line equation: ";
+    print();
+    std::cout << "point1: ";
+    this_point1.print();
+    std::cout << "point2: ";
+    this_point2.print();
+    if (contains(this_point1) && contains(this_point2)) {
+        std::cout << "generated points contain\n";
         return true;
     }
+/*
+    if (other.contains(this_point1) && other.contains(this_point2)) {
+        return true;
+    }*/
+    /*if (is_equal(other.a_ / a_, other.d_ / d_)) {
+        std::cout << "equal\n\n";
+        return true;
+    }*/
+    std::cout << "not_equal\n\n";
     return false;
 }
 // if lines don't intersects or they equal then return NAN point_t
 point_t line_t::get_intersec_point(const line_t& other) const {
-    gener_type generator;
-    init_generator(generator);
+    std::random_device rd;
+    gener_type generator(rd());
     
-    point_t this_pt  = get_random_point();       // random this-line's point
-    point_t other_pt = other.get_random_point(); // random other-line's point
-
+    point_t this_pt  = get_point();       // random this-line's point
+    point_t other_pt = other.get_point(); // random other-line's point
+    
     //check whether lines lie in one plane}
     if (!is_complanar(get_coords(), other.get_coords(), get_vector(this_pt, other_pt))) {
         return {};
@@ -91,34 +116,49 @@ vector_t line_t::get_dirr_vec() const {
     return solve_equation(a_, b_, c_, 0);
 }
 
-void line_t::init_generator(gener_type& generator) const {
-    const u_int seed = static_cast<u_int>(std::time(nullptr));
-    generator.seed(seed);
-}
-
-std::size_t line_t::random(gener_type& generator) const {
-    std::uniform_int_distribution<std::size_t> distribution(MIN_VALUE, MAX_VALUE);
+int line_t::random(gener_type& generator) const {
+    std::uniform_int_distribution<int> distribution(MIN_VALUE, MAX_VALUE);
     return distribution(generator);
 }
 
-point_t line_t::get_random_point() const {
+line_t::two_pts line_t::get_points() const {
+    point_t pt1 = get_point();
+    point_t pt2 = get_point();
+    while(pt1 == pt2) {
+        pt2 = get_point();
+    }
+    return {pt1, pt2};
+}
+
+point_t line_t::get_point() const {
     // solving linear equation: ||a b c|-d|| - matrix form
     double x{}, y{}, z{};
+    
+    std::random_device rd;
+    gener_type generator(rd());
 
-    gener_type generator;
-    init_generator(generator);
-
+    std::cout << "print random numbers:\n";
+    for (int i = 0; i < 10; ++i) {
+        std::cout << random(generator) << ' ';
+    }
+    std::cout << '\n';
     if (!is_equal(a_, 0)) {
         y = random(generator);
+        std::cout << "y gener = " << y << '\n';
         z = random(generator);
+        std::cout << "z gener = " << z << '\n';
         x = -((b_ / a_) * y + (c_ / a_) * z + d_ / a_);
     } else if (!is_equal(b_, 0)) {
         x = random(generator);
+        std::cout << "x gener = " << x << '\n';
         z = random(generator);
+        std::cout << "z gener = " << z << '\n';
         y = -((a_ / b_) * x + (c_ / b_) * z + d_ / b_);      
     } else {
         x = random(generator);
+        std::cout << "x gener = " << x << '\n';
         y = random(generator);
+        std::cout << "y gener = " << y << '\n';
         z = -((a_ / c_) * x + (b_ / c_) * y + d_ / c_);
     }
     return {x, y, z};
@@ -126,6 +166,7 @@ point_t line_t::get_random_point() const {
 
 bool line_t::contains(const point_t& pt) const {
     double expr = a_ * pt.x_ + b_ * pt.y_ + c_ * pt.z_ + d_;
+    std::cout << "point in line: " << expr << '\n';
     return is_equal(expr, 0);
 }
 

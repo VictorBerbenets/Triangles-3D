@@ -4,6 +4,7 @@
 #include <limits>
 #include <cmath>
 #include <array>
+#include <iostream>
 
 namespace yLAB {
 
@@ -12,7 +13,14 @@ inline double determ(double a, double b, double c, double d) { //|a b|
 }
 
 inline bool is_equal(double val1, double val2) {
-    return std::fabs(val1 - val2) < std::numeric_limits<double>::epsilon();
+    static constexpr double BITS_DIFFERENCE = 16; // 4 bits
+    static constexpr double EPSILON = 1e-9;
+   /* std::cout << "val1 = " << val1 << '\n';
+    std::cout << "val2 = " << val2 << '\n';
+    std::cout << "diff = " << std::fabs(val1 - val2) << '\n';
+    std::cout << "epsilon = " << 16*std::numeric_limits<double>::epsilon() << '\n';
+    std::cout << "is equal result = " << (std::fabs(val1 - val2) < 16*std::numeric_limits<double>::epsilon()) << '\n';*/
+    return std::fabs(val1 - val2) < BITS_DIFFERENCE*EPSILON;
 }
 
 using vector_t = std::array<double, 3>; // each vector has three coordinates

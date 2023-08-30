@@ -17,27 +17,24 @@ TEST(Line_Testing, Initialization) {
     point_t pt4{-1, 0, 0};
     line_t ln2{pt3, pt4};
     
-    ln2.print(); 
     EXPECT_TRUE( (ln2 == line_t{0, 1, 1, 0}) );
     
     point_t pt5{-2, 0, 0};
     point_t pt6{0, -1, 0};
     line_t ln3{pt5, pt6};
     
-    ln3.print(); 
     EXPECT_TRUE( (ln3 == line_t{0.5, 1, 1, 1}) );
     
     point_t pt7{1, 1, -1};
     point_t pt8{-9999, -99999, 4999};
     line_t ln4{pt7, pt8};
-    ln4.print(); 
+    
     EXPECT_TRUE( (ln4 == line_t{-9.5, 1, 1, 9.5}) );
     
     point_t pt9{10, 20, 300};
     point_t pt10{1, 0, 0};
     line_t ln5{pt9, pt10};
     
-    ln5.print(); 
     EXPECT_TRUE( (ln5 == line_t{-320./9, 1, 1, 320./9}) );    
 }
 
