@@ -18,7 +18,7 @@ line_t::line_t(const point_t& pt1, const point_t& pt2) {
     double b_dirr = pt1.y_ - pt2.y_;
     double c_dirr = pt1.z_ - pt2.z_;
     //finding cordinates of the normal vector
-    vector_t coords = solve_equation(a_dirr, b_dirr, c_dirr, 0);
+    vector_t coords = solve_equation(a_dirr, b_dirr, c_dirr);
     a_ = coords[0];
     b_ = coords[1];
     c_ = coords[2];
@@ -32,17 +32,21 @@ vector_t line_t::get_coords() const noexcept {
     return {a_, b_, c_};
 }
 
-vector_t line_t::solve_equation(double a, double b, double c, double d) const {
+vector_t line_t::solve_equation(double a, double b, double c, double d = 0,
+                                double rand_val1 = 1, double rand_val2 = 1) const {
     vector_t ret_val{};
     if (!is_equal(a, 0)) {
-        ret_val[0] = -(b / a + c / a + d / a);
-        ret_val[1] = ret_val[2] = 1;
+        ret_val[1] = rand_val1;
+        ret_val[2] = rand_val2;
+        ret_val[0] = -((b / a)*ret_val[1] + (c / a)*ret_val[2] + d / a);
     } else if (!is_equal(b, 0)) {
-        ret_val[1] = -(a / b  + c / b + d / b);
-        ret_val[0] = ret_val[2] = 1;
+        ret_val[0] = rand_val1;
+        ret_val[2] = rand_val2;
+        ret_val[1] = -((a / b)*ret_val[0] + (c / b)*ret_val[2] + d / b);
     } else {
-        ret_val[2] = -(a / c + b / c + d / c);
-        ret_val[0] = ret_val[1] = 1;
+        ret_val[0] = rand_val1;
+        ret_val[1] = rand_val2;
+        ret_val[2] = -((a / c)*ret_val[0] + (b / c)*ret_val[1] + d / c);
     }
     return ret_val;
 }
@@ -85,7 +89,7 @@ point_t line_t::get_intersec_point(const line_t& other) const {
 }
 
 vector_t line_t::get_dirr_vec() const {
-    return solve_equation(a_, b_, c_, 0);
+    return solve_equation(a_, b_, c_);
 }
 
 int line_t::random(gener_type& generator) const {
@@ -106,20 +110,7 @@ point_t line_t::get_point() const {
     // solving linear equation: ||a b c|-d|| - matrix form
     std::random_device rd;
     gener_type generator(rd());
-    double x{}, y{}, z{};
-    if (!is_equal(a_, 0)) {
-        y = random(generator);
-        z = random(generator);
-        x = -((b_ / a_) * y + (c_ / a_) * z + d_ / a_);
-    } else if (!is_equal(b_, 0)) {
-        x = random(generator);
-        z = random(generator);
-        y = -((a_ / b_) * x + (c_ / b_) * z + d_ / b_);      
-    } else {
-        x = random(generator);
-        y = random(generator);
-        z = -((a_ / c_) * x + (b_ / c_) * y + d_ / c_);
-    }
+    auto [x, y, z] = solve_equation(a_, b_, c_, d_, random(generator), random(generator));
     return {x, y, z};
 }
 
