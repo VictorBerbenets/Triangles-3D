@@ -22,10 +22,10 @@ struct line_t {     // line view:   a_x + b_y + c_z + d_ = 0
     bool is_parallel(const line_t& other) const;
 
     point_t get_intersec_point(const line_t& other) const;
-    vector_t get_coords() const noexcept;
-    vector_t get_dirr_vec() const;
-    point_t get_point() const;
-    two_pts get_points() const;
+    vector_t get_coords() const noexcept; 
+    vector_t get_dirr_vec() const; 
+    point_t get_point() const;  //random point on the line
+    two_pts get_points() const; // two NOT EQUAL random points on the line
 
     void print() const;
 private:
