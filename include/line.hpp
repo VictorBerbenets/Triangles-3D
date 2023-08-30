@@ -10,36 +10,28 @@
 
 namespace yLAB {
 
-struct line_t {     // line view:   a_x + b_y + c_z + d_ = 0
-    using two_pts = std::pair<point_t, point_t>;
+struct line_t {       
+    //using two_pts = std::pair<point_t, point_t>;
+    static constexpr double DEFAULT_COEFF = 1;
 
     line_t(const point_t& pt1, const point_t& pt2);
-    line_t(double a, double b, double c, double d);
+    line_t(double a1, double a2, double a3, const point_t& pt);
+    line_t(const vector_t& dirr_vec, const point_t& pt);
     ~line_t() = default;
  
     bool operator==(const line_t& other) const;
     bool contains(const point_t& pt) const;
     bool is_parallel(const line_t& other) const;
-
+    bool is_valid() const;
+    
     point_t get_intersec_point(const line_t& other) const;
-    vector_t get_coords() const noexcept; 
-    vector_t get_dirr_vec() const; 
-    point_t get_point() const;  //random point on the line
-    two_pts get_points() const; // two NOT EQUAL random points on the line
-
+    vector_t dir_coords() const noexcept;
+    point_t get_point(double coeff = DEFAULT_COEFF) const;
+    
     void print() const;
-private:
-    static constexpr int MAX_VALUE = 100;
-    static constexpr int MIN_VALUE = -100;
-
-    using gener_type = std::mt19937;
-    int random(gener_type& generator) const;
-    // solving equation of such view: ax + by + cz + d = 0. rand_val1, rand_val2 - random values of two roots
-    vector_t solve_equation(double a, double b, double c, double d = 0,
-                            double rand_val1 = 1, double rand_val2 = 1) const;
-public:
 //------------------------------------------------------------------//
-    double a_ = NAN, b_ = NAN, c_ = NAN, d_ = NAN;
+    double a1_ = NAN, a2_ = NAN, a3_ = NAN;
+    point_t point_{};
 };
 
 struct segment_t {

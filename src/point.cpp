@@ -14,9 +14,9 @@ bool point_t::is_valid() const noexcept {
 };
 
 bool point_t::operator==(const point_t& other) const {
-    return is_equal(x_, other.x_) &&
-           is_equal(y_, other.y_) &&
-           is_equal(z_, other.z_);
+    return are_equal(x_, other.x_) &&
+           are_equal(y_, other.y_) &&
+           are_equal(z_, other.z_);
 };
 
 void point_t::print() const {

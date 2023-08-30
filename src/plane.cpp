@@ -45,7 +45,7 @@ bool plane_t::operator==(const plane_t& other) const {
         return false;
     }
 
-    if (is_equal(other.A_ / A_, other.D_ / D_)) {
+    if (are_equal(other.A_ / A_, other.D_ / D_)) {
         return true;
     }
     return false;
