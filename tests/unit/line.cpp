@@ -58,7 +58,23 @@ TEST(Line_Testing, Parallelism) {
 }
 
 TEST(Line_Testing, Intersection_Point) {
+    line_t ln1{1, 2, 4, {1, -2, 3}};
+    line_t ln2{3, -2, 4, {-2, -1, -2}};
+    auto ans1 = ln2.get_intersec_point(ln1);
 
+    EXPECT_TRUE((ans1 == point_t{5./8, -11./4, 3./2}));
+
+    line_t ln3{1, 1, 1, {0, 0, 0}};
+    line_t ln4{1, 0, 0, {0, 0, 0}};
+    auto ans2 = ln3.get_intersec_point(ln4);
+
+    EXPECT_TRUE((ans2 == point_t{0, 0, 0}));
+
+    line_t ln5{-1, 0, 0, {0, 0, 0} };
+    line_t ln6{0, 1, 0,  {0, 0, 0} };
+    auto ans3 = ln5.get_intersec_point(ln6);
+
+    EXPECT_TRUE((ans3 == point_t{0, 0, 0}));
 }
 
 TEST(Line_Testing, Complanarity) {

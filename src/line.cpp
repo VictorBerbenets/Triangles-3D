@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stdexcept>
-#include <random>
-#include <ctime>
+#include <array>
+#include <utility>
 #include <cmath>
 #include <algorithm>
 
@@ -51,13 +51,34 @@ bool line_t::operator==(const line_t& other) const {
 }
 // if lines don't intersects or they equal then return NAN point_t
 point_t line_t::get_intersec_point(const line_t& other) const {
-    
     point_t dir_comp = (point_ == other.point_) ? get_point() : point_;
     if (!are_complanar(dir_coords(), other.dir_coords(), get_vector(dir_comp, other.point_)) ||
             is_parallel(other)) {
+        
         return {};
     }
-    // solving 
+    std::array<double, 3> diffs { other.point_.x_ - point_.x_,
+                                  other.point_.y_ - point_.y_,
+                                  other.point_.z_ - point_.z_  };
+                            
+    using pair = std::pair<double, std::size_t>;
+    std::array<pair, 3> dirs {pair{a1_, 0}, pair{a2_, 1}, pair{a3_, 2}};
+    vector_t other_dirs = other.dir_coords();
+
+    auto nzero_it = std::find_if(dirs.begin(), dirs.end(),
+                                 [](auto&& val) { return !are_equal(val.first, 0); }
+                                );
+    double coeff{};
+    for (std::size_t id = 1; id < 3; ++id) {
+        std::size_t neigh_id = (nzero_it->second + id) % 3;
+        double expr = other_dirs[neigh_id] * dirs[nzero_it->second].first - dirs[neigh_id].first * other_dirs[nzero_it->second];
+        if (!are_equal(expr, 0)) {
+            coeff = ( (dirs[neigh_id].first*diffs[nzero_it->second]) / dirs[nzero_it->second].first - diffs[neigh_id] ) * (dirs[nzero_it->second].first / expr);
+        }
+    }
+    return { other.point_.x_ + other.a1_ * coeff,
+             other.point_.y_ + other.a2_ * coeff,
+             other.point_.z_ + other.a3_ * coeff };
 }
 
 point_t line_t::get_point(double coeff) const {
