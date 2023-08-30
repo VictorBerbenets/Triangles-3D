@@ -32,8 +32,8 @@ vector_t line_t::get_coords() const noexcept {
     return {a_, b_, c_};
 }
 
-vector_t line_t::solve_equation(double a, double b, double c, double d = 0,
-                                double rand_val1 = 1, double rand_val2 = 1) const {
+vector_t line_t::solve_equation(double a, double b, double c, double d,
+                                double rand_val1, double rand_val2) const {
     vector_t ret_val{};
     if (!is_equal(a, 0)) {
         ret_val[1] = rand_val1;

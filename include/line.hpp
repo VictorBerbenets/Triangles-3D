@@ -35,8 +35,8 @@ private:
     using gener_type = std::mt19937;
     int random(gener_type& generator) const;
     // solving equation of such view: ax + by + cz + d = 0. rand_val1, rand_val2 - random values of two roots
-    vector_t solve_equation(double a, double b, double c, double d,
-                            double rand_val1, double rand_val2) const;
+    vector_t solve_equation(double a, double b, double c, double d = 0,
+                            double rand_val1 = 1, double rand_val2 = 1) const;
 public:
 //------------------------------------------------------------------//
     double a_ = NAN, b_ = NAN, c_ = NAN, d_ = NAN;
