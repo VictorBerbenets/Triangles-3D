@@ -29,8 +29,8 @@ struct line_t {     // line view:   a_x + b_y + c_z + d_ = 0
 
     void print() const;
 private:
-    static constexpr std::size_t MAX_VALUE = 100;
-    static constexpr std::size_t MIN_VALUE = -100;
+    static constexpr int MAX_VALUE = 100;
+    static constexpr int MIN_VALUE = -100;
 
     using gener_type = std::mt19937;
     int random(gener_type& generator) const;
