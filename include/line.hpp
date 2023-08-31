@@ -41,10 +41,13 @@ struct segment_t {
     segment_t()  = default;
     ~segment_t() = default;
     
-    bool is_valid() const;
     double length() const;
+    bool is_valid() const;
     bool is_intersect(const segment_t& other) const;
     bool is_inside(const point_t& pt) const;
+    bool is_degenerated() const;
+
+    void print() const;
 //------------------------------------------------------------------//
     point_t pt1_{}, pt2_{};
 };

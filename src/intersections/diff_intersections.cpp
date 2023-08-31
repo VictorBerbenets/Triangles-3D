@@ -14,10 +14,7 @@
 namespace yLAB {
 //bool intersector::
 bool intersector::different_intersection(const triangle_t& tria1, const triangle_t& tria2) const {
-    //std::cout << "INSIDE DIFFERENT INTERSECTION\n";
     line_t intsec_line = get_intersection_line(tria1.get_plane(), tria2.get_plane());
-   // std::cout << "intsec line: ";
-    //intsec_line.print();
     // finding intersection between triangles
     segment_t tr1_segment = get_segment(intsec_line, tria1);
     if (!tr1_segment.is_valid()) {
@@ -27,21 +24,17 @@ bool intersector::different_intersection(const triangle_t& tria1, const triangle
     if (!tr2_segment.is_valid()) {
         return false;
     }
-    //std::cout << "ALL SEGMENTS ARE VALID\n";
-
-    return tr1_segment.is_intersect(tr2_segment);
-    
+    return tr1_segment.is_intersect(tr2_segment);    
 }
 
 segment_t intersector::get_segment(line_t& intsec_line, const triangle_t& tria) const {
     std::vector<point_t> intsec_points{};
     for (int index = 0; index < 3; ++index) {
         find_intsec_points(intsec_points, intsec_line, tria.vertices_[index], tria.vertices_[(index + 1) % 3]);
-        if (intsec_points.size() == 2) {
-            return {intsec_points.front(), intsec_points.back()};
-        } 
     }
-    //std::cout << "INTSEC POINTS SIZE: " << intsec_points.size() << '\n';
+    if (intsec_points.size() == 2) {
+        return {intsec_points.front(), intsec_points.back()};
+    }
     if (intsec_points.size() == 1) {
         return {intsec_points.front()};
     } 
@@ -52,18 +45,24 @@ void intersector::find_intsec_points(std::vector<point_t>& intsec_points, line_t
                                     const point_t& pt1, const point_t& pt2) const {
     vector_t line_vec = intsec_line.dir_coords();
     vector_t segm_vec = get_vector(pt1, pt2);
-
+    
+    auto push_back_if = [&intsec_points](const point_t& pt) {
+                            if (std::find(intsec_points.begin(), intsec_points.end(), pt) == intsec_points.end()) {
+                                intsec_points.push_back(std::move(pt));
+                            }
+                        };
     if (is_null_vector(calc_vects_product(line_vec, segm_vec))) {
         // if both parallels each other and line contains one segment's point
         // then sigment lies on the line
         if (intsec_line.contains(pt1)) {
-            intsec_points.insert(intsec_points.end(), {pt1, pt2});
+            push_back_if(pt1);
+            push_back_if(pt2);
         }
     } else {
         point_t common_point = intsec_line.get_intersec_point({pt1, pt2});
         segment_t segm {pt1, pt2};
         if (segm.is_inside(common_point)) {
-            intsec_points.push_back(common_point);
+            push_back_if(common_point);
         }
     }
 }

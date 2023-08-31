@@ -12,9 +12,6 @@ namespace yLAB {
 
 line_t::line_t(const point_t& pt1, const point_t& pt2) {
     if (pt1 == pt2) {
-        std::cout << "POINTS: \n";
-        pt1.print();
-        pt2.print();
         throw std::invalid_argument{"points are equal, can't create 'line_t'"};
     }
     a1_ = pt1.x_ - pt2.x_;
@@ -130,6 +127,9 @@ bool segment_t::is_inside(const point_t& check_pt) const {
 }
 
 bool segment_t::is_intersect(const segment_t& other) const {
+    if (is_degenerated() || other.is_degenerated()) {
+        return is_inside(other.pt1_);
+    }
     line_t ln_this  {pt1_, pt2_};
     line_t ln_other {other.pt1_, other.pt2_};
     if (!are_complanar( ln_this.dir_coords(), ln_other.dir_coords(),
@@ -153,6 +153,15 @@ bool segment_t::is_intersect(const segment_t& other) const {
         return true;
     }
     return false;
+}
+
+bool segment_t::is_degenerated() const {
+    return pt1_ == pt2_;
+}
+
+void segment_t::print() const {
+    pt1_.print();
+    pt2_.print();
 }
 
 }
