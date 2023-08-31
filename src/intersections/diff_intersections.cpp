@@ -15,7 +15,7 @@ namespace yLAB {
 //bool intersector::
 bool intersector::different_intersection(const triangle_t& tria1, const triangle_t& tria2) const {
     line_t intsec_line = get_intersection_line(tria1.get_plane(), tria2.get_plane());
-    
+     
     // finding intersection between triangles
     segment_t tr1_segment = get_segment(intsec_line, tria1);
     if (!tr1_segment.is_valid()) {
@@ -69,7 +69,7 @@ bool intersector::inside_segment(const point_t& pt, const segment_t& segm) const
 
 line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t plane2) const {
     vector_t dirr_vec = calc_vects_product(plane1.get_coords(), plane2.get_coords());
-    point_t intsec_pt = get_intersec_point( plane_coeffs{plane1.A_, plane1.B_, plane1.C_, plane1.D_},
+    point_t intsec_pt = get_planes_intersec_point( plane_coeffs{plane1.A_, plane1.B_, plane1.C_, plane1.D_},
                                   plane_coeffs{plane2.A_, plane2.B_, plane2.C_, plane2.D_} );
     if (!intsec_pt.is_valid()) {
         throw std::runtime_error{"Couldn't get intersection point\n"};
@@ -77,15 +77,15 @@ line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t p
     return {dirr_vec, intsec_pt};
 }
 
-point_t intersector::get_intersec_point(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2) const {
+point_t intersector::get_planes_intersec_point(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2) const {
     static constexpr int  ARBITRARY_VALUE = 1;
 
     auto [colum1, colum2] = find_not_zero_minor(coeffs1, coeffs2);
-    double not_zero_minor = determ( coeffs1[colum1], coeffs1[colum2],
-                                    coeffs2[colum1], coeffs2[colum2] );
     if (std::isnan(colum1) || std::isnan(colum2)) {
         throw std::runtime_error{"Couldn't find not zero minor\n"};
     }
+    double not_zero_minor = determ( coeffs1[colum1], coeffs1[colum2],
+                                    coeffs2[colum1], coeffs2[colum2] );
     size_type arbit_col = 3 - (colum1 + colum2); //colum1 + colum2 <=3
     double det_colum1 = determ(-coeffs1[3] - ARBITRARY_VALUE * coeffs1[arbit_col], coeffs1[colum2],
                         -coeffs2[3] - ARBITRARY_VALUE * coeffs2[arbit_col], coeffs2[colum2] );

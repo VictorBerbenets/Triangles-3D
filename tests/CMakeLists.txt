@@ -11,9 +11,6 @@ set(TESTING_FILES
                 ../src/line.cpp
                 ../src/plane.cpp
                 ../src/triangle.cpp
-                ../src/intersections/diff_intersections.cpp
-                ../src/intersections/same_intersections.cpp
-                ../src/intersections/interface_intersections.cpp
                         )
 add_executable(test_app ${TEST_SOURCES}
                         ${TESTING_FILES}

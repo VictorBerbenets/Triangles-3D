@@ -28,7 +28,7 @@ private:
     bool different_intersection(const triangle_t& tria1, const triangle_t& tria2) const;
 
     line_t get_intersection_line(const plane_t& plane1, const plane_t plane2) const;
-    point_t get_intersec_point(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2) const;
+    point_t get_planes_intersec_point(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2) const;
     minor_pair find_not_zero_minor(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2) const;
     segment_t get_segment(line_t& intsec_line, const triangle_t& tria) const;
     void find_intsec_points(std::vector<point_t>& intsec_points, line_t& intsec_line,
