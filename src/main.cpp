@@ -5,6 +5,7 @@
 
 int main() {
     using namespace yLAB;
-    
-    segment_t seg{};
+
+    intersector triangles{std::cin};
+    triangles.print_intersected_triangles();
 }

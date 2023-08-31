@@ -12,6 +12,9 @@ namespace yLAB {
 
 line_t::line_t(const point_t& pt1, const point_t& pt2) {
     if (pt1 == pt2) {
+        std::cout << "POINTS: \n";
+        pt1.print();
+        pt2.print();
         throw std::invalid_argument{"points are equal, can't create 'line_t'"};
     }
     a1_ = pt1.x_ - pt2.x_;
@@ -53,8 +56,7 @@ bool line_t::operator==(const line_t& other) const {
 point_t line_t::get_intersec_point(const line_t& other) const {
     point_t dir_comp = (point_ == other.point_) ? get_point() : point_;
     if (!are_complanar(dir_coords(), other.dir_coords(), get_vector(dir_comp, other.point_)) ||
-            is_parallel(other)) {
-        
+            is_parallel(other)) { 
         return {};
     }
     std::array<double, 3> diffs { other.point_.x_ - point_.x_,
@@ -121,8 +123,36 @@ bool segment_t::is_valid() const {
     return pt1_.is_valid() && pt2_.is_valid();
 }
 
-bool segment_t::is_intersect() const {
-    return 1;
+bool segment_t::is_inside(const point_t& check_pt) const {
+    segment_t segm_part1(check_pt, pt1_);
+    segment_t segm_part2(check_pt, pt2_);
+    return are_equal(length(), segm_part1.length() + segm_part2.length());
+}
+
+bool segment_t::is_intersect(const segment_t& other) const {
+    line_t ln_this  {pt1_, pt2_};
+    line_t ln_other {other.pt1_, other.pt2_};
+    if (!are_complanar( ln_this.dir_coords(), ln_other.dir_coords(),
+               get_vector(other.pt1_, pt1_ == other.pt1_ ? ln_this.get_point() : pt1_) )) {
+        return false;
+    }
+    //if lie in one plane and parallel each other
+    if( is_null_vector( calc_vects_product(ln_this.dir_coords(), ln_other.dir_coords()) ) ) {
+        if (is_inside(other.pt1_) || is_inside(other.pt2_) ||
+            other.is_inside(pt1_) || other.is_inside(pt2_) ) {
+            return true;
+        }
+        return false;
+    }
+    // if not parallel
+    point_t segm_pt = ln_this.get_intersec_point(ln_other);
+    if (!segm_pt.is_valid()) {
+        return false;
+    }
+    if (is_inside(segm_pt) && other.is_inside(segm_pt)) {
+        return true;
+    }
+    return false;
 }
 
 }

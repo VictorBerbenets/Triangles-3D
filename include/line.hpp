@@ -43,7 +43,8 @@ struct segment_t {
     
     bool is_valid() const;
     double length() const;
-    bool is_intersect() const;
+    bool is_intersect(const segment_t& other) const;
+    bool is_inside(const point_t& pt) const;
 //------------------------------------------------------------------//
     point_t pt1_{}, pt2_{};
 };

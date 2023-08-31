@@ -37,7 +37,7 @@ intersector::intersector(std::istream& stream) {
 }
 
 void intersector::print_intersected_triangles() const {
-    std::unordered_set<size_type> intersec_triangles{};
+    std::unordered_set<size_type> intsec_triangles{};
     for (auto iter1 = data_.begin(); iter1 != data_.end(); ++iter1) {
         auto comp_plane = iter1->first.get_plane();
         for (auto iter2 = (iter1 + 1); iter2 != data_.end(); ++iter2) {
@@ -48,10 +48,17 @@ void intersector::print_intersected_triangles() const {
                 // these pair of triangles can't intersect each other
                 continue;
             } else { // both triangles lies in different planes
-               auto pair = different_intersection(iter1->first, iter2->first); 
+                std::cout << "DIFF PLANEEEEEEEEEES\n";
+                if (different_intersection(iter1->first, iter2->first)) {
+                    intsec_triangles.insert({iter1->second, iter2->second});
+                }
             }
         }
     }
+    for (auto val : intsec_triangles) {
+        std::cout << val << ' ';
+    }
+    std::cout << std::endl;
 }
 
 }

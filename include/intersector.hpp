@@ -15,14 +15,12 @@ namespace yLAB {
 
 class intersector {
 public:
-    using size_type   = std::size_t;
+    using size_type    = std::size_t;
     using dataVal      = std::pair<triangle_t, size_type>; // saving triangle and his order number
     using plane_coeffs = std::array<double, 4>; // A, B, C, D
     using minor_pair   = std::pair<size_type, size_type>;
 private:
-    static constexpr size_type VARIABLES_NUMBER = 8;
     static constexpr size_type SET_POINTS_SIZE  = 9;
-
     
 //--------------------------------triangles in different planes--------------------------------//
     bool different_intersection(const triangle_t& tria1, const triangle_t& tria2) const;
