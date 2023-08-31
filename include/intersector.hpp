@@ -21,6 +21,9 @@ public:
     using minor_pair   = std::pair<size_type, size_type>;
 private:
     static constexpr size_type SET_POINTS_SIZE  = 9;
+//--------------------------------triangles in the one plane-----------------------------------//
+    bool same_intersection(const triangle_t& tria1, const triangle_t& tria2) const;
+    bool mul_vect_products(const triangle_t::pts_vector& tria, const point_t& comp_pt) const;
     
 //--------------------------------triangles in different planes--------------------------------//
     bool different_intersection(const triangle_t& tria1, const triangle_t& tria2) const;
