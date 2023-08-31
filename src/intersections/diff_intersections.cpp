@@ -98,9 +98,9 @@ point_t intersector::get_intersec_point(const plane_coeffs& coeffs1, const plane
     std::sort( determ_and_id.begin(), determ_and_id.end(),
                          [](auto&& val1, auto&& val2) { return val1.second < val2.second; }
              );
-    return { determ_and_id[0].first / not_zero_minor,
-             determ_and_id[1].first / not_zero_minor,
-             determ_and_id[2].first / not_zero_minor };
+    return { 0 == arbit_col ? ARBITRARY_VALUE : determ_and_id[0].first / not_zero_minor,
+             1 == arbit_col ? ARBITRARY_VALUE : determ_and_id[1].first / not_zero_minor,
+             2 == arbit_col ? ARBITRARY_VALUE : determ_and_id[2].first / not_zero_minor };
 }
 intersector::minor_pair intersector::find_not_zero_minor(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2) const {
     for (size_type index = 0; index < 3; ++index) {
