@@ -2,6 +2,7 @@
 #include <vector>
 #include <utility>
 #include <algorithm>
+#include <stdexcept>
 
 #include "intersector.hpp"
 #include "utils.hpp"
@@ -67,8 +68,32 @@ bool intersector::inside_segment(const point_t& pt, const segment_t& segm) const
 }
 
 line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t plane2) const {
-//    return {plane1.A_ - plane2.A_, plane1.B_ - plane2.B_, plane1.C_ - plane2.C_, plane1.D_ - plane2.D_};
-    return {1, 2, 3, {1, 2, 3}};
+    vector_t dirr_vec = calc_vects_product(plane1.get_coords(), plane2.get_coords());
+    point_t intsec_pt = get_intersec_point( plane_coeffs{plane1.A_, plane1.B_, plane1.C_, plane1.D_},
+                                  plane_coeffs{plane2.A_, plane2.B_, plane2.C_, plane2.D_} );
+    if (!intsec_pt.is_valid()) {
+        throw std::runtime_error{"Couldn't get intersection point\n"};
+    }
+    return {dirr_vec, intsec_pt};
+}
+
+point_t intersector::get_intersec_point(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2) const {
+    static constexpr int  ARBITRARY_VALUE = 1;
+
+    auto [colum1, colum2] = find_not_zero_minor(coeffs1, coeffs2);
+    if (std::isnan(colum1) || std::isnan(colum2)) {
+        throw std::runtime_error{"Couldn't find not zero minor\n"};
+    }
+}
+intersector::minor_pair intersector::find_not_zero_minor(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2) const {
+    for (size_type index = 0; index < 3; ++index) {
+        size_type next_index = (index + 1) % 3;
+        double det = determ( coeffs1[index], coeffs1[next_index], coeffs2[index], coeffs2[next_index] );
+        if (!are_equal(det, 0)) {
+            return {index, next_index};
+        }
+    }
+    return {NAN, NAN};
 }
 
 }
