@@ -81,16 +81,33 @@ point_t intersector::get_intersec_point(const plane_coeffs& coeffs1, const plane
     static constexpr int  ARBITRARY_VALUE = 1;
 
     auto [colum1, colum2] = find_not_zero_minor(coeffs1, coeffs2);
+    double not_zero_minor = determ( coeffs1[colum1], coeffs1[colum2],
+                                    coeffs2[colum1], coeffs2[colum2] );
     if (std::isnan(colum1) || std::isnan(colum2)) {
         throw std::runtime_error{"Couldn't find not zero minor\n"};
     }
+    size_type arbit_col = 3 - (colum1 + colum2); //colum1 + colum2 <=3
+    double det_colum1 = determ(-coeffs1[3] - ARBITRARY_VALUE * coeffs1[arbit_col], coeffs1[colum2],
+                        -coeffs2[3] - ARBITRARY_VALUE * coeffs2[arbit_col], coeffs2[colum2] );
+    double det_colum2 = determ( coeffs1[colum1], -coeffs1[3] - ARBITRARY_VALUE * coeffs1[arbit_col],
+                         coeffs2[colum1], -coeffs2[3] - ARBITRARY_VALUE * coeffs2[arbit_col] );
+    using pair = std::pair<double, size_type>;
+    std::array<pair, 3> determ_and_id = { pair{det_colum1, colum1},
+                                          pair{det_colum2, colum2},
+                                          pair{ARBITRARY_VALUE, arbit_col} };
+    std::sort( determ_and_id.begin(), determ_and_id.end(),
+                         [](auto&& val1, auto&& val2) { return val1.second < val2.second; }
+             );
+    return { determ_and_id[0].first / not_zero_minor,
+             determ_and_id[1].first / not_zero_minor,
+             determ_and_id[2].first / not_zero_minor };
 }
 intersector::minor_pair intersector::find_not_zero_minor(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2) const {
     for (size_type index = 0; index < 3; ++index) {
         size_type next_index = (index + 1) % 3;
         double det = determ( coeffs1[index], coeffs1[next_index], coeffs2[index], coeffs2[next_index] );
         if (!are_equal(det, 0)) {
-            return {index, next_index};
+            return {std::min(index, next_index), std::max(index, next_index)};
         }
     }
     return {NAN, NAN};
