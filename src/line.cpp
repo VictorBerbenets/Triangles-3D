@@ -121,15 +121,23 @@ bool segment_t::is_valid() const {
 }
 
 bool segment_t::is_inside(const point_t& check_pt) const {
+    if (is_degenerated()) {
+        return pt1_ == check_pt;
+    }
     segment_t segm_part1(check_pt, pt1_);
     segment_t segm_part2(check_pt, pt2_);
     return are_equal(length(), segm_part1.length() + segm_part2.length());
 }
 
 bool segment_t::is_intersect(const segment_t& other) const {
-    if (is_degenerated() || other.is_degenerated()) {
-        return is_inside(other.pt1_);
+    // especial case
+    if (is_degenerated()) {
+        return other.is_inside(pt1_) ;
     }
+    if (other.is_degenerated()) {
+        return is_inside(other.pt1_) ;
+    }
+
     line_t ln_this  {pt1_, pt2_};
     line_t ln_other {other.pt1_, other.pt2_};
     if (!are_complanar( ln_this.dir_coords(), ln_other.dir_coords(),

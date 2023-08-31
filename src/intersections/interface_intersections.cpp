@@ -48,7 +48,6 @@ void intersector::print_intersected_triangles() const {
                 // these pair of triangles can't intersect each other
                 continue;
             } else { // both triangles lies in different planes
-                std::cout << "DIFF PLANEEEEEEEEEES\n";
                 if (different_intersection(iter1->first, iter2->first)) {
                     intsec_triangles.insert({iter1->second, iter2->second});
                 }
