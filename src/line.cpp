@@ -44,7 +44,7 @@ bool line_t::operator==(const line_t& other) const {
         return false;
     }
     // if other line contain a point of *this* line then they are equal
-    if (other.contains(other.point_)) {
+    if (other.contains(point_)) {
         return true;
     }
     return false;

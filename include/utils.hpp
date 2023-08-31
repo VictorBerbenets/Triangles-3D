@@ -32,11 +32,6 @@ inline bool are_complanar(const vector_t& vec1, const vector_t& vec2, const vect
     // | a1 a2 a3 |
     // | b1 b2 b3 | = 0
     // | c1 c2 c3 |
-    //
-        std::cout << "COMPLANAR: " << vec1[0] * determ(vec2[1], vec2[2], vec3[1], vec3[2]) -
-                      vec1[1] * determ(vec2[0], vec2[2], vec3[0], vec3[2]) +
-                      vec1[2] * determ(vec2[0], vec2[1], vec3[0], vec3[1]) << '\n';
-
     return are_equal( vec1[0] * determ(vec2[1], vec2[2], vec3[1], vec3[2]) -
                       vec1[1] * determ(vec2[0], vec2[2], vec3[0], vec3[2]) +
                       vec1[2] * determ(vec2[0], vec2[1], vec3[0], vec3[1]), 0 );
