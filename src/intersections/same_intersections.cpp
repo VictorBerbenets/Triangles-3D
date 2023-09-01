@@ -8,7 +8,6 @@ namespace yLAB {
 
 bool intersector::same_intersection(const triangle_t& tria1, const triangle_t& tria2) const {
     static constexpr std::size_t POINTS_TO_COMPARE = 3;
-    std::cout << "SAAAAAAAAAAAAME\n";
     for (std::size_t index1 = 0; index1 < POINTS_TO_COMPARE; ++index1) {
         std::size_t less_zero{0};
         for (std::size_t index2 = 0; index2 < POINTS_TO_COMPARE; ++index2) {

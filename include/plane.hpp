@@ -16,6 +16,8 @@ struct plane_t { // plane equation: Ax + By + Cz + D = 0
     bool operator==(const plane_t& other) const;
     vector_t get_coords() const;
     bool is_parallel(const plane_t& other) const;
+    bool contains(const point_t& pt) const;
+    point_t get_plane_point() const;
     void print() const;
 //------------------------------------------------------------------// 
     double A_ = NAN, B_ = NAN, C_ = NAN, D_ = NAN;

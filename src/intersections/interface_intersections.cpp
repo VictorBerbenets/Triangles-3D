@@ -18,8 +18,7 @@ intersector::intersector(std::istream& stream) {
     data_.reserve(data_size);
 
     std::vector<double> tmp_points{};
-    tmp_points.reserve(SET_POINTS_SIZE);
-    //  processing of input data 
+    tmp_points.reserve(SET_POINTS_SIZE); //  processing of input data 
     for (size_type count = 1; count <= data_size; ++count) {
         double tmp_value{};
         for (size_type points_number = 0; points_number < SET_POINTS_SIZE; ++points_number) {
@@ -42,10 +41,11 @@ void intersector::print_intersected_triangles() const {
         auto comp_plane = iter1->first.get_plane();
         for (auto iter2 = (iter1 + 1); iter2 != data_.end(); ++iter2) {
             auto tmp_plane = iter2->first.get_plane();
-            if (comp_plane == tmp_plane) { // both triangles lies in one plane
-
-            } else if (comp_plane.is_parallel(tmp_plane)) {
-                // these pair of triangles can't intersect each other
+            if (comp_plane == tmp_plane) {    // both triangles lies in one plane
+                if (same_intersection(iter1->first, iter2->first)) {
+                    intsec_triangles.insert({iter1->second, iter2->second});
+                }
+            } else if (comp_plane.is_parallel(tmp_plane)) { // these pair of triangles can't intersect each other
                 continue;
             } else { // both triangles lies in different planes
                 if (different_intersection(iter1->first, iter2->first)) {

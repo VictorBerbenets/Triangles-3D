@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <cmath>
 #include <stdexcept>
 
 #include "plane.hpp"
@@ -42,13 +43,31 @@ bool plane_t::is_parallel(const plane_t& other) const {
     return false; 
 };
 
+bool plane_t::contains(const point_t& pt) const {
+    return are_equal(A_ * pt.x_ + B_ * pt.y_ + C_ * pt.z_ + D_, 0);
+}
+
+point_t plane_t::get_plane_point() const {
+    double vec_module = std::sqrt( std::pow(A_, 2) + std::pow(B_, 2) + std::pow(C_, 2));
+    if (are_equal(vec_module, 0)) {
+        throw std::invalid_argument{"Modulus of the vector = 0\n"};
+    }
+    vector_t coords = get_coords();
+    //  normalization of the vector 
+    for (std::size_t id = 0; id < 3; ++id) {
+        coords[id] /= vec_module;
+    }
+    return {D_ * coords[0], D_ * coords[1], D_ * coords[2]};
+
+}
+
 bool plane_t::operator==(const plane_t& other) const {
     bool result = is_parallel(other);
     if (!result) {
         return false;
     }
 
-    if (are_equal(other.A_ / A_, other.D_ / D_)) {
+    if (other.contains(get_plane_point())) {
         return true;
     }
     return false;

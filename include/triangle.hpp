@@ -9,6 +9,8 @@
 namespace yLAB {
 
 struct triangle_t {
+    using pts_vector = std::array<point_t, 3>;
+
     triangle_t(const point_t& pt1, const point_t& pt2, const point_t& pt3);
     triangle_t( double val1, double val2, double val3,
                 double val4, double val5, double val6,
@@ -17,7 +19,7 @@ struct triangle_t {
 
     plane_t get_plane() const;
 //-------------------------------------------------------------------------//
-    std::array<point_t, 3> vertices_;
+    pts_vector vertices_;
 };
 
 }
