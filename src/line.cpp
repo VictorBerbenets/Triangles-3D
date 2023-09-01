@@ -140,10 +140,6 @@ bool segment_t::is_intersect(const segment_t& other) const {
 
     line_t ln_this  {pt1_, pt2_};
     line_t ln_other {other.pt1_, other.pt2_};
-    if (!are_complanar( ln_this.dir_coords(), ln_other.dir_coords(),
-               get_vector(other.pt1_, pt1_ == other.pt1_ ? ln_this.get_point() : pt1_) )) {
-        return false;
-    }
     //if lie in one plane and parallel each other
     if( is_null_vector( calc_vects_product(ln_this.dir_coords(), ln_other.dir_coords()) ) ) {
         if (is_inside(other.pt1_) || is_inside(other.pt2_) ||
