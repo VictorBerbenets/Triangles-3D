@@ -47,6 +47,8 @@ struct segment_t {
     bool is_inside(const point_t& pt) const;
     bool is_degenerated() const;
 
+    void set_ends(const point_t& pt1, const point_t& pt2);
+    void set_ends(const point_t& pt);
     void print() const;
 //------------------------------------------------------------------//
     point_t pt1_{}, pt2_{};

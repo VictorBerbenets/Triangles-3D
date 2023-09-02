@@ -11,15 +11,12 @@ bool intersector::same_intersection(const triangle_t& tria1, const triangle_t& t
     for (std::size_t index1 = 0; index1 < POINTS_TO_COMPARE; ++index1) {
         std::size_t less_zero{0};
         for (std::size_t index2 = 0; index2 < POINTS_TO_COMPARE; ++index2) {
-            less_zero += mul_vect_products({ tria1.vertices_[index2],
-                                             tria1.vertices_[(index2 + 1) % POINTS_TO_COMPARE],
-                                             tria1.vertices_[(index2 + 2) % POINTS_TO_COMPARE] },
-                                             tria2.vertices_[index1]);
+            if (!mul_vect_products({ tria1.vertices_[index2],
+                                     tria1.vertices_[(index2 + 1) % POINTS_TO_COMPARE],
+                                     tria1.vertices_[(index2 + 2) % POINTS_TO_COMPARE] },
+                                     tria2.vertices_[index1]) ) { break; }
         }
-        // if point (tria2[index1]) lies insid tria1
-        if (less_zero == POINTS_TO_COMPARE) {
-            return true;
-        }
+        return true;
     }
     return false;
 }

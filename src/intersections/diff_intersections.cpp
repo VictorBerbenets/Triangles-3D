@@ -11,34 +11,34 @@
 #include "plane.hpp"
 #include "triangle.hpp"
 
+#include <chrono>
 namespace yLAB {
-//bool intersector::
-bool intersector::different_intersection(const triangle_t& tria1, const triangle_t& tria2) const {
-    line_t intsec_line = get_intersection_line(tria1.get_plane(), tria2.get_plane());
-    // finding intersection between triangles
-    segment_t tr1_segment = get_segment(intsec_line, tria1);
-    if (!tr1_segment.is_valid()) {
-        return false;
-    }
-    segment_t tr2_segment = get_segment(intsec_line, tria2);
-    if (!tr2_segment.is_valid()) {
-        return false;
-    }
+
+bool intersector::different_intersection(const tria_plane& pair1, const tria_plane& pair2) const {
+    line_t intsec_line = get_intersection_line(pair1.second, pair2.second);
+    
+    segment_t tr1_segment{};
+    if (!init_segment(intsec_line, pair1.first, tr1_segment)) { return false; }
+    segment_t tr2_segment{};
+    if (!init_segment(intsec_line, pair2.first, tr2_segment)) { return false; }
+    
     return tr1_segment.is_intersect(tr2_segment);    
 }
 
-segment_t intersector::get_segment(line_t& intsec_line, const triangle_t& tria) const {
+bool intersector::init_segment(line_t& intsec_line, const triangle_t& tria, segment_t& segm) const {
     std::vector<point_t> intsec_points{};
     for (int index = 0; index < 3; ++index) {
         find_intsec_points(intsec_points, intsec_line, tria.vertices_[index], tria.vertices_[(index + 1) % 3]);
-    }
-    if (intsec_points.size() == 2) {
-        return {intsec_points.front(), intsec_points.back()};
+        if (intsec_points.size() == 2) {
+            segm.set_ends(intsec_points.front(), intsec_points.back());
+            return true;
+        }
     }
     if (intsec_points.size() == 1) {
-        return {intsec_points.front()};
+        segm.set_ends(intsec_points.front());
+        return true;
     } 
-    return {};
+    return false;
 }
 
 void intersector::find_intsec_points(std::vector<point_t>& intsec_points, line_t& intsec_line,
@@ -69,8 +69,8 @@ void intersector::find_intsec_points(std::vector<point_t>& intsec_points, line_t
 
 line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t plane2) const {
     vector_t dirr_vec = calc_vects_product(plane1.get_coords(), plane2.get_coords());
-    point_t intsec_pt = get_planes_intersec_point( plane_coeffs{plane1.A_, plane1.B_, plane1.C_, plane1.D_},
-                                  plane_coeffs{plane2.A_, plane2.B_, plane2.C_, plane2.D_} );
+    point_t intsec_pt = get_planes_intersec_point( plane_coeffs{plane1.normals_[0], plane1.normals_[1], plane1.normals_[2], plane1.D_},
+                                                   plane_coeffs{plane2.normals_[0], plane2.normals_[1], plane2.normals_[2], plane2.D_} );
     if (!intsec_pt.is_valid()) {
         throw std::runtime_error{"Couldn't get intersection point\n"};
     }

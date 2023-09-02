@@ -13,7 +13,7 @@ inline double determ(double a, double b, double c, double d) { //|a b|
 }
 
 inline bool are_equal(double val1, double val2) {
-    static constexpr double EPSILON = 1e-9;
+    static constexpr double EPSILON = 1e-6;
     return std::fabs(val1 - val2) < EPSILON;
 }
 

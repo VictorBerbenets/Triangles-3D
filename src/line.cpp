@@ -51,11 +51,11 @@ bool line_t::operator==(const line_t& other) const {
 }
 // if lines don't intersects or they equal then return NAN point_t
 point_t line_t::get_intersec_point(const line_t& other) const {
-    point_t dir_comp = (point_ == other.point_) ? get_point() : point_;
+    /*point_t dir_comp = (point_ == other.point_) ? get_point() : point_;
     if (!are_complanar(dir_coords(), other.dir_coords(), get_vector(dir_comp, other.point_)) ||
             is_parallel(other)) { 
         return {};
-    }
+    }*/
     std::array<double, 3> diffs { other.point_.x_ - point_.x_,
                                   other.point_.y_ - point_.y_,
                                   other.point_.z_ - point_.z_  };
@@ -161,6 +161,15 @@ bool segment_t::is_intersect(const segment_t& other) const {
 
 bool segment_t::is_degenerated() const {
     return pt1_ == pt2_;
+}
+
+void segment_t::set_ends(const point_t& pt1, const point_t& pt2) {
+    pt1_ = pt1;
+    pt2_ = pt2;
+}
+
+void segment_t::set_ends(const point_t& pt) {
+    pt1_ = pt2_ = pt;
 }
 
 void segment_t::print() const {
