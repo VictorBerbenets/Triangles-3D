@@ -25,16 +25,14 @@ plane_t::plane_t(double A, double B, double C, double D):
 
 
 bool plane_t::is_parallel(const plane_t& other) const {
-    vector_t vec_product = calc_vects_product(normal_coords_, other.normal_coords_);
-    if (is_null_vector(vec_product)) {
+    if ( calc_vects_product(normal_coords_, other.normal_coords_).is_null() ) {
         return true;
     }
     return false; 
 };
 
 bool plane_t::contains(const point_t& pt) const {
-    //return are_equal(normal_coords_[0] * pt.x_ + normal_coords_[1] * pt.y_ + normal_coords_[2] * pt.z_ + D_, 0);
-    return are_equal(normal_coords_[0] * pt.x_ + normal_coords_[1] * pt.y_ + normal_coords_[2] * pt.z_ + D_, 0);
+    return is_zero(normal_coords_[0] * pt.x_ + normal_coords_[1] * pt.y_ + normal_coords_[2] * pt.z_ + D_);
 }
 
 point_t plane_t::get_plane_point() const {
