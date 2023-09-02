@@ -20,7 +20,7 @@ struct plane_t { // plane equation: Ax + By + Cz + D = 0
     point_t get_plane_point() const;
     void print() const;
 //------------------------------------------------------------------// 
-    vector_t normals_;
+    vector_t normal_coords_;
     //double A_ = NAN, B_ = NAN, C_ = NAN,
     double D_ = NAN;
 };

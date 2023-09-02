@@ -11,7 +11,8 @@ set(TESTING_FILES
                 ../src/line.cpp
                 ../src/plane.cpp
                 ../src/triangle.cpp
-                        )
+                ../src/vector.cpp
+                )
 add_executable(test_app ${TEST_SOURCES}
                         ${TESTING_FILES}
               )

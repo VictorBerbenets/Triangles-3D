@@ -1,10 +1,10 @@
 #ifndef UTILS_
 #define UTILS_
 
-#include <limits>
 #include <cmath>
-#include <array>
-#include <iostream>
+
+#include "vector.hpp"
+#include "point.hpp"
 
 namespace yLAB {
 
@@ -17,7 +17,9 @@ inline bool are_equal(double val1, double val2) {
     return std::fabs(val1 - val2) < EPSILON;
 }
 
-using vector_t = std::array<double, 3>; // each vector has three coordinates
+inline bool is_zero(double expr) {
+    return are_equal(expr, 0);
+}
 
 inline vector_t calc_vects_product(const vector_t& vec1, const vector_t& vec2) {
     //    -> -> ->
@@ -44,13 +46,14 @@ inline bool is_null_vector(const vector_t& vector) {
 }
 
 inline vector_t get_vector(const point_t& pt1, const point_t& pt2) {
-    return {(pt1.x_ - pt2.x_), (pt1.y_ - pt2.y_), (pt1.z_ - pt2.z_)};
+    return {(pt2.x_ - pt1.x_), (pt2.y_ - pt1.y_), (pt2.z_ - pt1.z_)};
 }
 
 inline double scalar_multiply(const vector_t& vec1, const vector_t& vec2) {            
     return vec1[0] * vec2[0] + vec1[1] * vec2[1] + vec1[2] * vec2[2];
 }
 
-}
+
+} // <--- namespace yLAB
 
 #endif

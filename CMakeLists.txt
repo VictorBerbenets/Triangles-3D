@@ -11,6 +11,7 @@ set(SOURCES
         src/line.cpp
         src/plane.cpp
         src/triangle.cpp
+        src/vector.cpp
         src/intersections/diff_intersections.cpp
         src/intersections/same_intersections.cpp
         src/intersections/interface_intersections.cpp
