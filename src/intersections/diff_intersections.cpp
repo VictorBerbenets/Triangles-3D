@@ -43,15 +43,12 @@ bool intersector::init_segment(line_t& intsec_line, const triangle_t& tria, segm
 
 void intersector::find_intsec_points(std::vector<point_t>& intsec_points, line_t& intsec_line,
                                     const point_t& pt1, const point_t& pt2) const {
-    vector_t line_vec = intsec_line.dir_coords();
-    vector_t segm_vec {pt1, pt2};
-    
     auto push_back_if = [&intsec_points](const point_t& pt) {
                             if (std::find(intsec_points.begin(), intsec_points.end(), pt) == intsec_points.end()) {
                                 intsec_points.push_back(pt);
                             }
                         };
-    if (is_null_vector(calc_vects_product(line_vec, segm_vec))) {
+    if ( calc_vects_product(intsec_line.dir_coords_, {pt1, pt2}).is_null() ) {
         // if both parallels each other and line contains one segment's point
         // then sigment lies on the line
         if (intsec_line.contains(pt1)) {

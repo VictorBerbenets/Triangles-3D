@@ -25,12 +25,12 @@ struct line_t {
     bool is_valid() const;
     
     point_t get_intersec_point(const line_t& other) const;
-    vector_t dir_coords() const noexcept;
     point_t get_point(double coeff = DEFAULT_COEFF) const;
     
     void print() const;
 //------------------------------------------------------------------//
-    double a1_ = NAN, a2_ = NAN, a3_ = NAN;
+    vector_t dir_coords_; // coordinates of the direct vector 
+    //double a1_ = NAN, a2_ = NAN, a3_ = NAN;
     point_t point_{};
 };
 

@@ -1,3 +1,4 @@
+#include <iostream>
 #include <cmath>
 #include <stdexcept>
 
@@ -73,6 +74,10 @@ bool vector_t::is_valid() const {
     return !std::isnan(coords_[0]) &&
            !std::isnan(coords_[1]) &&
            !std::isnan(coords_[2]) ;
+}
+
+void vector_t::print() const noexcept {
+    std::cout << coords_[0] << ' ' << coords_[1] << ' ' << coords_[2] << std::endl;
 }
 
 } // <--- namespace yLAB

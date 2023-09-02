@@ -9,6 +9,9 @@ namespace yLAB {
 point_t::point_t(double x, double y, double z):
         x_{x}, y_{y}, z_{z} {};
 
+point_t::point_t():
+        x_{NAN}, y_{NAN}, z_{NAN} {};
+
 point_t::coords point_t::get_coords() const {
     return {x_, y_, z_};
 }

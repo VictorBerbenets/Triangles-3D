@@ -12,7 +12,7 @@ struct point_t {
     using coords = std::array<double, 3>;
 
     point_t(double x, double y, double z);
-    point_t()  = default;
+    point_t();
     ~point_t() = default;
 
     bool operator==(const point_t& other) const;

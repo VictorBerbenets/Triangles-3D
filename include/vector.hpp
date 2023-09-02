@@ -31,6 +31,8 @@ public:
     
     bool is_null() const;
     bool is_valid() const;
+
+    void print() const noexcept;
 private:
     std::array<double, 3> coords_;
 };
