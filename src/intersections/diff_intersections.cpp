@@ -103,7 +103,7 @@ intersector::minor_pair intersector::find_not_zero_minor(const plane_coeffs& coe
     for (size_type index = 0; index < 3; ++index) {
         size_type next_index = (index + 1) % 3;
         double det = determ( coeffs1[index], coeffs1[next_index], coeffs2[index], coeffs2[next_index] );
-        if (!are_equal(det, 0)) {
+        if (!is_zero(det)) {
             return {std::min(index, next_index), std::max(index, next_index)};
         }
     }

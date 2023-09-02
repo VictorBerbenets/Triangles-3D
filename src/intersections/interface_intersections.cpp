@@ -39,14 +39,12 @@ intersector::intersector(std::istream& stream) {
 void intersector::print_intersected_triangles() const {
     std::unordered_set<size_type> intsec_triangles{};
     for (auto iter1 = data_.begin(); iter1 != data_.end(); ++iter1) {
-        //auto comp_plane = iter1->first.get_plane();
         if (intsec_triangles.find(iter1->second) != intsec_triangles.end()) {
             continue;
         }
         tria_plane pair1 = {iter1->first, iter1->first.get_plane()};
         for (auto iter2 = (iter1 + 1); iter2 != data_.end(); ++iter2) {
             tria_plane pair2= {iter2->first, iter2->first.get_plane()};
-            //auto tmp_plane = iter2->first.get_plane();
             if (!pair1.second.is_parallel(pair2.second)) {
                 if (different_intersection(pair1, pair2)) {
                     intsec_triangles.insert({iter1->second, iter2->second});
