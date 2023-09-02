@@ -22,9 +22,9 @@ bool intersector::same_intersection(const triangle_t& tria1, const triangle_t& t
 }
 
 bool intersector::mul_vect_products(const triangle_t::pts_vector& tria, const point_t& comp_pt) const {
-    vector_t dir_tria1  = get_vector(tria[0], tria[1]);
-    vector_t dir_tria2  = get_vector(tria[0], tria[2]);
-    vector_t points_dir = get_vector(tria[0], comp_pt);
+    vector_t dir_tria1  {tria[0], tria[1]};
+    vector_t dir_tria2  {tria[0], tria[2]};
+    vector_t points_dir {tria[0], comp_pt};
 
     return scalar_multiply (calc_vects_product(points_dir, dir_tria1),
                             calc_vects_product(points_dir, dir_tria2)) <= 0;

@@ -44,11 +44,11 @@ bool intersector::init_segment(line_t& intsec_line, const triangle_t& tria, segm
 void intersector::find_intsec_points(std::vector<point_t>& intsec_points, line_t& intsec_line,
                                     const point_t& pt1, const point_t& pt2) const {
     vector_t line_vec = intsec_line.dir_coords();
-    vector_t segm_vec = get_vector(pt1, pt2);
+    vector_t segm_vec {pt1, pt2};
     
     auto push_back_if = [&intsec_points](const point_t& pt) {
                             if (std::find(intsec_points.begin(), intsec_points.end(), pt) == intsec_points.end()) {
-                                intsec_points.push_back(std::move(pt));
+                                intsec_points.push_back(pt);
                             }
                         };
     if (is_null_vector(calc_vects_product(line_vec, segm_vec))) {
@@ -69,8 +69,8 @@ void intersector::find_intsec_points(std::vector<point_t>& intsec_points, line_t
 
 line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t plane2) const {
     vector_t dirr_vec = calc_vects_product(plane1.get_coords(), plane2.get_coords());
-    point_t intsec_pt = get_planes_intersec_point( plane_coeffs{plane1.normals_[0], plane1.normals_[1], plane1.normals_[2], plane1.D_},
-                                                   plane_coeffs{plane2.normals_[0], plane2.normals_[1], plane2.normals_[2], plane2.D_} );
+    point_t intsec_pt = get_planes_intersec_point( plane_coeffs{plane1.normal_coords_[0], plane1.normal_coords_[1], plane1.normal_coords_[2], plane1.D_},
+                                                   plane_coeffs{plane2.normal_coords_[0], plane2.normal_coords_[1], plane2.normal_coords_[2], plane2.D_} );
     if (!intsec_pt.is_valid()) {
         throw std::runtime_error{"Couldn't get intersection point\n"};
     }

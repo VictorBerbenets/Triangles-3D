@@ -86,7 +86,7 @@ point_t line_t::get_point(double coeff) const {
              point_.z_ + a3_ * coeff, };
 }
 bool line_t::contains(const point_t& pt) const {
-    return is_null_vector(calc_vects_product(dir_coords(), get_vector(point_, pt)));
+    return calc_vects_product(dir_coords(), {point_, pt}).is_null();
 }
 
 bool line_t::is_valid() const {

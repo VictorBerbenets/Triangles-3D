@@ -30,23 +30,19 @@ inline vector_t calc_vects_product(const vector_t& vec1, const vector_t& vec2) {
             -determ(vec1[0], vec1[2], vec2[0], vec2[2]),
              determ(vec1[0], vec1[1], vec2[0], vec2[1]), };
 }
-inline bool are_complanar(const vector_t& vec1, const vector_t& vec2, const vector_t& vec3) {
+inline bool are_coplanar(const vector_t& vec1, const vector_t& vec2, const vector_t& vec3) {
     // | a1 a2 a3 |
     // | b1 b2 b3 | = 0
     // | c1 c2 c3 |
-    return are_equal( vec1[0] * determ(vec2[1], vec2[2], vec3[1], vec3[2]) -
-                      vec1[1] * determ(vec2[0], vec2[2], vec3[0], vec3[2]) +
-                      vec1[2] * determ(vec2[0], vec2[1], vec3[0], vec3[1]), 0 );
+    return is_zero( vec1[0] * determ(vec2[1], vec2[2], vec3[1], vec3[2]) -
+                    vec1[1] * determ(vec2[0], vec2[2], vec3[0], vec3[2]) +
+                    vec1[2] * determ(vec2[0], vec2[1], vec3[0], vec3[1]) );
 }
 
 inline bool is_null_vector(const vector_t& vector) {
-    return are_equal(vector[0], 0) &&
-           are_equal(vector[1], 0) &&
-           are_equal(vector[2], 0);
-}
-
-inline vector_t get_vector(const point_t& pt1, const point_t& pt2) {
-    return {(pt2.x_ - pt1.x_), (pt2.y_ - pt1.y_), (pt2.z_ - pt1.z_)};
+    return is_zero(vector[0]) &&
+           is_zero(vector[1]) &&
+           is_zero(vector[2]);
 }
 
 inline double scalar_multiply(const vector_t& vec1, const vector_t& vec2) {            

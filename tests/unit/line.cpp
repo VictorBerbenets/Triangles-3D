@@ -82,7 +82,7 @@ TEST(Line_Testing, Complanarity) {
     vector_t vec2{1, 2, 4};
     vector_t vec3{3, -2, 4};
 
-    EXPECT_TRUE(are_complanar(vec1, vec2, vec3));
+    EXPECT_TRUE(are_coplanar(vec1, vec2, vec3));
 
 }
 
