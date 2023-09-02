@@ -13,7 +13,7 @@
 
 namespace yLAB {
 
-class intersector {
+class intersector final {
 public:
     using size_type    = std::size_t;
     using dataVal      = std::pair<triangle_t, size_type>; // saving triangle and his order number
@@ -48,6 +48,7 @@ private:
     std::vector<dataVal> data_;
 };
 
-} 
+} // <--- namespace yLAB
 
 #endif
+

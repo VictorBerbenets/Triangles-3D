@@ -167,5 +167,5 @@ void segment_t::print() const {
     pt2_.print();
 }
 
-}
+}// namespace yLAB
 

@@ -47,16 +47,16 @@ void intersector::print_intersected_triangles() const {
         for (auto iter2 = (iter1 + 1); iter2 != data_.end(); ++iter2) {
             tria_plane pair2= {iter2->first, iter2->first.get_plane()};
             //auto tmp_plane = iter2->first.get_plane();
-            if (pair1.second == pair2.second) {    // both triangles lies in one plane
-                if (same_intersection(pair1.first, pair2.first)) {
-                    intsec_triangles.insert({iter1->second, iter2->second});
-                }
-            } else if (pair1.second.is_parallel(pair2.second)) { // these pair of triangles can't intersect each other
-                continue;
-            } else { // both triangles lies in different planes
+            if (!pair1.second.is_parallel(pair2.second)) {
                 if (different_intersection(pair1, pair2)) {
                     intsec_triangles.insert({iter1->second, iter2->second});
                 }
+            } else if (pair1.second == pair2.second) {    // both triangles lies in one plane
+                if (same_intersection(pair1.first, pair2.first)) {
+                    intsec_triangles.insert({iter1->second, iter2->second});
+                }
+            } else {
+                continue;
             }
         }
     }
@@ -66,5 +66,5 @@ void intersector::print_intersected_triangles() const {
     std::cout << std::endl;
 }
 
-}
+} // <--- namespace yLAB
 

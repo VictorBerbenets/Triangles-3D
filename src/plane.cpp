@@ -11,10 +11,6 @@
 
 namespace yLAB {
 
-plane_t::plane_t(const line_t& line, const point_t& pt) {
-
-}
-
 plane_t::plane_t(const point_t& pt1, const point_t& pt2, const point_t& pt3) {
     line_t ln(pt1, pt2);
     if (ln.contains(pt3)) {
@@ -27,12 +23,9 @@ plane_t::plane_t(const point_t& pt1, const point_t& pt2, const point_t& pt3) {
 plane_t::plane_t(double A, double B, double C, double D):
             normal_coords_ {A, B, C}, D_{D} {}
 
-vector_t plane_t::get_coords() const {
-    return {normal_coords_[0], normal_coords_[1], normal_coords_[2]};
-}
 
 bool plane_t::is_parallel(const plane_t& other) const {
-    vector_t vec_product = calc_vects_product(get_coords(), other.get_coords());
+    vector_t vec_product = calc_vects_product(normal_coords_, other.normal_coords_);
     if (is_null_vector(vec_product)) {
         return true;
     }
@@ -45,11 +38,11 @@ bool plane_t::contains(const point_t& pt) const {
 }
 
 point_t plane_t::get_plane_point() const {
-    double vec_module = std::sqrt( std::pow(normal_coords_[0], 2) + std::pow(normal_coords_[1], 2) + std::pow(normal_coords_[2], 2));
-    /*if (are_equal(vec_module, 0)) {
+    double vec_module = normal_coords_.get_module(); 
+    if (is_zero(vec_module)) {
         throw std::invalid_argument{"Modulus of the vector = 0\n"};
-    }*/
-    vector_t coords = get_coords();
+    }
+    vector_t coords = normal_coords_;
     //  normalization of the vector 
     for (std::size_t id = 0; id < 3; ++id) {
         coords[id] /= vec_module;
@@ -74,5 +67,5 @@ void plane_t::print() const {
     std::cout << normal_coords_[0] << "x + " << normal_coords_[1] << "y + " << normal_coords_[2] << "z + " << D_ << " = 0\n";
 };
 
-}
+} // <--- namespace yLAB
 

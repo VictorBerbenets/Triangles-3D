@@ -29,5 +29,5 @@ bool intersector::mul_vect_products(const triangle_t::pts_vector& tria, const po
                             calc_vects_product(points_dir, dir_tria2)) <= 0;
 }
 
-}
+} // <--- namespace yLAB
 

@@ -49,4 +49,4 @@ void point_t::print() const {
     std::cout << "x = " << x_ << " y = " << y_ << " z = " << z_ << std::endl;
 }
 
-}
+} // <--- namespace yLAB

@@ -8,7 +8,7 @@
 
 namespace yLAB {
 
-struct point_t {
+struct point_t final {
     using coords = std::array<double, 3>;
 
     point_t(double x, double y, double z);
@@ -29,6 +29,6 @@ struct point_t {
     double x_ = NAN, y_ = NAN, z_ = NAN;
 };
 
-}
+} // <--- namespace yLAB
 
 #endif

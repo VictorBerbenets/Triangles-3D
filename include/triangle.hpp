@@ -8,7 +8,7 @@
 
 namespace yLAB {
 
-struct triangle_t {
+struct triangle_t final {
     using pts_vector = std::array<point_t, 3>;
 
     triangle_t(const point_t& pt1, const point_t& pt2, const point_t& pt3);
@@ -22,5 +22,6 @@ struct triangle_t {
     pts_vector vertices_;
 };
 
-}
+} // namespace yLAB
+
 #endif

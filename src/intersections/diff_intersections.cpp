@@ -11,7 +11,6 @@
 #include "plane.hpp"
 #include "triangle.hpp"
 
-#include <chrono>
 namespace yLAB {
 
 bool intersector::different_intersection(const tria_plane& pair1, const tria_plane& pair2) const {
@@ -65,7 +64,7 @@ void intersector::find_intsec_points(std::vector<point_t>& intsec_points, line_t
 }
 
 line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t plane2) const {
-    vector_t dirr_vec = calc_vects_product(plane1.get_coords(), plane2.get_coords());
+    vector_t dirr_vec = calc_vects_product(plane1.normal_coords_, plane2.normal_coords_);
     point_t intsec_pt = get_planes_intersec_point( plane_coeffs{plane1.normal_coords_[0], plane1.normal_coords_[1], plane1.normal_coords_[2], plane1.D_},
                                                    plane_coeffs{plane2.normal_coords_[0], plane2.normal_coords_[1], plane2.normal_coords_[2], plane2.D_} );
     if (!intsec_pt.is_valid()) {
@@ -99,6 +98,7 @@ point_t intersector::get_planes_intersec_point(const plane_coeffs& coeffs1, cons
              1 == arbit_col ? ARBITRARY_VALUE : determ_and_id[1].first / not_zero_minor,
              2 == arbit_col ? ARBITRARY_VALUE : determ_and_id[2].first / not_zero_minor };
 }
+
 intersector::minor_pair intersector::find_not_zero_minor(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2) const {
     for (size_type index = 0; index < 3; ++index) {
         size_type next_index = (index + 1) % 3;
@@ -110,4 +110,5 @@ intersector::minor_pair intersector::find_not_zero_minor(const plane_coeffs& coe
     return {NAN, NAN};
 }
 
-}
+} // <--- namespace yLAB
+
