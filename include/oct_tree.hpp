@@ -21,7 +21,7 @@ class BoundingCube {
     bool is_point_inside(const point_t& pt) const;
 protected:
     BoundingCube();
-    BoundingCube(const point_t& center);
+    BoundingCube(const point_t& center, double side_size);
     ~BoundingCube() = default;
 
     bool is_tria_inside(const triangle_t& tria) const;
@@ -36,12 +36,12 @@ class Node final: protected BoundingCube {
 
     void construct_new_cubes() const;
 public:
-    //Node(const Node& rhs) = delete;
     Node();
     void insert(const triangle_t& tria) const;
 private:
-    std::list<triangle_t> data_;
-    
+    std::list<triangle_t> inside_cube_trias_;
+    std::list<triangle_t> intersec_trias_;
+
     std::unique_ptr<Node[]> childs_;
     std::shared_ptr<Node> parent_;
 
@@ -55,11 +55,11 @@ public:
     OctTree();
     ~OctTree() = default;
 
-    void insert_triangle(const triangle_t& tria) const;
+    void insert_triangle(const triangle_t& tria);
     const_value_type& get_root_node() const noexcept;
 private:
     value_type root_node_;
-
+    std::size_t nodes_counter_;
 };
 
 } // <--- namespace spaceBreaking
