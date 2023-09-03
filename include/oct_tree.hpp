@@ -1,3 +1,6 @@
+#ifndef OCT_TREE_
+#define OCT_TREE_
+
 #include <iostream>
 #include <list>
 #include <cmath>
@@ -63,3 +66,6 @@ private:
 };
 
 } // <--- namespace spaceBreaking
+
+#endif
+

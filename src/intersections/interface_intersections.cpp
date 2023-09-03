@@ -5,6 +5,7 @@
 #include <chrono>
 
 #include "intersector.hpp"
+#include "oct_tree.hpp"
 #include "plane.hpp"
 #include "triangle.hpp"
 
