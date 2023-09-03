@@ -18,13 +18,13 @@ class BoundingCube {
     static constexpr double MIN_CUBE_SIDE       = 1;
 
     void set_center() const;
+    bool is_point_inside(const point_t& pt) const;
 protected:
     BoundingCube();
     BoundingCube(const point_t& center);
     ~BoundingCube() = default;
 
-    is_inside(const point_t& pt) const;
-    
+    bool is_tria_inside(const triangle_t& tria) const;
 private:
     point_t center_;
     double side_size_;
@@ -34,19 +34,22 @@ class Node final: protected BoundingCube {
     
     bool is_limit_reached() const noexcept;
 
-    void insert(const triangle_t& tria) const;
     void construct_new_cubes() const;
+public:
+    //Node(const Node& rhs) = delete;
+
+    void insert(const triangle_t& tria) const;
 private:
     std::list<triangle_t> data_;
     
     std::unique_ptr<Node[]> childs_;
-    std::unique_ptr<Node> parent_;
+    std::shared_ptr<Node> parent_;
 
 
 }; // <--- class Node
 
 class OctTree final {
-    using value_type       = std::unique_ptr<Node>;
+    using value_type       = Node;
     using const_value_type = const value_type;
 public:
     OctTree();
@@ -55,7 +58,7 @@ public:
     void insert_triangle(const triangle_t& tria) const;
     const_value_type get_root_node() const noexcept;
 private:
-    value_type root_node_;
+    std::unique_ptr<Node> root_node_;
 
 };
 
