@@ -38,12 +38,12 @@ vector_t vector_t::operator/(double coeff) const {
     return {coords_[0] / coeff, coords_[1] / coeff, coords_[2] / coeff};
 }
 
-double& vector_t::operator[](size_type index) noexcept {
+double& vector_t::operator[](size_type index) {
     return coords_[index];
 }
 
 
-const double& vector_t::operator[](size_type index) const noexcept {
+const double& vector_t::operator[](size_type index) const {
     return coords_[index];
 }
 

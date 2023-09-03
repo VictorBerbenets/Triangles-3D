@@ -14,8 +14,8 @@ class BoundingCube {
 
     static constexpr size_type MAX_SPACE_DEGREE = 64;
     static constexpr size_type SPACE_BASE       = 2;
-    static constexpr double MAX_CUBE_SIDE       = std::pow(2, 64);
     static constexpr double MIN_CUBE_SIDE       = 1;
+    static constexpr double MAX_CUBE_SIDE       = std::pow(2, 64);
 
     void set_center() const;
     bool is_point_inside(const point_t& pt) const;
@@ -37,7 +37,7 @@ class Node final: protected BoundingCube {
     void construct_new_cubes() const;
 public:
     //Node(const Node& rhs) = delete;
-
+    Node();
     void insert(const triangle_t& tria) const;
 private:
     std::list<triangle_t> data_;
@@ -56,9 +56,9 @@ public:
     ~OctTree() = default;
 
     void insert_triangle(const triangle_t& tria) const;
-    const_value_type get_root_node() const noexcept;
+    const_value_type& get_root_node() const noexcept;
 private:
-    std::unique_ptr<Node> root_node_;
+    value_type root_node_;
 
 };
 

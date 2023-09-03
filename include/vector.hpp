@@ -22,8 +22,8 @@ public:
     vector_t operator*(double coeff) const noexcept;
     vector_t operator/(double coeff) const;
     
-    double& operator[](size_type index) noexcept;
-    const double& operator[](size_type index) const noexcept;
+    double& operator[](size_type index);
+    const double& operator[](size_type index) const;
     double& operator()(size_type index);
     const double&  operator()(size_type index) const;
 
