@@ -12,6 +12,7 @@ set(SOURCES
         src/plane.cpp
         src/triangle.cpp
         src/vector.cpp
+        src/OctTree/oct_tree.cpp
         src/intersections/diff_intersections.cpp
         src/intersections/same_intersections.cpp
         src/intersections/interface_intersections.cpp
