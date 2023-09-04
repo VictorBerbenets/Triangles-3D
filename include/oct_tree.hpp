@@ -6,6 +6,7 @@
 #include <array>
 #include <cmath>
 #include <memory>
+#include <utility>
 
 #include "triangle.hpp"
 
@@ -18,6 +19,7 @@ public:
     ~BoundingCube() = default;
 protected:
     using size_type = std::size_t;
+    using data_type    = std::pair<triangle_t, size_type>;
 
     static constexpr size_type VOLUMES_NUMBER = 8;
     
@@ -36,7 +38,7 @@ protected:
     BoundingCube();
     BoundingCube(const point_t& center, size_type space_degree);
 
-    cubeInfo what_subcube(const triangle_t& tria) const;
+    cubeInfo what_subcube(const data_type& tria) const;
     subCubes get_subcubes(double hlf_side, size_type new_degree) const;
 
     void set_center() noexcept;
@@ -57,10 +59,10 @@ public:
     Node(const Node& parent, const point_t& center, size_type space_degree);
     ~Node() = default;
 
-    void insert(const triangle_t& tria);
+    void insert(const data_type& tria);
 private:
-    std::list<triangle_t> inside_cube_trias_;
-    std::list<triangle_t> intersec_trias_;
+    std::list<data_type> inside_cube_trias_;
+    std::list<data_type> intersec_trias_;
 
     std::unique_ptr<pointer_type[]> ptrs_childs_;
     const Node& parent_;
@@ -73,11 +75,12 @@ private:
 class OctTree final {
     using value_type       = Node;
     using const_value_type = const value_type;
+    using data_type        = std::pair<triangle_t, std::size_t>;
 public:
     OctTree();
     ~OctTree() = default;
 
-    void insert_triangle(const triangle_t& tria);
+    void insert_triangle(const data_type& tria);
     const_value_type& get_root_node() const noexcept;
 private:
     value_type root_node_;

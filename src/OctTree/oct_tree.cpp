@@ -30,14 +30,15 @@ BoundingCube::subCubes BoundingCube::get_subcubes(double hlf_side, size_type new
              BoundingCube { {center_.x_ + hlf_side, center_.y_ + hlf_side, center_.z_ - hlf_side}, new_degree } };
 }
 
-BoundingCube::cubeInfo BoundingCube::what_subcube(const triangle_t& tria) const {
+BoundingCube::cubeInfo BoundingCube::what_subcube(const data_type& tria) const {
     auto new_degree = space_degree_ - DEGREE_DECREASE;
     auto sb_cubes = get_subcubes(side_length(new_degree), new_degree);
 
     for (size_type cubes_index = 0; cubes_index < VOLUMES_NUMBER; ++cubes_index) {
         size_type tria_index = 0;
         for ( ; tria_index < 3; ++tria_index) {
-            if ( !sb_cubes[cubes_index].is_point_inside(tria.vertices_[tria_index]) ) {
+            auto& triangle = tria.first;
+            if ( !sb_cubes[cubes_index].is_point_inside(triangle.vertices_[tria_index]) ) {
                 break;
             }
         }
@@ -60,7 +61,7 @@ bool BoundingCube::is_point_inside(const point_t& pt) const {
            less{}(std::fabs(pt.z_), std::fabs(center_.z_ + hlf_side)) && greater{}(std::fabs(pt.z_), std::fabs(center_.z_ - hlf_side));
 }
 
-void Node::insert(const triangle_t& tria) {
+void Node::insert(const data_type& tria) {
     if (is_zero(space_degree_)) {
         return ;
     }
@@ -93,7 +94,7 @@ OctTree::const_value_type& OctTree::get_root_node() const noexcept {
     return root_node_;
 }
 
-void OctTree::insert_triangle(const triangle_t& tria) {
+void OctTree::insert_triangle(const data_type& tria) {
     root_node_.insert(tria);
     ++nodes_counter_;
 }
