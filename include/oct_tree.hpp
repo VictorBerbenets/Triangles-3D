@@ -23,16 +23,16 @@ protected:
     static constexpr size_type SPACE_BASE       = 2;
     static constexpr double MIN_CUBE_SIDE       = 1; // = 2^space_degree
 
-    void set_center() noexcept;
-    bool is_point_inside(const point_t& pt) const;
-
     BoundingCube();
     BoundingCube(const point_t& center, double space_degree);
     ~BoundingCube() = default;
     
     SubSpaces what_subspace(const point_t& check_pt) const;
 
+    void set_center() noexcept;
+    bool is_point_inside(const point_t& pt) const;
     bool is_tria_inside(const triangle_t& tria) const;
+
     double side_length() const;
 //-----------------------------------------------------------------------//
     point_t center_;
