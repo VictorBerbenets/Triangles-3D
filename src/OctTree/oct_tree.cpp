@@ -1,3 +1,4 @@
+#include <memory>
 
 #include "triangle.hpp"
 #include "oct_tree.hpp"
@@ -20,11 +21,14 @@ double BoundingCube::side_length() const {
 }
 
 bool BoundingCube::is_tria_inside(const triangle_t& tria) const {
-
+    
 }
 
 bool BoundingCube::is_point_inside(const point_t& pt) const {
-
+    auto hlf_side = std::pow(SPACE_BASE, space_degree_);
+    return  fabs(pt.x_) <= fabs(center_.x_ + hlf_side) && fabs(pt.x_) >= fabs(center_.x_ - hlf_side) &&
+            fabs(pt.y_) <= fabs(center_.y_ + hlf_side) && fabs(pt.y_) >= fabs(center_.y_ - hlf_side) &&
+            fabs(pt.z_) <= fabs(center_.z_ + hlf_side) && fabs(pt.z_) >= fabs(center_.z_ - hlf_side);
 }
 
 void Node::set_pointers() {
@@ -50,9 +54,9 @@ void Node::insert(const triangle_t& tria) {
 }
 
 Node::Node(const Node& parent, const point_t& center, double space_degree):
-            BoundingCube(center, space_degree),
-            parent_(parent) {}
-
+            BoundingCube {center, space_degree},
+            ptrs_childs_ {std::make_unique<pointer_type[]>(VOLUMES_NUMBER)},
+            parent_ {parent} {}
 
 OctTree::const_value_type& OctTree::get_root_node() const noexcept {
     return root_node_;

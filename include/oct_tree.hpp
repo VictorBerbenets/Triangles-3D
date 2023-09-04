@@ -15,6 +15,9 @@ using namespace yLAB;
 class BoundingCube {
 protected:
     using size_type = std::size_t;
+    
+    enum class SubSpaces: char {A = 0, B = 1, C = 2, D = 3,
+                                E = 4, F = 5, G = 6, H = 7};
 
     static constexpr size_type MAX_SPACE_DEGREE = 64;
     static constexpr size_type SPACE_BASE       = 2;
@@ -26,6 +29,8 @@ protected:
     BoundingCube();
     BoundingCube(const point_t& center, double space_degree);
     ~BoundingCube() = default;
+    
+    SubSpaces what_subspace(const point_t& check_pt) const;
 
     bool is_tria_inside(const triangle_t& tria) const;
     double side_length() const;
@@ -35,8 +40,10 @@ protected:
 }; // <--- class BoandingCube
 
 class Node final: protected BoundingCube {
+    using pointer_type = std::unique_ptr<Node>;
+    
     static constexpr std::size_t VOLUMES_NUMBER = 8;
-
+    
     bool is_limit_reached() const noexcept;
     void construct_new_cubes() const;
     void set_pointers();
@@ -50,7 +57,7 @@ private:
     std::list<triangle_t> inside_cube_trias_;
     std::list<triangle_t> intersec_trias_;
 
-    std::unique_ptr<Node[]> childs_;
+    std::unique_ptr<pointer_type[]> ptrs_childs_;
     const Node& parent_;
 
     bool are_ptrs_set_ = false;
