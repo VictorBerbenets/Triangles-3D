@@ -16,11 +16,11 @@ using namespace yLAB;
 
 class BoundingCube {
 public:
-    ~BoundingCube() = default;
-protected:
     using size_type = std::size_t;
     using data_type    = std::pair<triangle_t, size_type>;
-
+    
+    ~BoundingCube() = default;
+protected:
     static constexpr size_type VOLUMES_NUMBER = 8;
     
     enum class SubCubes: int { A = 0, B = 1, C = 2, D = 3,
@@ -34,7 +34,7 @@ protected:
     static constexpr size_type DEGREE_DECREASE  = 1;  //  divide each volume by 2
     static constexpr size_type SPACE_BASE       = 2;  //
     static constexpr double MIN_CUBE_SIDE       = 1;  // = 2^space_degree
-
+ 
     BoundingCube();
     BoundingCube(const point_t& center, size_type space_degree);
 
@@ -75,7 +75,7 @@ private:
 class OctTree final {
     using value_type       = Node;
     using const_value_type = const value_type;
-    using data_type        = std::pair<triangle_t, std::size_t>;
+    using data_type        = BoundingCube::data_type;
 public:
     OctTree();
     ~OctTree() = default;
@@ -86,6 +86,7 @@ private:
     value_type root_node_;
     std::size_t nodes_counter_;
 }; // <--- class OctTree
+
 
 } // <--- namespace spaceBreaking
 

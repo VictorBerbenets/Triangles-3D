@@ -6,13 +6,14 @@
 #include <utility>
 #include <array>
 
+#include "oct_tree.hpp"
 #include "point.hpp"
 #include "line.hpp"
 #include "plane.hpp"
 #include "triangle.hpp"
 
 namespace yLAB {
-
+    using spaceBreaking::OctTree;
 class intersector final {
 public:
     using size_type    = std::size_t;
@@ -46,6 +47,7 @@ public:
     void print_intersected_triangles() const;
 private:
     std::vector<dataVal> data_;
+    OctTree oct_tree_;
 };
 
 } // <--- namespace yLAB
