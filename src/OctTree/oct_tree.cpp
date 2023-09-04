@@ -60,10 +60,6 @@ bool BoundingCube::is_point_inside(const point_t& pt) const {
            less{}(std::fabs(pt.z_), std::fabs(center_.z_ + hlf_side)) && greater{}(std::fabs(pt.z_), std::fabs(center_.z_ - hlf_side));
 }
 
-void Node::set_pointers() {
-    
-}
-
 void Node::insert(const triangle_t& tria) {
     if (is_zero(space_degree_)) {
         return ;
@@ -77,7 +73,15 @@ void Node::insert(const triangle_t& tria) {
     if (ptrs_childs_[cube_sector].get() == nullptr) {
         ptrs_childs_[cube_sector] = std::make_unique<Node>(*this, center, space_degree);
     }
-    ptrs_childs_[cube_sector]->inside_cube_trias_.push_back(tria);
+    if (is_limit_reached()) {
+        ptrs_childs_[cube_sector]->inside_cube_trias_.push_back(tria);
+        return ;
+    }
+    ptrs_childs_[cube_sector]->insert(tria);
+}
+
+bool Node::is_limit_reached() const noexcept {
+    return space_degree_ == MIN_CUBE_SIDE;
 }
 
 Node::Node(const Node& parent, const point_t& center, size_type space_degree):

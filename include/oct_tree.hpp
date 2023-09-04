@@ -52,8 +52,6 @@ class Node final: protected BoundingCube {
     using pointer_type = std::unique_ptr<Node>;
 
     bool is_limit_reached() const noexcept;
-    void construct_new_cubes() const;
-    void set_pointers();
 public:
     Node(const Node& parent);
     Node(const Node& parent, const point_t& center, size_type space_degree);
@@ -84,7 +82,7 @@ public:
 private:
     value_type root_node_;
     std::size_t nodes_counter_;
-};
+}; // <--- class OctTree
 
 } // <--- namespace spaceBreaking
 
