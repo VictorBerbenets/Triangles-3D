@@ -19,28 +19,29 @@ public:
 protected:
     using size_type = std::size_t;
 
-    static constexpr size_type CUBES_SPACE_NUMBER = 8;
+    static constexpr size_type VOLUMES_NUMBER = 8;
+    
+    enum class SubCubes: int { A = 0, B = 1, C = 2, D = 3,
+                               E = 4, F = 5, G = 6, H = 7,
+                               NOT_IN_CUBE = -1 };
 
-    using subcubes  = std::array<BoundingCube, CUBES_SPACE_NUMBER>;
-
-    enum class SubCubes: char { A = 0, B = 1, C = 2, D = 3,
-                                E = 4, F = 5, G = 6, H = 7,
-                                NOT_IN_CUBE = -1 };
+    using subCubes  = std::array<BoundingCube, VOLUMES_NUMBER>;
+    using cubeInfo  = std::tuple<SubCubes, point_t, size_type>;
 
     static constexpr size_type MAX_SPACE_DEGREE = 32; // 2^32 - half side's length
     static constexpr size_type DEGREE_DECREASE  = 1;  //  divide each volume by 2
-    static constexpr size_type SPACE_BASE       = 2;  // 
+    static constexpr size_type SPACE_BASE       = 2;  //
     static constexpr double MIN_CUBE_SIDE       = 1;  // = 2^space_degree
 
     BoundingCube();
     BoundingCube(const point_t& center, size_type space_degree);
-    
-    SubCubes what_subspace(const triangle_t& tria) const;
-    subcubes get_subcubes(double hlf_side, size_type new_degree) const;
+
+    cubeInfo what_subcube(const triangle_t& tria) const;
+    subCubes get_subcubes(double hlf_side, size_type new_degree) const;
 
     void set_center() noexcept;
     bool is_point_inside(const point_t& pt) const;
-    
+
     double side_length(size_type space_degree) const;
 //-----------------------------------------------------------------------//
     point_t center_;
@@ -49,16 +50,14 @@ protected:
 
 class Node final: protected BoundingCube {
     using pointer_type = std::unique_ptr<Node>;
-    
-    static constexpr std::size_t VOLUMES_NUMBER = 8;
-    
+
     bool is_limit_reached() const noexcept;
     void construct_new_cubes() const;
     void set_pointers();
 public:
     Node(const Node& parent);
     Node(const Node& parent, const point_t& center, size_type space_degree);
-    ~Node() = default; 
+    ~Node() = default;
 
     void insert(const triangle_t& tria);
 private:
