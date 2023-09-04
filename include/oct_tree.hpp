@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <list>
+#include <array>
 #include <cmath>
 #include <memory>
 
@@ -13,30 +14,37 @@ namespace spaceBreaking {
 using namespace yLAB;
 
 class BoundingCube {
+public:
+    ~BoundingCube() = default;
 protected:
     using size_type = std::size_t;
-    
-    enum class SubSpaces: char {A = 0, B = 1, C = 2, D = 3,
-                                E = 4, F = 5, G = 6, H = 7};
 
-    static constexpr size_type MAX_SPACE_DEGREE = 64;
-    static constexpr size_type SPACE_BASE       = 2;
-    static constexpr double MIN_CUBE_SIDE       = 1; // = 2^space_degree
+    static constexpr size_type CUBES_SPACE_NUMBER = 8;
+
+    using subcubes  = std::array<BoundingCube, CUBES_SPACE_NUMBER>;
+
+    enum class SubCubes: char { A = 0, B = 1, C = 2, D = 3,
+                                E = 4, F = 5, G = 6, H = 7,
+                                NOT_IN_CUBE = -1 };
+
+    static constexpr size_type MAX_SPACE_DEGREE = 32; // 2^32 - half side's length
+    static constexpr size_type DEGREE_DECREASE  = 1;  //  divide each volume by 2
+    static constexpr size_type SPACE_BASE       = 2;  // 
+    static constexpr double MIN_CUBE_SIDE       = 1;  // = 2^space_degree
 
     BoundingCube();
-    BoundingCube(const point_t& center, double space_degree);
-    ~BoundingCube() = default;
+    BoundingCube(const point_t& center, size_type space_degree);
     
-    SubSpaces what_subspace(const point_t& check_pt) const;
+    SubCubes what_subspace(const triangle_t& tria) const;
+    subcubes get_subcubes(double hlf_side, size_type new_degree) const;
 
     void set_center() noexcept;
     bool is_point_inside(const point_t& pt) const;
-    bool is_tria_inside(const triangle_t& tria) const;
-
-    double side_length() const;
+    
+    double side_length(size_type space_degree) const;
 //-----------------------------------------------------------------------//
     point_t center_;
-    double space_degree_;
+    size_type space_degree_;
 }; // <--- class BoandingCube
 
 class Node final: protected BoundingCube {
@@ -49,7 +57,7 @@ class Node final: protected BoundingCube {
     void set_pointers();
 public:
     Node(const Node& parent);
-    Node(const Node& parent, const point_t& center, double space_degree);
+    Node(const Node& parent, const point_t& center, size_type space_degree);
     ~Node() = default; 
 
     void insert(const triangle_t& tria);
