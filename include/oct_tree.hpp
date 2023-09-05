@@ -50,12 +50,14 @@ protected:
     size_type space_degree_;
 }; // <--- class BoandingCube
 
-class Node final: protected BoundingCube {
-    using pointer_type = std::unique_ptr<Node>;
-    
+class Node final: public BoundingCube {
+    using pointer_type   = std::unique_ptr<Node>;
+    using pointers       = std::unique_ptr<pointer_type[]>;
+    using triangles_list = std::list<data_type>;
+
     enum class Indicator: int {Tree_List = 1, Work_Node = 2, Tree_Root = 3};
 
-    void change_id(const Indicator& id) noexcept; 
+    void change_id(const Indicator& id) noexcept;
     bool is_limit_reached() const noexcept;
 public:
     Node();
@@ -63,11 +65,18 @@ public:
     Node(const Node& parent, const point_t& center, size_type space_degree, const Indicator& id);
     ~Node() = default;
 
-    void insert(const data_type& tria);
-private:
-    std::list<data_type> inside_cube_trias_;
+    const pointer_type& operator[](const SubCubes& cube_sector) const;
 
-    std::unique_ptr<pointer_type[]> ptrs_childs_;
+    void insert(const data_type& tria);
+    // geters
+    const Node& parent() const noexcept;
+    const triangles_list& data() const noexcept;
+//    decltype(auto) pointer(const SubCubes& cube_sector = SubCubes::NOT_IN_CUBE) const;
+//    const pointers& childs() const;
+private:
+    triangles_list inside_cube_trias_;
+
+    pointers ptrs_childs_;
     const Node& parent_;
 
     Indicator id_;
@@ -75,21 +84,27 @@ private:
 }; // <--- class Node
 
 
-class OctTree final {
+class OctTree {
     using value_type       = Node;
     using const_value_type = const value_type;
     using data_type        = BoundingCube::data_type;
 public:
     OctTree() {};
     ~OctTree() = default;
-
+    
     void insert_triangle(const data_type& tria);
     const_value_type& get_root_node() const noexcept;
+template<typename Collector = std::list<data_type>, typename Compare>
+    void find_intersecting_triangles(const Collector& col, const Compare& comp) const;
 private:
     value_type root_node_;
     std::size_t nodes_counter_;
 }; // <--- class OctTree
 
+template<typename Collector, typename Compare>
+void OctTree::find_intersecting_triangles(const Collector& col, const Compare& comp) const {
+    
+}
 
 } // <--- namespace spaceBreaking
 

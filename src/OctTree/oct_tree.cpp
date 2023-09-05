@@ -112,7 +112,8 @@ Node::Node(const Node& parent, const point_t& center, size_type space_degree, co
             parent_ {parent},
             id_{id} {}
 
-Node::Node(): Node{*this, {0, 0, 0}, MAX_SPACE_DEGREE, Indicator::Tree_Root} {}
+Node::Node():
+            Node{*this, {0, 0, 0}, MAX_SPACE_DEGREE, Indicator::Tree_Root} {}
 
 Node::Node(const Node& parent, const Indicator& id):
             Node(parent, {0, 0, 0}, MAX_SPACE_DEGREE, id) {}
@@ -125,6 +126,26 @@ OctTree::const_value_type& OctTree::get_root_node() const noexcept {
 void OctTree::insert_triangle(const data_type& tria) {
     root_node_.insert(tria);
     ++nodes_counter_;
+}
+
+const Node::pointer_type& Node::operator[](const SubCubes& cube_sector) const {
+    return ptrs_childs_[static_cast<size_type>(cube_sector)];
+}
+
+/*const Node::pointers& Node::childs() const {
+    return ptrs_childs_;
+}
+
+decltype(auto) Node::pointer(const SubCubes& cube_sector) const {
+    return ptrs_childs_[static_cast<size_type>(cube_sector)].get();
+}*/
+
+const Node& Node::parent() const noexcept {
+    return parent_;
+}
+
+const Node::triangles_list& Node::data() const noexcept {
+    return inside_cube_trias_;
 }
 
 } // <--- namespace spaceBreaking

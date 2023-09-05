@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <unordered_set>
+#include <functional>
 #include <stdexcept>
 #include <chrono>
 
@@ -38,13 +39,6 @@ intersector::intersector(std::istream& stream) {
     };
 }
 
-void intersector::find_intersected_triangles(const Node& node) {
-    static constexpr size_type VOLUMES_NUMBER = 8;
-    for (size_type id = 0; id < VOLUMES_NUMBER; ++id) {
-    
-    }
-}
-
 bool intersector::are_intersecting(const triangle_t& tria1, const triangle_t& tria2) const {
         tria_plane pair1 = {tria1, tria1.get_plane()};
         tria_plane pair2 = {tria2, tria2.get_plane()};
@@ -61,6 +55,15 @@ bool intersector::are_intersecting(const triangle_t& tria1, const triangle_t& tr
 }
 
 void intersector::print_intersected_triangles() const {
+    std::unordered_set<size_type> intsec_triangles{};
+    std::function<bool(const triangle_t&, const triangle_t)> comp_func{};
+
+    oct_tree_.find_intersecting_triangles(intsec_triangles, comp_func);
+
+    for (auto val : intsec_triangles) {
+        std::cout << val << ' ';
+    }
+    std::cout << std::endl;
     /*std::unordered_set<size_type> intsec_triangles{};
     for (auto iter1 = data_.begin(); iter1 != data_.end(); ++iter1) {
         if (intsec_triangles.find(iter1->second) != intsec_triangles.end()) {
