@@ -70,10 +70,15 @@ bool vector_t::is_null() const {
            is_zero(coords_[1]) &&
            is_zero(coords_[2]) ;
 }
+
 bool vector_t::is_valid() const {
     return !std::isnan(coords_[0]) &&
            !std::isnan(coords_[1]) &&
            !std::isnan(coords_[2]) ;
+}
+
+vector_t::size_type vector_t::size() const noexcept {
+    return coords_.size();
 }
 
 void vector_t::print() const noexcept {

@@ -39,15 +39,15 @@ BoundingCube::cubeInfo BoundingCube::what_subcube(const data_type& tria) const {
         std::cout << "SPACE DEGREE\n";
         std::cout << cb.space_degree_ << std::endl;
     }*/
+    auto& triangle = tria.first;
     for (size_type cubes_index = 0; cubes_index < VOLUMES_NUMBER; ++cubes_index) {
         size_type tria_index = 0;
         for ( ; tria_index < 3; ++tria_index) {
-            auto& triangle = tria.first;
             if ( !sb_cubes[cubes_index].is_point_inside(triangle.vertices_[tria_index]) ) {
                 break;
             }
         }
-        if (tria_index == 3) {
+        if (tria_index == 3) { // all points inside the cube (triangle has 3 points)
             return { static_cast<SubCubes>(cubes_index),
                      sb_cubes[cubes_index].center_,
                      sb_cubes[cubes_index].space_degree_ };
@@ -74,20 +74,23 @@ void Node::insert(const data_type& tria) {
     auto [sub_cube_t, center, space_degree] = what_subcube(tria);
     //std::cout << "out from what subcube\n";
     if (sub_cube_t == SubCubes::NOT_IN_CUBE) { // if the vertices of the triangle are not in any one cube
-        //std::cout << "NOT in CUBE\n";
-        intersec_trias_.push_back(tria);
+//        std::cout << "NOT in CUBE\n";
+        inside_cube_trias_.push_back(tria);
         return ;
     }
     auto cube_sector = static_cast<size_type>(sub_cube_t);
    // std::cout << "1\n";
     if (ptrs_childs_[cube_sector] == nullptr) {
         //std::cout << "MAKE UNIQUE\n";
-        ptrs_childs_[cube_sector] = std::make_unique<Node>(*this, center, space_degree);
+        ptrs_childs_[cube_sector] = std::make_unique<Node>(*this, center, space_degree, Indicator::Work_Node);
         //std::cout << "MADE UNIQUE\n";
     }
    // std::cout << "2\n";
     if (is_limit_reached()) {
         std::cout << "LIMIT IS REACHED\n";
+        std::cout << "center:" << std::endl;
+        center.print();
+        ptrs_childs_[cube_sector]->change_id(Indicator::Tree_List);
         ptrs_childs_[cube_sector]->inside_cube_trias_.push_back(tria);
         return ;
     }
@@ -95,24 +98,25 @@ void Node::insert(const data_type& tria) {
     ptrs_childs_[cube_sector]->insert(tria);
 }
 
+void Node::change_id(const Indicator& id) noexcept {
+    id_ = id;
+}
+
 bool Node::is_limit_reached() const noexcept {
     return space_degree_ == MIN_CUBE_SIDE;
 }
 
-Node::Node():
-        BoundingCube {{0, 0, 0}, {MAX_SPACE_DEGREE}},
-        ptrs_childs_ {std::make_unique<pointer_type[]>(VOLUMES_NUMBER)},
-        parent_{*this} {}
-
-Node::Node(const Node& parent):
-            BoundingCube {{0, 0, 0}, {MAX_SPACE_DEGREE}},
-            ptrs_childs_ {std::make_unique<pointer_type[]>(VOLUMES_NUMBER)},
-            parent_{parent} {}
-
-Node::Node(const Node& parent, const point_t& center, size_type space_degree):
+Node::Node(const Node& parent, const point_t& center, size_type space_degree, const Indicator& id):
             BoundingCube {center, space_degree},
             ptrs_childs_ {std::make_unique<pointer_type[]>(VOLUMES_NUMBER)},
-            parent_ {parent} {}
+            parent_ {parent},
+            id_{id} {}
+
+Node::Node(): Node{*this, {0, 0, 0}, MAX_SPACE_DEGREE, Indicator::Tree_Root} {}
+
+Node::Node(const Node& parent, const Indicator& id):
+            Node(parent, {0, 0, 0}, MAX_SPACE_DEGREE, id) {}
+
 
 OctTree::const_value_type& OctTree::get_root_node() const noexcept {
     return root_node_;

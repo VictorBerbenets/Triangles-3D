@@ -29,6 +29,8 @@ public:
 
     double get_module() const;
     
+    size_type size() const noexcept;
+
     bool is_null() const;
     bool is_valid() const;
 

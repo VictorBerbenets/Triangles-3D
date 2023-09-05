@@ -33,7 +33,7 @@ protected:
     static constexpr size_type MAX_SPACE_DEGREE = 32; // 2^32 - half side's length
     static constexpr size_type DEGREE_DECREASE  = 1;  //  divide each volume by 2
     static constexpr size_type SPACE_BASE       = 2;  //
-    static constexpr double MIN_CUBE_SIDE       = 1;  // = 2^space_degree
+    static constexpr double MIN_CUBE_SIDE       = 5;  // = 2^space_degree
  
     BoundingCube();
     BoundingCube(const point_t& center, size_type space_degree);
@@ -52,21 +52,25 @@ protected:
 
 class Node final: protected BoundingCube {
     using pointer_type = std::unique_ptr<Node>;
+    
+    enum class Indicator: int {Tree_List = 1, Work_Node = 2, Tree_Root = 3};
 
+    void change_id(const Indicator& id) noexcept; 
     bool is_limit_reached() const noexcept;
 public:
     Node();
-    explicit Node(const Node& parent);
-    Node(const Node& parent, const point_t& center, size_type space_degree);
+    Node(const Node& parent, const Indicator& id);
+    Node(const Node& parent, const point_t& center, size_type space_degree, const Indicator& id);
     ~Node() = default;
 
     void insert(const data_type& tria);
 private:
     std::list<data_type> inside_cube_trias_;
-    std::list<data_type> intersec_trias_;
 
     std::unique_ptr<pointer_type[]> ptrs_childs_;
     const Node& parent_;
+
+    Indicator id_;
 
 }; // <--- class Node
 
