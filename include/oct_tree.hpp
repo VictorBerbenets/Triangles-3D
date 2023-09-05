@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <functional>
+#include <unordered_set>
 #include <list>
 #include <array>
 #include <cmath>
@@ -20,10 +21,10 @@ public:
     using size_type = std::size_t;
     using data_type = std::pair<triangle_t, size_type>;
     
-    ~BoundingCube() = default;
-protected:
     static constexpr size_type VOLUMES_NUMBER = 8;
-    
+
+    ~BoundingCube() = default;
+protected: 
     enum class SubCubes: int { A = 0, B = 1, C = 2, D = 3,
                                E = 4, F = 5, G = 6, H = 7,
                                NOT_IN_CUBE = -1 };
@@ -86,17 +87,23 @@ private:
 
 
 class OctTree {
+public:
+    using size_type        = std::size_t;
     using value_type       = Node;
     using const_value_type = const value_type;
     using data_type        = BoundingCube::data_type;
+    using collision_list   = std::list<data_type>; 
     using trias_compare    = std::function<bool(const triangle_t&, const triangle_t&)>;
+private:
+template<typename Collector = std::unordered_set<size_type>> 
+    void diving_into_tree(Collector& col, collision_list& collision_list) const; 
 public:
     OctTree() {};
     ~OctTree() = default;
     
     void insert_triangle(const data_type& tria);
     const_value_type& get_root_node() const noexcept;
-template<typename Collector = std::list<data_type>> 
+template<typename Collector = std::unordered_set<size_type>> 
     void find_intersecting_triangles(Collector& col, const trias_compare& comporator = trias_compare()) const;
 private:
     value_type root_node_;
@@ -104,8 +111,26 @@ private:
 }; // <--- class OctTree
 
 template<typename Collector>
-void OctTree::find_intersecting_triangles(Collector& col, const trias_compare& comporator) const {
+void OctTree::find_intersecting_triangles(Collector& col, const trias_compare& comporator) const {    
+    std::list<data_type> collision_list;
+    auto root_collis= root_node_.data();
+    for (auto iter1 = root_collis.begin(); iter1 != root_collis.end(); ++iter1) {
+        for (auto iter2 = std::next(iter1); iter2 != root_collis.end(); ++iter2) {
+            if (comporator(iter1->first, iter2->first)) {
+                col.insert({iter1->second, iter2->second});
+            }
+        }
+    }   
+    diving_into_tree(col, collision_list);
+}
+
+template<typename Collector>
+void OctTree::diving_into_tree(Collector& col, collision_list& collision_list) const {
+    auto VOLUMES_NUMBER = BoundingCube::VOLUMES_NUMBER;
     
+    for (size_type count = 0; count < VOLUMES_NUMBER; ++count) {
+        
+    }
 }
 
 } // <--- namespace spaceBreaking
