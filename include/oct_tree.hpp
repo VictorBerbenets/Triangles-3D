@@ -17,7 +17,7 @@ using namespace yLAB;
 class BoundingCube {
 public:
     using size_type = std::size_t;
-    using data_type    = std::pair<triangle_t, size_type>;
+    using data_type = std::pair<triangle_t, size_type>;
     
     ~BoundingCube() = default;
 protected:
@@ -55,7 +55,8 @@ class Node final: protected BoundingCube {
 
     bool is_limit_reached() const noexcept;
 public:
-    Node(const Node& parent);
+    Node();
+    explicit Node(const Node& parent);
     Node(const Node& parent, const point_t& center, size_type space_degree);
     ~Node() = default;
 
@@ -67,8 +68,6 @@ private:
     std::unique_ptr<pointer_type[]> ptrs_childs_;
     const Node& parent_;
 
-    bool are_ptrs_set_ = false;
-
 }; // <--- class Node
 
 
@@ -77,7 +76,7 @@ class OctTree final {
     using const_value_type = const value_type;
     using data_type        = BoundingCube::data_type;
 public:
-    OctTree();
+    OctTree() {};
     ~OctTree() = default;
 
     void insert_triangle(const data_type& tria);

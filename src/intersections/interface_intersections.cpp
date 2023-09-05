@@ -18,7 +18,6 @@ intersector::intersector(std::istream& stream) {
         throw std::runtime_error{"data size reading error\n"};
     }
     data_.reserve(data_size);
-
     std::vector<double> tmp_points{};
     tmp_points.reserve(SET_POINTS_SIZE); //  processing of input data 
     for (size_type count = 1; count <= data_size; ++count) {
@@ -30,15 +29,39 @@ intersector::intersector(std::istream& stream) {
             }
             tmp_points.push_back(tmp_value);
         }
-        data_.emplace_back(triangle_t { {tmp_points[0], tmp_points[1], tmp_points[2]},
-                                        {tmp_points[3], tmp_points[4], tmp_points[5]},
-                                        {tmp_points[6], tmp_points[7], tmp_points[8]} }, count);
+        auto data = dataVal( triangle_t { {tmp_points[0], tmp_points[1], tmp_points[2]},
+                                          {tmp_points[3], tmp_points[4], tmp_points[5]},
+                                          {tmp_points[6], tmp_points[7], tmp_points[8]} }, count );
+        data_.emplace_back(data);
+        oct_tree_.insert_triangle(data);
         tmp_points.clear();
     };
 }
 
+void intersector::find_intersected_triangles(const Node& node) {
+    static constexpr size_type VOLUMES_NUMBER = 8;
+    for (size_type id = 0; id < VOLUMES_NUMBER; ++id) {
+    
+    }
+}
+
+bool intersector::are_intersecting(const triangle_t& tria1, const triangle_t& tria2) const {
+        tria_plane pair1 = {tria1, tria1.get_plane()};
+        tria_plane pair2 = {tria2, tria2.get_plane()};
+        if (!pair1.second.is_parallel(pair2.second)) {
+            if (different_intersection(pair1, pair2)) {
+                return true;
+            }
+        } else if (pair1.second == pair2.second) {    // both triangles lies in one plane
+            if (same_intersection(pair1.first, pair2.first)) {
+                return true;
+            }
+        }
+        return false;
+}
+
 void intersector::print_intersected_triangles() const {
-    std::unordered_set<size_type> intsec_triangles{};
+    /*std::unordered_set<size_type> intsec_triangles{};
     for (auto iter1 = data_.begin(); iter1 != data_.end(); ++iter1) {
         if (intsec_triangles.find(iter1->second) != intsec_triangles.end()) {
             continue;
@@ -62,7 +85,7 @@ void intersector::print_intersected_triangles() const {
     for (auto val : intsec_triangles) {
         std::cout << val << ' ';
     }
-    std::cout << std::endl;
+    std::cout << std::endl;*/
 }
 
 } // <--- namespace yLAB

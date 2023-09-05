@@ -7,5 +7,5 @@ int main() {
     using namespace yLAB;
 
     intersector triangles{std::cin};
-    triangles.print_intersected_triangles();
+   // triangles.print_intersected_triangles();
 }
