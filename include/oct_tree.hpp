@@ -95,14 +95,14 @@ public:
     void insert_triangle(const data_type& tria);
     const_value_type& get_root_node() const noexcept;
 template<typename Collector = std::list<data_type>, typename Compare>
-    void find_intersecting_triangles(const Collector& col, const Compare& comp) const;
+    void find_intersecting_triangles(Collector& col, const Compare& comp) const;
 private:
     value_type root_node_;
     std::size_t nodes_counter_;
 }; // <--- class OctTree
 
 template<typename Collector, typename Compare>
-void OctTree::find_intersecting_triangles(const Collector& col, const Compare& comp) const {
+void OctTree::find_intersecting_triangles(Collector& col, const Compare& comp) const {
     
 }
 
