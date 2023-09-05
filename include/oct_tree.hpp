@@ -2,6 +2,7 @@
 #define OCT_TREE_
 
 #include <iostream>
+#include <functional>
 #include <list>
 #include <array>
 #include <cmath>
@@ -88,21 +89,22 @@ class OctTree {
     using value_type       = Node;
     using const_value_type = const value_type;
     using data_type        = BoundingCube::data_type;
+    using trias_compare    = std::function<bool(const triangle_t&, const triangle_t&)>;
 public:
     OctTree() {};
     ~OctTree() = default;
     
     void insert_triangle(const data_type& tria);
     const_value_type& get_root_node() const noexcept;
-template<typename Collector = std::list<data_type>, typename Compare>
-    void find_intersecting_triangles(Collector& col, const Compare& comp) const;
+template<typename Collector = std::list<data_type>> 
+    void find_intersecting_triangles(Collector& col, const trias_compare& comporator = trias_compare()) const;
 private:
     value_type root_node_;
     std::size_t nodes_counter_;
 }; // <--- class OctTree
 
-template<typename Collector, typename Compare>
-void OctTree::find_intersecting_triangles(Collector& col, const Compare& comp) const {
+template<typename Collector>
+void OctTree::find_intersecting_triangles(Collector& col, const trias_compare& comporator) const {
     
 }
 

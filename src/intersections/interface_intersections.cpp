@@ -56,9 +56,7 @@ bool intersector::are_intersecting(const triangle_t& tria1, const triangle_t& tr
 
 void intersector::print_intersected_triangles() const {
     std::unordered_set<size_type> intsec_triangles{};
-    std::function<bool(const triangle_t&, const triangle_t)> comp_func{};
-
-    oct_tree_.find_intersecting_triangles(intsec_triangles, comp_func);
+    oct_tree_.find_intersecting_triangles(intsec_triangles);
 
     for (auto val : intsec_triangles) {
         std::cout << val << ' ';
