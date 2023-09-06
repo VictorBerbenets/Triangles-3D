@@ -6,7 +6,7 @@
 
 namespace yLAB {
 
-bool intersector::same_intersection(const triangle_t& tria1, const triangle_t& tria2) const {
+bool intersector::same_intersection(const triangle_t& tria1, const triangle_t& tria2) {
     static constexpr std::size_t POINTS_TO_COMPARE = 3;
     for (std::size_t index1 = 0; index1 < POINTS_TO_COMPARE; ++index1) {
         for (std::size_t index2 = 0; index2 < POINTS_TO_COMPARE; ++index2) {
@@ -20,7 +20,7 @@ bool intersector::same_intersection(const triangle_t& tria1, const triangle_t& t
     return false;
 }
 
-bool intersector::mul_vect_products(const triangle_t::pts_vector& tria, const point_t& comp_pt) const {
+bool intersector::mul_vect_products(const triangle_t::pts_vector& tria, const point_t& comp_pt) {
     vector_t dir_tria1  {tria[0], tria[1]};
     vector_t dir_tria2  {tria[0], tria[2]};
     vector_t points_dir {tria[0], comp_pt};

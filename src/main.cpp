@@ -1,11 +1,12 @@
 #include <iostream>
 
-#include "intersector.hpp"
 #include <cmath>
+
+#include "admin.hpp"
 
 int main() {
     using namespace yLAB;
 
-    intersector triangles{std::cin};
-   // triangles.print_intersected_triangles();
+    admin ad{std::cin};
+    ad.print_intersected_triangles();
 }

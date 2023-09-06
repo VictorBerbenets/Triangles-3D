@@ -7,7 +7,6 @@
 #include <utility>
 #include <array>
 
-#include "oct_tree.hpp"
 #include "point.hpp"
 #include "line.hpp"
 #include "plane.hpp"
@@ -16,42 +15,26 @@
 namespace yLAB {
     
 class intersector final {
-    using Node    = spaceBreaking::Node;
-    using OctTree = spaceBreaking::OctTree;
 public:
     using size_type    = std::size_t;
-    using dataVal      = std::pair<triangle_t, size_type>; // saving triangle and his order number
     using plane_coeffs = std::array<double, 4>; // A, B, C, D
     using minor_pair   = std::pair<size_type, size_type>;
-private:
     using tria_plane = std::pair<triangle_t, plane_t>;
     
-    static constexpr size_type SET_POINTS_SIZE  = 9;
-    void find_intersected_triangles(const Node& node);
-    bool are_intersecting(const triangle_t& tria1, const triangle_t& tria2) const;
-//--------------------------------triangles in the one plane-----------------------------------//
-    bool same_intersection(const triangle_t& tria1, const triangle_t& tria2) const;
-    bool mul_vect_products(const triangle_t::pts_vector& tria, const point_t& comp_pt) const;
-    
-//--------------------------------triangles in different planes--------------------------------//
-    bool different_intersection(const tria_plane& pair1, const tria_plane& pair2) const;
-    bool init_segment(line_t& intsec_line, const triangle_t& tria, segment_t& segm) const;
-    bool inside_segment(const point_t& pt, const segment_t& segm) const;
+    static bool are_intersecting(const triangle_t& tria1, const triangle_t& tria2);
 
-    line_t get_intersection_line(const plane_t& plane1, const plane_t plane2) const;
-    point_t get_planes_intersec_point(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2) const;
-    minor_pair find_not_zero_minor(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2) const;
-    void find_intsec_points(std::vector<point_t>& intsec_points, line_t& intsec_line,
-                                    const point_t& pt1, const point_t& pt2) const; 
-public:
-    intersector(std::istream& stream);
-    ~intersector() = default;
+    static bool same_intersection(const triangle_t& tria1, const triangle_t& tria2);
+    static bool different_intersection(const tria_plane& pair1, const tria_plane& pair2);
 
-    void print_intersected_triangles() const;
+    static bool init_segment(line_t& intsec_line, const triangle_t& tria, segment_t& segm);
+    static bool inside_segment(const point_t& pt, const segment_t& segm);
+    static line_t get_intersection_line(const plane_t& plane1, const plane_t plane2);
+    static point_t get_planes_intersec_point(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2);
 private:
-    std::vector<dataVal> data_;
-    OctTree oct_tree_;
-    std::list<size_type> intersec_trias_;
+    static bool mul_vect_products(const triangle_t::pts_vector& tria, const point_t& comp_pt);
+    static minor_pair find_not_zero_minor(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2);
+    static void find_intsec_points(std::vector<point_t>& intsec_points, line_t& intsec_line,
+                                    const point_t& pt1, const point_t& pt2); 
 };
 
 } // <--- namespace yLAB

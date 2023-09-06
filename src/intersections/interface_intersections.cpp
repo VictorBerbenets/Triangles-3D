@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <chrono>
 
+#include "admin.hpp"
 #include "intersector.hpp"
 #include "oct_tree.hpp"
 #include "plane.hpp"
@@ -12,13 +13,12 @@
 
 namespace yLAB {
 
-intersector::intersector(std::istream& stream) {
+admin::admin(std::istream& stream) {
     size_type data_size{};
     stream >> data_size;
     if (!stream.good()) {
         throw std::runtime_error{"data size reading error\n"};
     }
-    data_.reserve(data_size);
     std::vector<double> tmp_points{};
     tmp_points.reserve(SET_POINTS_SIZE); //  processing of input data 
     for (size_type count = 1; count <= data_size; ++count) {
@@ -33,13 +33,13 @@ intersector::intersector(std::istream& stream) {
         auto data = dataVal( triangle_t { {tmp_points[0], tmp_points[1], tmp_points[2]},
                                           {tmp_points[3], tmp_points[4], tmp_points[5]},
                                           {tmp_points[6], tmp_points[7], tmp_points[8]} }, count );
-        data_.emplace_back(data);
+        //data_.emplace_back(data);
         oct_tree_.insert_triangle(data);
         tmp_points.clear();
     };
 }
 
-bool intersector::are_intersecting(const triangle_t& tria1, const triangle_t& tria2) const {
+bool intersector::are_intersecting(const triangle_t& tria1, const triangle_t& tria2) {
         tria_plane pair1 = {tria1, tria1.get_plane()};
         tria_plane pair2 = {tria2, tria2.get_plane()};
         if (!pair1.second.is_parallel(pair2.second)) {
@@ -54,7 +54,8 @@ bool intersector::are_intersecting(const triangle_t& tria1, const triangle_t& tr
         return false;
 }
 
-void intersector::print_intersected_triangles() const {
+void admin::print_intersected_triangles() const {
+
     std::unordered_set<size_type> intsec_triangles{};
     oct_tree_.find_intersecting_triangles(intsec_triangles);
 

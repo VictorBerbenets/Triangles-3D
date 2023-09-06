@@ -13,7 +13,7 @@
 
 namespace yLAB {
 
-bool intersector::different_intersection(const tria_plane& pair1, const tria_plane& pair2) const {
+bool intersector::different_intersection(const tria_plane& pair1, const tria_plane& pair2) {
     line_t intsec_line = get_intersection_line(pair1.second, pair2.second);
     
     segment_t tr1_segment{};
@@ -24,7 +24,7 @@ bool intersector::different_intersection(const tria_plane& pair1, const tria_pla
     return tr1_segment.is_intersect(tr2_segment);    
 }
 
-bool intersector::init_segment(line_t& intsec_line, const triangle_t& tria, segment_t& segm) const {
+bool intersector::init_segment(line_t& intsec_line, const triangle_t& tria, segment_t& segm) {
     std::vector<point_t> intsec_points{};
     for (int index = 0; index < 3; ++index) {
         find_intsec_points(intsec_points, intsec_line, tria.vertices_[index], tria.vertices_[(index + 1) % 3]);
@@ -41,7 +41,7 @@ bool intersector::init_segment(line_t& intsec_line, const triangle_t& tria, segm
 }
 
 void intersector::find_intsec_points(std::vector<point_t>& intsec_points, line_t& intsec_line,
-                                    const point_t& pt1, const point_t& pt2) const {
+                                    const point_t& pt1, const point_t& pt2) {
     auto push_back_if = [&intsec_points](const point_t& pt) {
                             if (std::find(intsec_points.begin(), intsec_points.end(), pt) == intsec_points.end()) {
                                 intsec_points.push_back(pt);
@@ -63,7 +63,7 @@ void intersector::find_intsec_points(std::vector<point_t>& intsec_points, line_t
     }
 }
 
-line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t plane2) const {
+line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t plane2) {
     vector_t dirr_vec = calc_vects_product(plane1.normal_coords_, plane2.normal_coords_);
     point_t intsec_pt = get_planes_intersec_point( plane_coeffs{plane1.normal_coords_[0], plane1.normal_coords_[1], plane1.normal_coords_[2], plane1.D_},
                                                    plane_coeffs{plane2.normal_coords_[0], plane2.normal_coords_[1], plane2.normal_coords_[2], plane2.D_} );
@@ -73,7 +73,7 @@ line_t intersector::get_intersection_line(const plane_t& plane1, const plane_t p
     return {dirr_vec, intsec_pt};
 }
 
-point_t intersector::get_planes_intersec_point(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2) const {
+point_t intersector::get_planes_intersec_point(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2) {
     static constexpr int  ARBITRARY_VALUE = 1;
 
     auto [colum1, colum2] = find_not_zero_minor(coeffs1, coeffs2);
@@ -99,7 +99,7 @@ point_t intersector::get_planes_intersec_point(const plane_coeffs& coeffs1, cons
              2 == arbit_col ? ARBITRARY_VALUE : determ_and_id[2].first / not_zero_minor };
 }
 
-intersector::minor_pair intersector::find_not_zero_minor(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2) const {
+intersector::minor_pair intersector::find_not_zero_minor(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2) {
     for (size_type index = 0; index < 3; ++index) {
         size_type next_index = (index + 1) % 3;
         double det = determ( coeffs1[index], coeffs1[next_index], coeffs2[index], coeffs2[next_index] );

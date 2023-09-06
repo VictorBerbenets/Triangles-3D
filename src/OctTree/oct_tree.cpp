@@ -87,15 +87,19 @@ void Node::insert(const data_type& tria) {
     }
    // std::cout << "2\n";
     if (is_limit_reached()) {
-        std::cout << "LIMIT IS REACHED\n";
-        std::cout << "center:" << std::endl;
-        center.print();
+        //std::cout << "LIMIT IS REACHED\n";
+        //std::cout << "center:" << std::endl;
+        //center.print();
         ptrs_childs_[cube_sector]->change_id(Indicator::Tree_List);
         ptrs_childs_[cube_sector]->inside_cube_trias_.push_back(tria);
         return ;
     }
     //std::cout << "3\n";
     ptrs_childs_[cube_sector]->insert(tria);
+}
+
+Node::Indicator Node::get_id() const noexcept {
+    return id_;
 }
 
 void Node::change_id(const Indicator& id) noexcept {
@@ -128,8 +132,8 @@ void OctTree::insert_triangle(const data_type& tria) {
     ++nodes_counter_;
 }
 
-const Node::pointer_type& Node::operator[](const SubCubes& cube_sector) const {
-    return ptrs_childs_[static_cast<size_type>(cube_sector)];
+const Node::pointer_type& Node::operator[](size_type cube_sector) const {
+    return ptrs_childs_[cube_sector];
 }
 
 /*const Node::pointers& Node::childs() const {
