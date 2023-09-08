@@ -35,7 +35,7 @@ public:
     bool is_null() const;
     bool is_valid() const;
 
-    void print() const noexcept;
+    void print() const;
 private:
     std::array<value_type, 3> coords_;
 };
