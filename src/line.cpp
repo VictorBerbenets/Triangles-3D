@@ -99,9 +99,10 @@ segment_t::segment_t(const point_t& pt):
         pt1_{pt}, pt2_{pt} {};
 
 double segment_t::length() const {
-    return std::sqrt( std::pow(pt1_.x_ - pt2_.x_, 2) + 
-                      std::pow(pt1_.y_ - pt2_.y_, 2) + 
-                      std::pow(pt1_.z_ - pt2_.z_, 2) );
+    auto sq_len1 = pt2_.x_ - pt1_.x_;
+    auto sq_len2 = pt2_.y_ - pt1_.y_;
+    auto sq_len3 = pt2_.z_ - pt1_.z_;
+    return std::sqrt(sq_len1 * sq_len1 + sq_len2 * sq_len2 + sq_len3 * sq_len3);
 }
 
 bool segment_t::is_valid() const {

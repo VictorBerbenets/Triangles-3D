@@ -62,7 +62,7 @@ vector_t::value_type vector_t::at(size_type index) const {
 }
 
 vector_t::value_type vector_t::get_module() const {
-    return std::sqrt( std::pow(coords_[0], 2) + std::pow(coords_[1], 2) + std::pow(coords_[2], 2) );
+    return std::sqrt( coords_[0] * coords_[0] + coords_[1] * coords_[1] + coords_[2] * coords_[2] );
 }
 
 bool vector_t::is_null() const {
