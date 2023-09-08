@@ -8,13 +8,13 @@
 
 namespace yLAB {
 
-vector_t::vector_t(double coord1, double coord2, double coord3):
+vector_t::vector_t(value_type coord1, value_type coord2, value_type coord3):
                 coords_ {coord1, coord2, coord3} {}
 
 vector_t::vector_t(const point_t& pt1, const point_t& pt2):
                 coords_ {pt2.x_ - pt1.x_, pt2.y_ - pt1.y_, pt2.z_ - pt1.z_} {}
 
-vector_t::vector_t(double coord):
+vector_t::vector_t(value_type coord):
                 coords_{coord, coord, coord} {}
 
 vector_t::vector_t(): coords_{NAN, NAN, NAN} {}
@@ -27,41 +27,41 @@ vector_t operator-(const vector_t& lhs, const vector_t& rhs) noexcept {
     return {lhs[0] - rhs[0], lhs[1] - rhs[1], lhs[2] - rhs[2]};
 }
 
-vector_t vector_t::operator*(double coeff) const noexcept {
+vector_t vector_t::operator*(value_type coeff) const noexcept {
     return {coords_[0] * coeff, coords_[1] * coeff, coords_[2] * coeff};
 }
 
-vector_t vector_t::operator/(double coeff) const {
+vector_t vector_t::operator/(value_type coeff) const {
     if (is_zero(coeff)) {
         throw std::invalid_argument{"Attempt to divide by zero in vector's operator/"};
     }
     return {coords_[0] / coeff, coords_[1] / coeff, coords_[2] / coeff};
 }
 
-double& vector_t::operator[](size_type index) {
+vector_t::value_type& vector_t::operator[](size_type index) {
     return coords_[index];
 }
 
 
-const double& vector_t::operator[](size_type index) const {
+vector_t::value_type vector_t::operator[](size_type index) const {
     return coords_[index];
 }
 
-double& vector_t::operator()(size_type index) {
+vector_t::value_type& vector_t::at(size_type index) {
     if (index > 2) {
         throw std::invalid_argument{"index out of range in vector's operator()"};
     }
     return coords_[index];
 }
 
-const double& vector_t::operator()(size_type index) const {
+vector_t::value_type vector_t::at(size_type index) const {
     if (index > 2) {
         throw std::invalid_argument{"index out of range in vector's operator()"};
     }
     return coords_[index];
 }
 
-double vector_t::get_module() const {
+vector_t::value_type vector_t::get_module() const {
     return std::sqrt( std::pow(coords_[0], 2) + std::pow(coords_[1], 2) + std::pow(coords_[2], 2) );
 }
 
