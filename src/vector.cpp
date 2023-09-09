@@ -42,7 +42,6 @@ vector_t::value_type& vector_t::operator[](size_type index) {
     return coords_[index];
 }
 
-
 vector_t::value_type vector_t::operator[](size_type index) const {
     return coords_[index];
 }
@@ -81,8 +80,8 @@ vector_t::size_type vector_t::size() const noexcept {
     return coords_.size();
 }
 
-void vector_t::print() const {
-    std::cout << coords_[0] << ' ' << coords_[1] << ' ' << coords_[2] << std::endl;
+std::ostream& operator<<(std::ostream& os, const vector_t& rhs) {
+    return os << rhs[0] << ' ' << rhs[1] << ' ' << rhs[2] << std::endl; 
 }
 
 } // <--- namespace yLAB

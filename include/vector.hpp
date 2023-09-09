@@ -8,11 +8,12 @@
 namespace yLAB {
 
 class vector_t final {
-    using size_type      = std::size_t;
-    using iterator       = typename std::array<double, 3>::iterator;
-    using const_iterator = typename std::array<double, 3>::const_iterator;
-    using value_type     = double;
 public:
+    using value_type     = double;
+    using size_type      = std::size_t;
+    using iterator       = typename std::array<value_type, 3>::iterator;
+    using const_iterator = typename std::array<value_type, 3>::const_iterator;
+
     vector_t(value_type coord1, value_type coord2, value_type coord3);
     vector_t(const point_t& pt1, const point_t& pt2);
     vector_t(value_type coord_for_all);
@@ -35,7 +36,7 @@ public:
     bool is_null() const;
     bool is_valid() const;
 
-    void print() const;
+    friend std::ostream& operator<<(std::ostream& os, const vector_t& rhs);
 private:
     std::array<value_type, 3> coords_;
 };
