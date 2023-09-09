@@ -31,26 +31,24 @@ protected:
                                NOT_IN_CUBE = -1 };
 
     using subCubes  = std::array<BoundingCube, VOLUMES_NUMBER>;
-    using cubeInfo  = std::tuple<SubCubes, point_t, size_type>;
+    using cubeInfo  = std::tuple<SubCubes, point_t, double>;
 
-    static constexpr size_type MAX_SPACE_DEGREE = 32; // 2^32 - half side's length
+    static constexpr double MAX_HLF_SIDE        = std::pow(2, 32); // 2^32 - half side's length
     static constexpr size_type DEGREE_DECREASE  = 1;  //  divide each volume by 2
     static constexpr size_type SPACE_BASE       = 2;  //
-    static constexpr double MIN_CUBE_SIDE       = 3;  // = 2^space_degree
+    static constexpr double MIN_CUBE_SIDE       = 16;  // = 2^space_degree
  
     BoundingCube();
-    BoundingCube(const point_t& center, size_type space_degree);
+    BoundingCube(const point_t& center, double hlf_side);
 
     cubeInfo what_subcube(const data_type& tria) const;
-    subCubes get_subcubes(size_type new_degree) const;
+    subCubes get_subcubes(double hlf_side) const;
 
     void set_center() noexcept;
     bool is_point_inside(const point_t& pt) const;
-
-    double side_length(size_type space_degree) const;
 //-----------------------------------------------------------------------//
     point_t center_;
-    size_type space_degree_;
+    double hlf_side_;
 }; // <--- class BoandingCube
 
 class Node final: public BoundingCube {
@@ -66,7 +64,7 @@ private:
 public:
     Node();
     Node(const Node& parent, const Indicator& id);
-    Node(const Node& parent, const point_t& center, size_type space_degree, const Indicator& id);
+    Node(const Node& parent, const point_t& center, double hlf_side, const Indicator& id);
     ~Node() = default;
 
     const pointer_type& operator[](size_type cube_sector) const;
