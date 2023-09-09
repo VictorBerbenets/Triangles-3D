@@ -36,7 +36,7 @@ protected:
     static constexpr double MAX_HLF_SIDE        = std::pow(2, 32); // 2^32 - half side's length
     static constexpr size_type DEGREE_DECREASE  = 1;  //  divide each volume by 2
     static constexpr size_type SPACE_BASE       = 2;  //
-    static constexpr double MIN_CUBE_SIDE       = 16;  // = 2^space_degree
+    static constexpr double MIN_CUBE_SIDE       = 64;  // = 2^space_degree
  
     BoundingCube();
     BoundingCube(const point_t& center, double hlf_side);
