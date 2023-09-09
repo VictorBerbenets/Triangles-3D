@@ -86,7 +86,7 @@ private:
 
 }; // <--- class Node
 
-class OctTree {
+class OctTree final{
 public:
     using size_type        = std::size_t;
     using value_type       = Node;
