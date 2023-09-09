@@ -20,7 +20,10 @@ public:
     vector_t();
     ~vector_t() = default;
     
-    vector_t operator*(value_type coeff) const noexcept;
+    bool operator==(const vector_t& rhs) const noexcept;
+
+    vector_t& operator*=(value_type coeff) noexcept;
+    vector_t& operator/=(value_type coeff);
     vector_t operator/(value_type coeff) const;
     
     value_type& operator[](size_type index);
@@ -41,6 +44,9 @@ private:
     std::array<value_type, 3> coords_;
 };
 
+vector_t operator+(const vector_t& lhs, const vector_t& rhs) noexcept;
+vector_t operator-(const vector_t& lhs, const vector_t& rhs) noexcept;
+vector_t operator*(const vector_t& vec, vector_t::value_type coeff) noexcept;
 
 } // <--- namespace yLAB
 
