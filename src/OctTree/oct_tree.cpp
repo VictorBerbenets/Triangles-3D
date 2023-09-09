@@ -57,9 +57,12 @@ bool BoundingCube::is_point_inside(const point_t& pt) const {
     using greater = std::greater<double>;
 
     auto hlf_side = side_length(space_degree_);
-    return less{}(std::fabs(pt.x_), std::fabs(center_.x_ + hlf_side)) && greater{}(std::fabs(pt.x_), std::fabs(center_.x_ - hlf_side)) &&
+    return greater{}( (center_.x_ + hlf_side - pt.x_) * (pt.x_ - (center_.x_ - hlf_side)), 0) &&
+           greater{}( (center_.y_ + hlf_side - pt.y_) * (pt.y_ - (center_.y_ - hlf_side)), 0) &&
+           greater{}( (center_.z_ + hlf_side - pt.z_) * (pt.z_ - (center_.z_ - hlf_side)), 0) ;
+    /*return less{}(std::fabs(pt.x_), std::fabs(center_.x_ + hlf_side)) && greater{}(std::fabs(pt.x_), std::fabs(center_.x_ - hlf_side)) &&
            less{}(std::fabs(pt.y_), std::fabs(center_.y_ + hlf_side)) && greater{}(std::fabs(pt.y_), std::fabs(center_.y_ - hlf_side)) &&
-           less{}(std::fabs(pt.z_), std::fabs(center_.z_ + hlf_side)) && greater{}(std::fabs(pt.z_), std::fabs(center_.z_ - hlf_side));
+           less{}(std::fabs(pt.z_), std::fabs(center_.z_ + hlf_side)) && greater{}(std::fabs(pt.z_), std::fabs(center_.z_ - hlf_side));*/
 }
 
 void Node::insert(const data_type& tria) {
