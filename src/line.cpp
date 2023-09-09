@@ -85,9 +85,9 @@ bool line_t::is_valid() const {
 
 void line_t::print() const {
     std::cout << "direct vector:" << std::endl;
-    dir_coords_.print();
+    std::cout << dir_coords_ << std::endl;
     std::cout << "point: ";
-    point_.print();
+    std::cout << point_ << std::endl;
     std::cout << std::endl;
 }
 //----------------------------------------------------------------------//
@@ -162,8 +162,8 @@ void segment_t::set_ends(const point_t& pt) {
 }
 
 void segment_t::print() const {
-    pt1_.print();
-    pt2_.print();
+    std::cout << pt1_ << std::endl;
+    std::cout << pt2_ << std::endl;
 }
 
 }// namespace yLAB

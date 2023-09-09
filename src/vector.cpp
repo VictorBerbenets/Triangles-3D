@@ -81,7 +81,7 @@ vector_t::size_type vector_t::size() const noexcept {
 }
 
 std::ostream& operator<<(std::ostream& os, const vector_t& rhs) {
-    return os << rhs[0] << ' ' << rhs[1] << ' ' << rhs[2] << std::endl; 
+    return os << rhs[0] << ' ' << rhs[1] << ' ' << rhs[2]; 
 }
 
 } // <--- namespace yLAB
