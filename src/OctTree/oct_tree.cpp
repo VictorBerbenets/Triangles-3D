@@ -74,7 +74,7 @@ void Node::insert(const data_type& tria) {
     auto cube_sector = static_cast<size_type>(sub_cube_t);
     if (ptrs_childs_[cube_sector] == nullptr) {
         ptrs_childs_[cube_sector] = std::make_unique<Node>(*this, center, space_degree, Indicator::Work_Node);
-        ptrs_childs_[cube_sector]->inside_cube_trias_.push_back(tria);
+        //ptrs_childs_[cube_sector]->inside_cube_trias_.push_back(tria);
     }
     if (is_limit_reached()) {
         ptrs_childs_[cube_sector]->change_id(Indicator::Tree_List);
