@@ -1,12 +1,14 @@
 #ifndef POINT_TYPE_
 #define POINT_TYPE_
 
+#include <iostream>
 #include <cmath>
 #include <array>
 
 #include "point.hpp"
 
 namespace yLAB {
+
 
 struct point_t final {
     using coords = std::array<double, 3>;
@@ -24,10 +26,11 @@ struct point_t final {
     
     coords get_coords() const;
     bool is_valid() const noexcept;
-    void print() const;
 //--------------------------------------------------------//
     double x_ = NAN, y_ = NAN, z_ = NAN;
 };
+
+std::ostream& operator<<(std::ostream& os, const point_t& pt);
 
 } // <--- namespace yLAB
 

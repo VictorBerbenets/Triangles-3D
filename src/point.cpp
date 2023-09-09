@@ -45,8 +45,8 @@ point_t point_t::operator/(double coeff) const {
     return {x_ / coeff, y_ / coeff, z_ / coeff};
 }
 
-void point_t::print() const {
-    std::cout << "x = " << x_ << " y = " << y_ << " z = " << z_ << std::endl;
+std::ostream& operator<<(std::ostream& os, const point_t& pt) {
+    return os << pt.x_ << ' ' << pt.y_ << ' ' << pt.z_;
 }
 
 } // <--- namespace yLAB
