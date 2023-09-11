@@ -1,5 +1,4 @@
 #include <memory>
-
 #include "triangle.hpp"
 #include "oct_tree.hpp"
 #include "utils.hpp"
@@ -47,34 +46,45 @@ BoundingCube::cubeInfo BoundingCube::what_subcube(const data_type& tria) const {
 }
 
 bool BoundingCube::is_point_inside(const point_t& pt) const {
-    //using less    = std::less<double>;
-    using greater = std::greater<double>;
-
-    return greater{}( (center_.x_ + hlf_side_ - pt.x_) * (pt.x_ - (center_.x_ - hlf_side_)), 0) &&
-           greater{}( (center_.y_ + hlf_side_ - pt.y_) * (pt.y_ - (center_.y_ - hlf_side_)), 0) &&
-           greater{}( (center_.z_ + hlf_side_ - pt.z_) * (pt.z_ - (center_.z_ - hlf_side_)), 0) ;
-    /*return less{}(std::fabs(pt.x_), std::fabs(center_.x_ + hlf_side)) && greater{}(std::fabs(pt.x_), std::fabs(center_.x_ - hlf_side)) &&
-           less{}(std::fabs(pt.y_), std::fabs(center_.y_ + hlf_side)) && greater{}(std::fabs(pt.y_), std::fabs(center_.y_ - hlf_side)) &&
-           less{}(std::fabs(pt.z_), std::fabs(center_.z_ + hlf_side)) && greater{}(std::fabs(pt.z_), std::fabs(center_.z_ - hlf_side));*/
+    return  ((center_.x_ + hlf_side_) > pt.x_) && ((center_.x_ - hlf_side_) < pt.x_) &&
+            ((center_.y_ + hlf_side_) > pt.y_) && ((center_.y_ - hlf_side_) < pt.y_) &&
+            ((center_.z_ + hlf_side_) > pt.z_) && ((center_.z_ - hlf_side_) < pt.z_) ;
 }
 
 void Node::insert(const data_type& tria) {
+    static size_type COUNT = 0;
+    //std::cout << "------------------------------------PRINTING TRIANGLE-----------------------------------------\n";
+   // std::cout << tria.first << std::endl;
     auto [sub_cube_t, center, hlf_side] = what_subcube(tria);
+    //int id = static_cast<int>(sub_cube_t);
+    //std::cout << "CUBE ID = " << id << std::endl;
     if (sub_cube_t == SubCubes::NOT_IN_CUBE) { // if the vertices of the triangle are not in any one cube
+        ++COUNT;
+       // std::cout << "TRIA WAS PUSHED IN NOT IN CUBE\n";
         inside_cube_trias_.push_back(tria);
+       // std::cout << "-----------------------RETURN FROM NOT IN CUBE WITH COUNT = " << COUNT << "\tAND DEEP = " << tree_deep_ << "--------------------" << std::endl;
         return ;
     }
     auto cube_sector = static_cast<size_type>(sub_cube_t);
+   // std::cout << "CUBE SECTOR = " << cube_sector << "\t DEEP = " << tree_deep_ << std::endl;
     if (ptrs_childs_[cube_sector] == nullptr) {
-        ptrs_childs_[cube_sector] = std::make_unique<Node>(*this, center, hlf_side, Indicator::Work_Node);
+     //   std::cout << "CREATING NEW NODE WITH CUBE SECTOR = " << cube_sector << "\t AND TREE DEEP = " << tree_deep_ + 1 << std::endl;
+        ptrs_childs_[cube_sector] = std::make_unique<Node>(*this, center, hlf_side, Indicator::Work_Node, tree_deep_ + 1);
         //ptrs_childs_[cube_sector]->inside_cube_trias_.push_back(tria);
     }
     if (is_limit_reached()) {
+        //std::cout << "DEEP before LIMIT: " << tree_deep_ << std::endl;
+       // std::cout << "LIMIT IS REACHED\n";
         ptrs_childs_[cube_sector]->change_id(Indicator::Tree_List);
+        ++COUNT;
+       // std::cout << "--------------------------------TRIA WAS PUSHED IN LIMIT IS REACHED-----------------------------\n";
         ptrs_childs_[cube_sector]->inside_cube_trias_.push_back(tria);
         return ;
     }
+    //++tree_deep_;
     ptrs_childs_[cube_sector]->insert(tria);
+    //std::cout << "COUNT = " << COUNT << std::endl;
+   // std::cout << "DEEP = " << tree_deep_ << std::endl;
 }
 
 Node::Indicator Node::get_id() const noexcept {
@@ -86,25 +96,36 @@ void Node::change_id(const Indicator& id) noexcept {
 }
 
 bool Node::is_limit_reached() const noexcept {
-    return hlf_side_ == MIN_CUBE_SIDE;
+    return tree_deep_ == 30;
+    //return hlf_side_ <= MIN_CUBE_SIDE;
 }
 
-Node::Node(const Node& parent, const point_t& center, double hlf_side, const Indicator& id):
+Node::Node(const Node& parent, const point_t& center, double hlf_side, const Indicator& id, size_type deep):
             BoundingCube {center, hlf_side},
             ptrs_childs_ {std::make_unique<pointer_type[]>(VOLUMES_NUMBER)},
             parent_ {parent},
+            tree_deep_{deep},
             id_{id} {}
-
+#if 0
 Node::Node():
-            Node{*this, {0, 0, 0}, MAX_HLF_SIDE, Indicator::Tree_Root} {}
+            Node{*this, {0, 0, 0}, MAX_HLF_SIDE, Indicator::Tree_Root, 0} {}
 
 Node::Node(const Node& parent, const Indicator& id):
-            Node(parent, {0, 0, 0}, MAX_HLF_SIDE, id) {}
+            Node(parent, {0, 0, 0}, MAX_HLF_SIDE, id, 0) {}
+#endif
 
+Node::Node(double hlf_side):
+            Node{*this, {0, 0, 0}, hlf_side, Indicator::Tree_Root, 0} {}
+
+Node::Node(const Node& parent, double hlf_side, const Indicator& id):
+            Node(parent, {0, 0, 0}, hlf_side, id, 0) {}
 
 OctTree::const_value_type& OctTree::get_root_node() const noexcept {
     return root_node_;
 }
+
+OctTree::OctTree(double space_limit):
+                root_node_{space_limit} {}
 
 void OctTree::insert_triangle(const data_type& tria) {
     root_node_.insert(tria);
@@ -118,7 +139,7 @@ const Node& Node::parent() const noexcept {
     return parent_;
 }
 
-const Node::triangles_list& Node::data() const noexcept {
+Node::triangles_list Node::data() const noexcept {
     return inside_cube_trias_;
 }
 

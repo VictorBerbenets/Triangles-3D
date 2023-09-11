@@ -12,10 +12,14 @@
 
 #include "triangle.hpp"
 #include "intersector.hpp"
-
+#include <chrono>
 namespace spaceBreaking {
 
 using namespace yLAB;
+
+struct AABB {
+
+};
 
 class BoundingCube {
 public:
@@ -33,10 +37,11 @@ protected:
     using subCubes  = std::array<BoundingCube, VOLUMES_NUMBER>;
     using cubeInfo  = std::tuple<SubCubes, point_t, double>;
 
+//    static constexpr double MAX_HLF_SIDE        = 10053253532.532532; // 2^32 - half side's length
     static constexpr double MAX_HLF_SIDE        = std::pow(2, 32); // 2^32 - half side's length
     static constexpr size_type DEGREE_DECREASE  = 1;  //  divide each volume by 2
     static constexpr size_type SPACE_BASE       = 2;  //
-    static constexpr double MIN_CUBE_SIDE       = 64;  // = 2^space_degree
+    static constexpr double MIN_CUBE_SIDE       = std::pow(2, 8) ;  // = 2^space_degree
  
     BoundingCube();
     BoundingCube(const point_t& center, double hlf_side);
@@ -62,9 +67,11 @@ private:
     void change_id(const Indicator& id) noexcept;
     bool is_limit_reached() const noexcept;
 public:
-    Node();
-    Node(const Node& parent, const Indicator& id);
-    Node(const Node& parent, const point_t& center, double hlf_side, const Indicator& id);
+   // Node();
+   // Node(const Node& parent, const Indicator& id);
+    Node(double hlf_side);
+    Node(const Node& parent, double hlf_side, const Indicator& id);
+    Node(const Node& parent, const point_t& center, double hlf_side, const Indicator& id, size_type deep);
     ~Node() = default;
 
     const pointer_type& operator[](size_type cube_sector) const;
@@ -72,16 +79,14 @@ public:
     void insert(const data_type& tria);
     // geters
     const Node& parent() const noexcept;
-    const triangles_list& data() const noexcept;
+    triangles_list data() const noexcept;
     Indicator get_id() const noexcept;
 private:
     triangles_list inside_cube_trias_;
-
     pointers ptrs_childs_;
     const Node& parent_;
-
+    size_type tree_deep_ = 0;
     Indicator id_;
-
 }; // <--- class Node
 
 class OctTree final {
@@ -94,10 +99,12 @@ public:
 private:
 template<typename Collector>
     void diving_into_tree(const Node& node, Collector& col, collision_list& collision_list) const;
-template<typename Collector, typename Iter>
-    void walk_through_node(Collector& col, Iter iter1_begin, Iter iter1_end, Iter iter2_begin, Iter iter2_end) const;
+template<typename Collector>
+    void check_collis_inside_node(Collector& col, const collision_list& ls) const;
+template<typename Collector>
+    void check_collis_between_nodes(Collector& col, const collision_list& ls1, const collision_list& ls2) const;
 public:
-    OctTree() {};
+    OctTree(double space_limit);
     ~OctTree() = default;
 
     void insert_triangle(const data_type& tria);
@@ -106,44 +113,79 @@ template<typename Collector = std::unordered_set<size_type>>
     void find_intersecting_triangles(Collector& col) const;
 private:
     value_type root_node_;
-    std::size_t nodes_counter_;
 }; // <--- class OctTree
 
 template<typename Collector>
 void OctTree::find_intersecting_triangles(Collector& col) const {
-    collision_list root_collis = root_node_.data();
-    walk_through_node(col, root_collis.begin(), root_collis.end(), std::next(root_collis.begin()), root_collis.end());
+    collision_list root_collis {};
     diving_into_tree(root_node_, col, root_collis);
 }
 
 template<typename Collector>
 void OctTree::diving_into_tree(const Node& node, Collector& col, collision_list& collision_list) const {
     static constexpr auto VOLUMES_NUMBER = BoundingCube::VOLUMES_NUMBER;
+    static size_type NODES_COUNT = 0;
+
     auto node_data = node.data();
-    walk_through_node(col, node_data.begin(), node_data.end(), collision_list.begin(), collision_list.end());
-    walk_through_node(col, node_data.begin(), node_data.end(), std::next(node_data.begin()), node_data.end());
+    NODES_COUNT += node_data.size();
+   // std::cout << "TREE DEEP      " << node.tree_deep_ << std::endl;
+   // std::cout << "NODE DATE SIZE = " << node.data().size() << std::endl;
+   // std::cout << "COLLISION SIZE = " << collision_list.size() << std::endl;
+    check_collis_inside_node(col, node_data);
+    check_collis_between_nodes(col, collision_list, node_data);
+#if 0
+    for (auto it1 = node_data.begin(); it1 != node_data.end(); ++it1) {
+        for (auto it2 = std::next(it1); it2 != node_data.end(); ++it2) {
+            if (intersector::are_intersecting(it1->first, it2->first)) {
+                col.insert({it1->second, it2->second});
+            }
+        }
+    }
+    for (auto it1 = collision_list.begin(); it1 != collision_list.end(); ++it1) {
+        for (auto it2 = node_data.begin(); it2 != node_data.end(); ++it2) {
+            if (intersector::are_intersecting(it1->first, it2->first)) {
+                col.insert({it1->second, it2->second});
+            }
+        }
+    }
+#endif
 
     if (node.get_id() == Node::Indicator::Tree_List) {
+        //std::cout << "IT IS A TREE LIST\n";
         return ;
     }
     int node_diff = node_data.size();
     collision_list.splice(collision_list.end(), node_data);      // adding collision triangles
     for (size_type count = 0; count < VOLUMES_NUMBER; ++count) {
         if (node[count]) {
+      //    std::cout << "CUBE NUMBER = " << count << std::endl;
+      //    std::cout << "NODE size   = " << node[count]->data().size() << std::endl;
             diving_into_tree(*node[count], col, collision_list);
         }
     }
     auto erase_begin = collision_list.end();
     std::advance(erase_begin, -node_diff);
     collision_list.erase(erase_begin, collision_list.end());
+    //std::cout << "NODES COUNT = " << NODES_COUNT << std::endl;
 }
 
-template<typename Collector, typename Iter>
-void OctTree::walk_through_node(Collector& col, Iter iter1_begin, Iter iter1_end, Iter iter2_begin, Iter iter2_end) const {
-    for ( ; iter1_begin != iter1_end; ++iter1_begin) {
-        for ( ; iter2_begin != iter2_end; ++iter2_begin) {
-            if (intersector::are_intersecting(iter1_begin->first, iter2_begin->first)) {
-                col.insert({iter1_begin->second, iter2_begin->second});
+template<typename Collector>
+void OctTree::check_collis_inside_node(Collector& col, const collision_list& ls) const {
+    for (auto it1 = ls.cbegin(); it1 != ls.cend(); ++it1) {
+        for (auto it2 = std::next(it1); it2 != ls.cend(); ++it2) {
+            if (intersector::are_intersecting(it1->first, it2->first)) {
+                col.insert({it1->second, it2->second});
+            }
+        }
+    }
+}
+
+template<typename Collector>
+void OctTree::check_collis_between_nodes(Collector& col, const collision_list& ls1, const collision_list& ls2) const {
+    for (auto it1 = ls1.cbegin(); it1 != ls1.cend(); ++it1) {
+        for (auto it2 = ls2.cbegin(); it2 != ls2.cend(); ++it2) {
+            if (intersector::are_intersecting(it1->first, it2->first)) {
+                col.insert({it1->second, it2->second});
             }
         }
     }

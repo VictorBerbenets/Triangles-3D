@@ -1,6 +1,7 @@
 #ifndef TRIANGLE_TYPE_
 #define TRIANGLE_TYPE_
 
+#include <iostream>
 #include <array>
 
 #include "point.hpp"
@@ -21,6 +22,8 @@ struct triangle_t final {
 //-------------------------------------------------------------------------//
     pts_vector vertices_;
 };
+
+std::ostream& operator<<(std::ostream& os, const triangle_t& tria);
 
 } // namespace yLAB
 

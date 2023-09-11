@@ -59,9 +59,10 @@ point_t line_t::get_intersec_point(const line_t& other) const {
     // solving system of linear equations to find common point
     for (std::size_t id = 1; id < 3; ++id) {
         std::size_t neigh_id = (nzero_it->second + id) % 3;
-        double expr = other.dir_coords_[neigh_id] * dirs[nzero_it->second].first - dirs[neigh_id].first * other.dir_coords_[nzero_it->second];
+        auto val = dirs[nzero_it->second].first;
+        double expr = other.dir_coords_[neigh_id] * val - dirs[neigh_id].first * other.dir_coords_[nzero_it->second];
         if (!are_equal(expr, 0)) {
-            coeff = ( (dirs[neigh_id].first*diffs[nzero_it->second]) / dirs[nzero_it->second].first - diffs[neigh_id] ) * (dirs[nzero_it->second].first / expr);
+            coeff = ( (dirs[neigh_id].first*diffs[nzero_it->second]) / val - diffs[neigh_id] ) * (val / expr);
         }
     }
     return other.get_point(coeff);
