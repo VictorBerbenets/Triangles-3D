@@ -10,7 +10,8 @@ namespace yLAB {
 class admin {    
 public:
     using size_type = std::size_t;
-    using dataVal   = std::pair<triangle_t, size_type>; // saving triangle and his order number
+    using data_type = spaceBreaking::OctTree::data_type;
+//    using dataVal   = std::pair<triangle_t, size_type>; // saving triangle and his order number
 
     static constexpr size_type SET_POINTS_SIZE  = 9;
 

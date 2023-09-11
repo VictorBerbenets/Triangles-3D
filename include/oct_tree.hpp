@@ -39,7 +39,7 @@ private:
 class BoundingCube {
 public:
     using size_type = std::size_t;
-    using data_type = std::pair<triangle_t, size_type>;
+    using data_type = std::tuple<triangle_t, AABB, size_type>;
     
     static constexpr size_type VOLUMES_NUMBER = 8;
 
@@ -101,7 +101,7 @@ private:
     triangles_list inside_cube_trias_;
     pointers ptrs_childs_;
     const Node& parent_;
-    size_type tree_deep_ = 0;
+    size_type tree_deep_{0};
     Indicator id_;
 }; // <--- class Node
 
@@ -188,9 +188,13 @@ void OctTree::diving_into_tree(const Node& node, Collector& col, collision_list&
 template<typename Collector>
 void OctTree::check_collis_inside_node(Collector& col, const collision_list& ls) const {
     for (auto it1 = ls.cbegin(); it1 != ls.cend(); ++it1) {
+        auto [tria1, aabb_1, number1] = *it1; 
         for (auto it2 = std::next(it1); it2 != ls.cend(); ++it2) {
-            if (intersector::are_intersecting(it1->first, it2->first)) {
-                col.insert({it1->second, it2->second});
+            auto [tria2, aabb_2, number2] = *it2; 
+            if (aabb_1.is_intersect(aabb_2)) {
+                if (intersector::are_intersecting(tria1, tria2)) {
+                    col.insert({number1, number2});
+                }
             }
         }
     }
@@ -199,9 +203,13 @@ void OctTree::check_collis_inside_node(Collector& col, const collision_list& ls)
 template<typename Collector>
 void OctTree::check_collis_between_nodes(Collector& col, const collision_list& ls1, const collision_list& ls2) const {
     for (auto it1 = ls1.cbegin(); it1 != ls1.cend(); ++it1) {
+        auto [tria1, aabb_1, number1] = *it1; 
         for (auto it2 = ls2.cbegin(); it2 != ls2.cend(); ++it2) {
-            if (intersector::are_intersecting(it1->first, it2->first)) {
-                col.insert({it1->second, it2->second});
+            auto [tria2, aabb_2, number2] = *it2; 
+            if (aabb_1.is_intersect(aabb_2)) {
+                if (intersector::are_intersecting(tria1, tria2)) {
+                    col.insert({number1, number2});
+                }
             }
         }
     }

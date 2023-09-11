@@ -19,7 +19,7 @@ bool AABB::is_intersect(const AABB& rhs) const {
     if (std::fabs(center_.x_ - rhs.center_.x_) > (radius_[0] + rhs.radius_[0])) { return false; }
     if (std::fabs(center_.y_ - rhs.center_.y_) > (radius_[1] + rhs.radius_[1])) { return false; }
     if (std::fabs(center_.z_ - rhs.center_.z_) > (radius_[2] + rhs.radius_[2])) { return false; }
-    return false;
+    return true;
 }
 
 BoundingCube::BoundingCube():
@@ -44,7 +44,7 @@ BoundingCube::subCubes BoundingCube::get_subcubes(double hlf_side) const {
 BoundingCube::cubeInfo BoundingCube::what_subcube(const data_type& tria) const {
     auto sb_cubes = get_subcubes(hlf_side_ / 2);
     
-    auto& triangle = tria.first;
+    auto& triangle = std::get<triangle_t>(tria);
     for (size_type cubes_index = 0; cubes_index < VOLUMES_NUMBER; ++cubes_index) {
         size_type tria_index = 0;
         for ( ; tria_index < 3; ++tria_index) {
