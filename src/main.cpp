@@ -31,8 +31,8 @@ decltype(auto) give_data(std::istream& stream) {
             if (!stream.good()) {
                 throw std::runtime_error{"data reading error\n"};
             }
-            if (std::greater<double>{}(tmp_value, max_hlf_side)) {
-                max_hlf_side = tmp_value;
+            if (std::greater<double>{}(std::fabs(tmp_value), max_hlf_side)) {
+                max_hlf_side = std::fabs(tmp_value);
             }
             tmp_points.push_back(tmp_value);
         }
@@ -43,7 +43,6 @@ decltype(auto) give_data(std::istream& stream) {
         tmp_points.clear();
     }
     return std::pair<std::vector<dataVal>, double>{data, max_hlf_side};
-
 }
 
 int main() {
@@ -58,3 +57,4 @@ int main() {
     std::chrono::duration<double> dur = end - start;
     std::cout << "TIME: " << dur.count() << std::endl;
 }
+

@@ -41,12 +41,14 @@ struct segment_t final {
     segment_t()  = default;
     ~segment_t() = default;
     
+    point_t center() const noexcept;
+    
     double length() const;
     bool is_valid() const;
     bool is_intersect(const segment_t& other) const;
     bool is_inside(const point_t& pt) const;
     bool is_degenerated() const;
-
+    
     void set_ends(const point_t& pt1, const point_t& pt2);
     void set_ends(const point_t& pt);
     void print() const;

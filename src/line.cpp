@@ -99,6 +99,10 @@ segment_t::segment_t(const point_t& pt1, const point_t& pt2):
 segment_t::segment_t(const point_t& pt):
         pt1_{pt}, pt2_{pt} {};
 
+point_t segment_t::center() const noexcept {
+    return { (pt1_.x_ + pt2_.x_) / 2, (pt1_.y_ + pt2_.y_) / 2, (pt1_.z_ + pt2_.z_) / 2 };
+}
+
 double segment_t::length() const {
     auto sq_len1 = pt2_.x_ - pt1_.x_;
     auto sq_len2 = pt2_.y_ - pt1_.y_;

@@ -6,6 +6,22 @@
 
 namespace spaceBreaking {
 
+AABB::AABB(const point_t& pt1, const point_t& pt2, const point_t& pt3):
+           center_{ (pt1.x_ + pt2.x_) / 2, (pt1.y_ + pt2.y_) / 2, (pt1.z_ + pt2.z_) / 2},
+           radius_{ std::max(std::fabs(center_.x_ - pt1.x_), std::fabs(center_.x_ - pt3.x_)),
+                    std::max(std::fabs(center_.y_ - pt1.y_), std::fabs(center_.y_ - pt3.y_)),
+                    std::max(std::fabs(center_.z_ - pt1.z_), std::fabs(center_.z_ - pt3.z_)) } {}
+
+AABB::AABB(const triangle_t& tria):
+           AABB(tria.vertices_[0], tria.vertices_[1], tria.vertices_[2]) {}
+
+bool AABB::is_intersect(const AABB& rhs) const {
+    if (std::fabs(center_.x_ - rhs.center_.x_) > (radius_[0] + rhs.radius_[0])) { return false; }
+    if (std::fabs(center_.y_ - rhs.center_.y_) > (radius_[1] + rhs.radius_[1])) { return false; }
+    if (std::fabs(center_.z_ - rhs.center_.z_) > (radius_[2] + rhs.radius_[2])) { return false; }
+    return false;
+}
+
 BoundingCube::BoundingCube():
                             center_{0, 0, 0},
                             hlf_side_{MAX_HLF_SIDE} {};
@@ -52,15 +68,16 @@ bool BoundingCube::is_point_inside(const point_t& pt) const {
 }
 
 void Node::insert(const data_type& tria) {
-    static size_type COUNT = 0;
+    //static size_type COUNT = 0;
     //std::cout << "------------------------------------PRINTING TRIANGLE-----------------------------------------\n";
    // std::cout << tria.first << std::endl;
     auto [sub_cube_t, center, hlf_side] = what_subcube(tria);
+    //std::cout << "HLF SIDE = " << hlf_side << std::endl;
     //int id = static_cast<int>(sub_cube_t);
     //std::cout << "CUBE ID = " << id << std::endl;
     if (sub_cube_t == SubCubes::NOT_IN_CUBE) { // if the vertices of the triangle are not in any one cube
-        ++COUNT;
-       // std::cout << "TRIA WAS PUSHED IN NOT IN CUBE\n";
+        //++COUNT;
+        //std::cout << "TRIA WAS PUSHED IN NOT IN CUBE\n";
         inside_cube_trias_.push_back(tria);
        // std::cout << "-----------------------RETURN FROM NOT IN CUBE WITH COUNT = " << COUNT << "\tAND DEEP = " << tree_deep_ << "--------------------" << std::endl;
         return ;
@@ -76,7 +93,7 @@ void Node::insert(const data_type& tria) {
         //std::cout << "DEEP before LIMIT: " << tree_deep_ << std::endl;
        // std::cout << "LIMIT IS REACHED\n";
         ptrs_childs_[cube_sector]->change_id(Indicator::Tree_List);
-        ++COUNT;
+        //++COUNT;
        // std::cout << "--------------------------------TRIA WAS PUSHED IN LIMIT IS REACHED-----------------------------\n";
         ptrs_childs_[cube_sector]->inside_cube_trias_.push_back(tria);
         return ;
@@ -96,8 +113,9 @@ void Node::change_id(const Indicator& id) noexcept {
 }
 
 bool Node::is_limit_reached() const noexcept {
-    return tree_deep_ == 30;
-    //return hlf_side_ <= MIN_CUBE_SIDE;
+    return tree_deep_ == MAX_TREE_DEEP;
+    //return tree_deep_ == MAX_TREE_DEEP || hlf_side_ < MIN_CUBE_SIDE;
+    //return hlf_side_ <= 1;
 }
 
 Node::Node(const Node& parent, const point_t& center, double hlf_side, const Indicator& id, size_type deep):

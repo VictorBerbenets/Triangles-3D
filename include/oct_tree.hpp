@@ -17,8 +17,23 @@ namespace spaceBreaking {
 
 using namespace yLAB;
 
-struct AABB {
+class AABB {
+    using value_type = double;
+public:
+    AABB(const triangle_t& tria);
+    AABB(const point_t& pt1, const point_t& pt2, const point_t& pt3);
+    ~AABB() = default;
 
+    bool is_intersect(const AABB& rhs) const;
+
+    value_type radius_x() const { return radius_[0]; };
+    value_type radius_y() const { return radius_[1]; };
+    value_type radius_z() const { return radius_[2]; };
+
+    const point_t& center() const noexcept { return center_; };
+private:
+    point_t center_;
+    std::array<value_type, 3> radius_;
 };
 
 class BoundingCube {
@@ -40,9 +55,10 @@ protected:
 //    static constexpr double MAX_HLF_SIDE        = 10053253532.532532; // 2^32 - half side's length
     static constexpr double MAX_HLF_SIDE        = std::pow(2, 32); // 2^32 - half side's length
     static constexpr size_type DEGREE_DECREASE  = 1;  //  divide each volume by 2
-    static constexpr size_type SPACE_BASE       = 2;  //
-    static constexpr double MIN_CUBE_SIDE       = std::pow(2, 8) ;  // = 2^space_degree
- 
+    static constexpr size_type SPACE_BASE       = 2;
+    static constexpr size_type MAX_TREE_DEEP    = 9;
+    static constexpr double MIN_CUBE_SIDE       = 25;  // = 2^space_degree
+
     BoundingCube();
     BoundingCube(const point_t& center, double hlf_side);
 
@@ -124,10 +140,10 @@ void OctTree::find_intersecting_triangles(Collector& col) const {
 template<typename Collector>
 void OctTree::diving_into_tree(const Node& node, Collector& col, collision_list& collision_list) const {
     static constexpr auto VOLUMES_NUMBER = BoundingCube::VOLUMES_NUMBER;
-    static size_type NODES_COUNT = 0;
+    //static size_type NODES_COUNT = 0;
 
     auto node_data = node.data();
-    NODES_COUNT += node_data.size();
+    //NODES_COUNT += node_data.size();
    // std::cout << "TREE DEEP      " << node.tree_deep_ << std::endl;
    // std::cout << "NODE DATE SIZE = " << node.data().size() << std::endl;
    // std::cout << "COLLISION SIZE = " << collision_list.size() << std::endl;
