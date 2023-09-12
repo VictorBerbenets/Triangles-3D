@@ -34,7 +34,8 @@ public:
 private:
     point_t center_;
     std::array<value_type, 3> radius_;
-};
+}; // <--- class AABB
+/*------------------------------------------------------------------------------------------------------------------------*/
 
 class BoundingCube {
 public:
@@ -67,6 +68,7 @@ protected:
     point_t center_;
     double hlf_side_;
 }; // <--- class BoandingCube
+/*------------------------------------------------------------------------------------------------------------------------*/
 
 class Node final: public BoundingCube {
 public:
@@ -98,6 +100,7 @@ private:
     size_type tree_deep_{0};
     Indicator id_;
 }; // <--- class Node
+/*------------------------------------------------------------------------------------------------------------------------*/
 
 class OctTree final {
 public:
@@ -183,6 +186,7 @@ void OctTree::check_collis_between_nodes(Collector& col, const collision_list& l
         }
     }
 }
+/*------------------------------------------------------------------------------------------------------------------------*/
 
 } // <--- namespace spaceBreaking
 

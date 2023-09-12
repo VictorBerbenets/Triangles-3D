@@ -21,6 +21,7 @@ bool AABB::is_intersect(const AABB& rhs) const {
     if (std::fabs(center_.z_ - rhs.center_.z_) > (radius_[2] + rhs.radius_[2])) { return false; }
     return true;
 }
+/*------------------------------------------------------------------------------------------------------------------------*/
 
 BoundingCube::BoundingCube():
                             center_{0, 0, 0},
@@ -66,6 +67,20 @@ bool BoundingCube::is_point_inside(const point_t& pt) const {
             ((center_.y_ + hlf_side_) > pt.y_) && ((center_.y_ - hlf_side_) < pt.y_) &&
             ((center_.z_ + hlf_side_) > pt.z_) && ((center_.z_ - hlf_side_) < pt.z_) ;
 }
+/*------------------------------------------------------------------------------------------------------------------------*/
+
+Node::Node(const Node& parent, const point_t& center, double hlf_side, const Indicator& id, size_type deep):
+            BoundingCube {center, hlf_side},
+            ptrs_childs_ {std::make_unique<pointer_type[]>(VOLUMES_NUMBER)},
+            parent_ {parent},
+            tree_deep_{deep},
+            id_{id} {}
+
+Node::Node(double hlf_side):
+            Node{*this, {0, 0, 0}, hlf_side, Indicator::Tree_Root, 0} {}
+
+Node::Node(const Node& parent, double hlf_side, const Indicator& id):
+            Node(parent, {0, 0, 0}, hlf_side, id, 0) {}
 
 void Node::insert(const data_type& tria) {
     auto [sub_cube_t, center, hlf_side] = what_subcube(tria);
@@ -97,18 +112,18 @@ bool Node::is_limit_reached() const noexcept {
     return tree_deep_ == MAX_TREE_DEEP;
 }
 
-Node::Node(const Node& parent, const point_t& center, double hlf_side, const Indicator& id, size_type deep):
-            BoundingCube {center, hlf_side},
-            ptrs_childs_ {std::make_unique<pointer_type[]>(VOLUMES_NUMBER)},
-            parent_ {parent},
-            tree_deep_{deep},
-            id_{id} {}
+const Node::pointer_type& Node::operator[](size_type cube_sector) const {
+    return ptrs_childs_[cube_sector];
+}
 
-Node::Node(double hlf_side):
-            Node{*this, {0, 0, 0}, hlf_side, Indicator::Tree_Root, 0} {}
+const Node& Node::parent() const noexcept {
+    return parent_;
+}
 
-Node::Node(const Node& parent, double hlf_side, const Indicator& id):
-            Node(parent, {0, 0, 0}, hlf_side, id, 0) {}
+Node::triangles_list Node::data() const noexcept {
+    return inside_cube_trias_;
+}
+/*------------------------------------------------------------------------------------------------------------------------*/
 
 OctTree::const_value_type& OctTree::get_root_node() const noexcept {
     return root_node_;
@@ -121,17 +136,6 @@ void OctTree::insert_triangle(const data_type& tria) {
     root_node_.insert(tria);
 }
 
-const Node::pointer_type& Node::operator[](size_type cube_sector) const {
-    return ptrs_childs_[cube_sector];
-}
-
-const Node& Node::parent() const noexcept {
-    return parent_;
-}
-
-Node::triangles_list Node::data() const noexcept {
-    return inside_cube_trias_;
-}
 
 } // <--- namespace spaceBreaking
 
