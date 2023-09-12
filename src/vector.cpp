@@ -34,7 +34,7 @@ vector_t operator-(const vector_t& lhs, const vector_t& rhs) noexcept {
 }
 
 vector_t& vector_t::operator*=(value_type coeff) noexcept {
-    for (auto& val : coords_) {
+    for (auto val : coords_) {
         val *= coeff;
     }
     return *this;
@@ -44,7 +44,7 @@ vector_t& vector_t::operator/=(value_type coeff) {
     if (is_zero(coeff)) {
         throw std::invalid_argument{"Attempt to divide by zero in vector's operator/=\n"};
     }
-    for (auto& val : coords_) {
+    for (auto val : coords_) {
         val /= coeff;
     }
     return *this;

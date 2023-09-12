@@ -2,7 +2,6 @@
 #define OCT_TREE_
 
 #include <iostream>
-#include <functional>
 #include <list>
 #include <set>
 #include <array>

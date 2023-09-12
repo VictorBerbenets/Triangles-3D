@@ -81,7 +81,7 @@ Node::Node(double hlf_side):
             Node{*this, {0, 0, 0}, hlf_side, Indicator::Tree_Root, 0} {}
 
 Node::Node(const Node& parent, double hlf_side, const Indicator& id):
-            Node(parent, {0, 0, 0}, hlf_side, id, 0) {}
+            Node{parent, {0, 0, 0}, hlf_side, id, 0} {}
 
 void Node::insert(const data_type& tria) {
     auto [sub_cube_t, center, hlf_side] = what_subcube(tria);
@@ -136,6 +136,8 @@ OctTree::OctTree(double space_limit):
 void OctTree::insert_triangle(const data_type& tria) {
     root_node_.insert(tria);
 }
+/*------------------------------------------------------------------------------------------------------------------------*/
+
 
 } // <--- namespace spaceBreaking
 

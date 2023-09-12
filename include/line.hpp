@@ -3,7 +3,6 @@
 
 #include <cmath>
 #include <utility>
-#include <random>
 
 #include "point.hpp"
 #include "utils.hpp"
@@ -11,7 +10,6 @@
 namespace yLAB {
 
 struct line_t final {       
-    //using two_pts = std::pair<point_t, point_t>;
     static constexpr double DEFAULT_COEFF = 1;
 
     line_t(const point_t& pt1, const point_t& pt2);
@@ -30,7 +28,6 @@ struct line_t final {
     void print() const;
 //------------------------------------------------------------------//
     vector_t dir_coords_; // coordinates of the direct vector 
-    //double a1_ = NAN, a2_ = NAN, a3_ = NAN;
     point_t point_{};
 };
 

@@ -22,6 +22,8 @@ bool intersector::are_intersecting(const triangle_t& tria1, const triangle_t& tr
                 return true;
             }
         } else if (pair1.second == pair2.second) {    // both triangles lies in one plane
+       // } else if (pair1.second.contains(pair2.second.get_plane_point())) {    // both triangles lies in one plane
+            std::cout << "IN ONE PLANE\n";
             if (same_intersection(pair1.first, pair2.first)) {
                 return true;
             }

@@ -19,7 +19,7 @@ public:
     using size_type    = std::size_t;
     using plane_coeffs = std::array<double, 4>; // A, B, C, D
     using minor_pair   = std::pair<size_type, size_type>;
-    using tria_plane = std::pair<triangle_t, plane_t>;
+    using tria_plane   = std::pair<triangle_t, plane_t>;
     
     static bool are_intersecting(const triangle_t& tria1, const triangle_t& tria2);
 
