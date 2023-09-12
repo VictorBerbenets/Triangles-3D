@@ -68,40 +68,21 @@ bool BoundingCube::is_point_inside(const point_t& pt) const {
 }
 
 void Node::insert(const data_type& tria) {
-    //static size_type COUNT = 0;
-    //std::cout << "------------------------------------PRINTING TRIANGLE-----------------------------------------\n";
-   // std::cout << tria.first << std::endl;
     auto [sub_cube_t, center, hlf_side] = what_subcube(tria);
-    //std::cout << "HLF SIDE = " << hlf_side << std::endl;
-    //int id = static_cast<int>(sub_cube_t);
-    //std::cout << "CUBE ID = " << id << std::endl;
     if (sub_cube_t == SubCubes::NOT_IN_CUBE) { // if the vertices of the triangle are not in any one cube
-        //++COUNT;
-        //std::cout << "TRIA WAS PUSHED IN NOT IN CUBE\n";
         inside_cube_trias_.push_back(tria);
-       // std::cout << "-----------------------RETURN FROM NOT IN CUBE WITH COUNT = " << COUNT << "\tAND DEEP = " << tree_deep_ << "--------------------" << std::endl;
         return ;
     }
     auto cube_sector = static_cast<size_type>(sub_cube_t);
-   // std::cout << "CUBE SECTOR = " << cube_sector << "\t DEEP = " << tree_deep_ << std::endl;
     if (ptrs_childs_[cube_sector] == nullptr) {
-     //   std::cout << "CREATING NEW NODE WITH CUBE SECTOR = " << cube_sector << "\t AND TREE DEEP = " << tree_deep_ + 1 << std::endl;
         ptrs_childs_[cube_sector] = std::make_unique<Node>(*this, center, hlf_side, Indicator::Work_Node, tree_deep_ + 1);
-        //ptrs_childs_[cube_sector]->inside_cube_trias_.push_back(tria);
     }
     if (is_limit_reached()) {
-        //std::cout << "DEEP before LIMIT: " << tree_deep_ << std::endl;
-       // std::cout << "LIMIT IS REACHED\n";
         ptrs_childs_[cube_sector]->change_id(Indicator::Tree_List);
-        //++COUNT;
-       // std::cout << "--------------------------------TRIA WAS PUSHED IN LIMIT IS REACHED-----------------------------\n";
         ptrs_childs_[cube_sector]->inside_cube_trias_.push_back(tria);
         return ;
     }
-    //++tree_deep_;
     ptrs_childs_[cube_sector]->insert(tria);
-    //std::cout << "COUNT = " << COUNT << std::endl;
-   // std::cout << "DEEP = " << tree_deep_ << std::endl;
 }
 
 Node::Indicator Node::get_id() const noexcept {
@@ -114,8 +95,6 @@ void Node::change_id(const Indicator& id) noexcept {
 
 bool Node::is_limit_reached() const noexcept {
     return tree_deep_ == MAX_TREE_DEEP;
-    //return tree_deep_ == MAX_TREE_DEEP || hlf_side_ < MIN_CUBE_SIDE;
-    //return hlf_side_ <= 1;
 }
 
 Node::Node(const Node& parent, const point_t& center, double hlf_side, const Indicator& id, size_type deep):
@@ -124,13 +103,6 @@ Node::Node(const Node& parent, const point_t& center, double hlf_side, const Ind
             parent_ {parent},
             tree_deep_{deep},
             id_{id} {}
-#if 0
-Node::Node():
-            Node{*this, {0, 0, 0}, MAX_HLF_SIDE, Indicator::Tree_Root, 0} {}
-
-Node::Node(const Node& parent, const Indicator& id):
-            Node(parent, {0, 0, 0}, MAX_HLF_SIDE, id, 0) {}
-#endif
 
 Node::Node(double hlf_side):
             Node{*this, {0, 0, 0}, hlf_side, Indicator::Tree_Root, 0} {}
