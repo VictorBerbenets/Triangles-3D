@@ -21,10 +21,12 @@ add_executable(unit ${UNIT_TESTS}
               )
 add_executable(end2end 
                        ${END2END_TESTS}
+                       ${TESTING_FILES}
               )
 
 target_include_directories(end2end
                            PRIVATE end2end/include
+                           PRIVATE ${INCLUDE_DIR}
                            )
 
 target_include_directories(unit

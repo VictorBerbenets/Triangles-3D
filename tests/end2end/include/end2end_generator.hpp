@@ -5,7 +5,10 @@
 #include <random>
 #include <fstream>
 
+#include "point.hpp"
+
 namespace testing {
+    using namespace yLAB;
 
 class generator final {
     using u_int      = std::size_t;
@@ -14,33 +17,30 @@ class generator final {
     static constexpr u_int TRIANGLES_LIMIT_NUMBER = 1000000;
     static constexpr u_int MAX_POINT_COORD        = 5000000;
     static constexpr u_int MIN_POINT_COORD        = -5000000;
-#if 0   
-    static constexpr u_int ;
-    static constexpr u_int ;
-    static constexpr u_int ;
-#endif
+    static constexpr u_int MIN_UINT_INDEX         = 0;
+    static constexpr u_int MAX_UINT_INDEX         = 1;
+   // static constexpr u_int ;
+
     
-    enum class TriaOrientation: char { In_One_Plane = 0, In_Different_Planes = 1};
+    enum class TriaOrientation: char { In_One_Plane = MIN_UINT_INDEX, In_Different_Planes = MAX_UINT_INDEX};
 
-    void one_plane_triangles() const;
-    void diff_planes_triangles() const;
+    void one_plane_triangles();
+    void diff_planes_triangles();
 
-    void init_generator(gener_type& gener) const;
-    u_int random_uint(gener_type& generator) const;
-    double random_double(gener_type& generator) const;
+    u_int random_uint() noexcept;
+    double random_double() noexcept;
+
+    point_t random_point() noexcept;
 public:
-    generator(std::string file_name, u_int tests_number):
-              test_file_{file_name},
-              file_name_{file_name},
-              triangles_number_{tests_number} {}
+    generator(std::string file_name, u_int tests_number);
     ~generator() = default;
 
-    void generate_triangles() const;
+    void generate_triangles();
 private:
-    std::ofstream test_file_;
     std::string file_name_;
+    std::ofstream test_file_;
     u_int triangles_number_;
-//    gener_type generator_;
+    gener_type generator_;
 };
 
 } // <--- namespace testing
