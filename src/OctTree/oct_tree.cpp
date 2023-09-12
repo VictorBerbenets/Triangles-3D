@@ -1,4 +1,5 @@
 #include <memory>
+
 #include "triangle.hpp"
 #include "oct_tree.hpp"
 #include "utils.hpp"
@@ -26,13 +27,13 @@ bool AABB::is_intersect(const AABB& rhs) const {
 BoundingCube::BoundingCube():
                             center_{0, 0, 0},
                             hlf_side_{MAX_HLF_SIDE} {};
-                            
+
 BoundingCube::BoundingCube(const point_t& center, double new_hlf_side):
                             center_{center},
-                            hlf_side_{new_hlf_side} {}              
+                            hlf_side_{new_hlf_side} {}
 
 BoundingCube::subCubes BoundingCube::get_subcubes(double hlf_side) const {
-    return { BoundingCube { {center_.x_ - hlf_side, center_.y_ - hlf_side, center_.z_ + hlf_side}, hlf_side }, 
+    return { BoundingCube { {center_.x_ - hlf_side, center_.y_ - hlf_side, center_.z_ + hlf_side}, hlf_side },
              BoundingCube { {center_.x_ - hlf_side, center_.y_ + hlf_side, center_.z_ + hlf_side}, hlf_side },
              BoundingCube { {center_.x_ - hlf_side, center_.y_ - hlf_side, center_.z_ - hlf_side}, hlf_side },
              BoundingCube { {center_.x_ - hlf_side, center_.y_ + hlf_side, center_.z_ - hlf_side}, hlf_side },
@@ -40,11 +41,11 @@ BoundingCube::subCubes BoundingCube::get_subcubes(double hlf_side) const {
              BoundingCube { {center_.x_ + hlf_side, center_.y_ + hlf_side, center_.z_ + hlf_side}, hlf_side },
              BoundingCube { {center_.x_ + hlf_side, center_.y_ - hlf_side, center_.z_ - hlf_side}, hlf_side },
              BoundingCube { {center_.x_ + hlf_side, center_.y_ + hlf_side, center_.z_ - hlf_side}, hlf_side } };
-}                                                                                                   
+}
 
 BoundingCube::cubeInfo BoundingCube::what_subcube(const data_type& tria) const {
     auto sb_cubes = get_subcubes(hlf_side_ / 2);
-    
+
     auto& triangle = std::get<triangle_t>(tria);
     for (size_type cubes_index = 0; cubes_index < VOLUMES_NUMBER; ++cubes_index) {
         size_type tria_index = 0;
@@ -135,7 +136,6 @@ OctTree::OctTree(double space_limit):
 void OctTree::insert_triangle(const data_type& tria) {
     root_node_.insert(tria);
 }
-
 
 } // <--- namespace spaceBreaking
 
