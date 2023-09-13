@@ -18,6 +18,14 @@ plane_t triangle_t::get_plane() const {
     return {vertices_[0], vertices_[1], vertices_[2]};
 }
 
+point_t triangle_t::operator[](std::size_t index) const {
+    return vertices_[index];
+}
+
+point_t& triangle_t::operator[](std::size_t index) {
+    return vertices_[index];
+}
+
 std::ostream& operator<<(std::ostream& os, const triangle_t& tria) {
     os << tria.vertices_[0] << std::endl;
     os << tria.vertices_[1] << std::endl;

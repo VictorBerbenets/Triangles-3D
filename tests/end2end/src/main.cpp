@@ -11,4 +11,6 @@ int main(int argc, const char* argv[]) {
     
     std::size_t triangles_number = std::stoi(argv[2]);
     generator gen(argv[1], triangles_number);
+
+    gen.generate_triangles();
 }

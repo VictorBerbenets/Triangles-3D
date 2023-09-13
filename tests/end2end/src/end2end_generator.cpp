@@ -30,6 +30,10 @@ void generator::generate_triangles() {
     }
 }
 
+triangle_t generator::generate_triangle() {
+
+}
+
 void generator::one_plane_triangles() {
      plane_t main_plane{random_point(), random_point(), random_point()};
 
@@ -37,7 +41,9 @@ void generator::one_plane_triangles() {
 }
 
 void generator::diff_planes_triangles() {
-
+    plane_t plane1{random_point(), random_point(), random_point()};
+    plane_t plane2{random_point(), random_point(), random_point()};
+    
 }
 
 

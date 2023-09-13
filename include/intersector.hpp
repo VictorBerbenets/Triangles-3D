@@ -31,6 +31,8 @@ public:
     static line_t get_intersection_line(const plane_t& plane1, const plane_t plane2);
     static point_t get_planes_intersec_point(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2);
 private:
+    static bool check_inside_point(const triangle_t& tria1, const triangle_t& tria2);
+    static bool check_segments_intersection(const triangle_t& tria1, const triangle_t& tria2);
     static bool mul_vect_products(const triangle_t::pts_vector& tria, const point_t& comp_pt);
     static minor_pair find_not_zero_minor(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2);
     static void find_intsec_points(std::vector<point_t>& intsec_points, line_t& intsec_line,

@@ -6,6 +6,7 @@
 #include <fstream>
 
 #include "point.hpp"
+#include "triangle.hpp"
 
 namespace testing {
     using namespace yLAB;
@@ -23,6 +24,8 @@ class generator final {
 
     
     enum class TriaOrientation: char { In_One_Plane = MIN_UINT_INDEX, In_Different_Planes = MAX_UINT_INDEX};
+    
+    triangle_t generate_triangle();
 
     void one_plane_triangles();
     void diff_planes_triangles();
