@@ -27,9 +27,9 @@ point_t& triangle_t::operator[](std::size_t index) {
 }
 
 std::ostream& operator<<(std::ostream& os, const triangle_t& tria) {
-    os << tria.vertices_[0] << std::endl;
-    os << tria.vertices_[1] << std::endl;
-    return os << tria.vertices_[2];
+    os << tria[0] << std::endl;
+    os << tria[1] << std::endl;
+    return os << tria[2];
 }
 
 } // <--- namespace yLAB

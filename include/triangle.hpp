@@ -9,7 +9,8 @@
 
 namespace yLAB {
 
-struct triangle_t final {
+class triangle_t final {
+public:
     using pts_vector = std::array<point_t, 3>;
 
     triangle_t(const point_t& pt1, const point_t& pt2, const point_t& pt3);
@@ -22,7 +23,7 @@ struct triangle_t final {
     point_t& operator[](std::size_t index);
 
     plane_t get_plane() const;
-//-------------------------------------------------------------------------//
+private:
     pts_vector vertices_;
 };
 

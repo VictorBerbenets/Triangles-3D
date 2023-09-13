@@ -14,7 +14,7 @@ AABB::AABB(const point_t& pt1, const point_t& pt2, const point_t& pt3):
                     std::max(std::fabs(center_.z_ - pt1.z_), std::fabs(center_.z_ - pt3.z_)) } {}
 
 AABB::AABB(const triangle_t& tria):
-           AABB(tria.vertices_[0], tria.vertices_[1], tria.vertices_[2]) {}
+           AABB(tria[0], tria[1], tria[2]) {}
 
 bool AABB::is_intersect(const AABB& rhs) const {
     if (std::fabs(center_.x_ - rhs.center_.x_) > (radius_[0] + rhs.radius_[0])) { return false; }
@@ -50,7 +50,7 @@ BoundingCube::cubeInfo BoundingCube::what_subcube(const data_type& tria) const {
     for (size_type cubes_index = 0; cubes_index < VOLUMES_NUMBER; ++cubes_index) {
         size_type tria_index = 0;
         for ( ; tria_index < 3; ++tria_index) {
-            if ( !sb_cubes[cubes_index].is_point_inside(triangle.vertices_[tria_index]) ) {
+            if ( !sb_cubes[cubes_index].is_point_inside(triangle[tria_index]) ) {
                 break;
             }
         }

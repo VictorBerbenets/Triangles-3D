@@ -42,10 +42,10 @@ bool intersector::check_inside_point(const triangle_t& tria1, const triangle_t& 
     for (size_type index1 = 0; index1 < POINTS_TO_COMPARE; ++index1) {
         size_type count = 0;
         for (size_type index2 = 0; index2 < POINTS_TO_COMPARE; ++index2) {
-            if (mul_vect_products({ tria1.vertices_[index2],
-                                    tria1.vertices_[(index2 + 1) % POINTS_TO_COMPARE],
-                                    tria1.vertices_[(index2 + 2) % POINTS_TO_COMPARE] },
-                                    tria2.vertices_[index1]) ) {
+            if (mul_vect_products({ tria1[index2],
+                                    tria1[(index2 + 1) % POINTS_TO_COMPARE],
+                                    tria1[(index2 + 2) % POINTS_TO_COMPARE] },
+                                    tria2[index1]) ) {
                 ++count;
             } else {
                 break;
