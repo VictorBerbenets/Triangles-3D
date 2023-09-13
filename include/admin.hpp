@@ -14,10 +14,8 @@ public:
 
     static constexpr size_type SET_POINTS_SIZE  = 9;
 
-template<typename Container>
-    admin(const Container& data, double space_limit);
-template<typename T>
-    admin(T&& pair_data);
+template<typename Iter>
+    admin(Iter begin, Iter end, double  space_limit);
     ~admin() = default;
 
     void print_intersected_triangles() const;
@@ -25,19 +23,12 @@ private:
     spaceBreaking::OctTree oct_tree_;
 };
 
-template<typename Container>
-admin::admin(const Container& data, double space_limit):
-            oct_tree_ {space_limit} {
-    for (auto& val : data) {
-        oct_tree_.insert_triangle(val);
-    }
-};
-
-template<typename T>
-admin::admin(T&& pair_data): oct_tree_{pair_data.second} {
-    for (auto& val : pair_data.first) {
-        oct_tree_.insert_triangle(val);
-    }
+template<typename Iter>
+admin::admin(Iter begin, Iter end, double  space_limit):
+        oct_tree_{space_limit} {
+        for (; begin != end; ++begin) {
+            oct_tree_.insert_triangle(*begin);
+        }
 }
 
 }

@@ -5,7 +5,7 @@
 
 #include "admin.hpp"
 
-decltype(auto) give_data(std::istream& stream) {
+auto give_data(std::istream& stream) {
     using namespace yLAB;
 
     using data_type   = admin::data_type;
@@ -50,8 +50,9 @@ int main() {
     using namespace yLAB;
 
     auto start = std::chrono::high_resolution_clock::now(); 
-    
-    admin ad{give_data(std::cin)};
+
+    auto data = give_data(std::cin); 
+    admin ad{data.first.begin(), data.first.end(), data.second};
     ad.print_intersected_triangles();
    
     auto end = std::chrono::high_resolution_clock::now(); 
