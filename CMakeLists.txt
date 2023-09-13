@@ -5,20 +5,11 @@ project(triangles)
 set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
 
-set(SOURCES
-        src/main.cpp
-        src/point.cpp
-        src/line.cpp
-        src/plane.cpp
-        src/triangle.cpp
-        src/vector.cpp
-        src/OctTree/oct_tree.cpp
-        src/intersections/diff_intersections.cpp
-        src/intersections/same_intersections.cpp
-        src/intersections/interface_intersections.cpp
-    )
+aux_source_directory(./src PRIMITIVES)
+aux_source_directory(./src/OctTree OCTTREE)
+aux_source_directory(./src/intersections INTERSECTIONS)
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${PRIMITIVES} ${OCTTREE} ${INTERSECTIONS})
 
 target_include_directories( ${PROJECT_NAME}
                             PRIVATE
@@ -27,7 +18,7 @@ set_target_properties(
     ${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
-    COMPILE_FLAGS " -O2 -Wall -Wextra "
+    COMPILE_FLAGS " -O3 -Wall -Wextra "
 )
 
 add_subdirectory(tests)
