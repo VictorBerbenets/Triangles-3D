@@ -27,7 +27,7 @@ bool intersector::different_intersection(const tria_plane& pair1, const tria_pla
 bool intersector::init_segment(line_t& intsec_line, const triangle_t& tria, segment_t& segm) {
     std::vector<point_t> intsec_points{};
     for (int index = 0; index < 3; ++index) {
-        find_intsec_points(intsec_points, intsec_line, tria.vertices_[index], tria.vertices_[(index + 1) % 3]);
+        find_intsec_points(intsec_points, intsec_line, tria[index], tria[(index + 1) % 3]);
         if (intsec_points.size() == 2) {
             segm.set_ends(intsec_points.front(), intsec_points.back());
             return true;

@@ -4,7 +4,7 @@
 #include "utils.hpp"
 #include "point.hpp"
 #include "triangle.hpp"
-#include <chrono>
+
 namespace yLAB {
 
 bool intersector::same_intersection(const triangle_t& tria1, const triangle_t& tria2) {
