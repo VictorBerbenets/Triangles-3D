@@ -8,20 +8,19 @@ auto get_data(int argc, const char* argv[]) {
     using gener = testing::generator;
     using size_type = std::size_t;
 
-    std::cout << "ARGC = " << argc << std::endl;
-    size_type triangles_number = std::stoi(argv[2]);
+    int triangles_number = std::stoi(argv[2]);
     if (triangles_number < 0) {
         throw std::invalid_argument{"triangles number must be positive value"};
     }
     if (argc == 3) {
-        return std::array<size_type, 3>{triangles_number, gener::MAX_POINT_COORD, gener::MAX_POINT_COORD};
+        return std::array<int, 3>{triangles_number, gener::MIN_TRIA_SIDE, gener::MAX_TRIA_SIDE};
     } else if (argc == 4) {
-        size_type min_point_coord = std::stoi(argv[3]);
-        return std::array<size_type, 3>{triangles_number, min_point_coord, gener::MAX_POINT_COORD};
+        int min_point_coord = std::stoi(argv[3]);
+        return std::array<int, 3>{triangles_number, min_point_coord, gener::MAX_TRIA_SIDE};
     } else if (argc == 5) {
-        size_type min_point_coord = std::stoi(argv[3]);
-        size_type max_point_coord = std::stoi(argv[4]);
-        return std::array<size_type, 3>{triangles_number, min_point_coord, max_point_coord};
+        int min_point_coord = std::stoi(argv[3]);
+        int max_point_coord = std::stoi(argv[4]);
+        return std::array<int, 3>{triangles_number, min_point_coord, max_point_coord};
     } else {
         throw std::invalid_argument{"error: expected two main parameters: file name, number of triangles, and two optional params"};
     }
