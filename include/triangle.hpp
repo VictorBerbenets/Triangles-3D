@@ -19,7 +19,7 @@ public:
                 double val7, double val8, double val9 );
     ~triangle_t() = default;
 
-    point_t  operator[](std::size_t index) const;
+    const point_t&  operator[](std::size_t index) const;
     point_t& operator[](std::size_t index);
 
     plane_t get_plane() const;
