@@ -25,7 +25,7 @@ auto give_data(std::istream& stream) {
     std::vector<double> tmp_points{};
     tmp_points.reserve(admin::SET_POINTS_SIZE); //  processing of input data
 
-    for (size_type count = 1; count <= data_size; ++count) {
+    for (size_type count = 0; count < data_size; ++count) {
         double tmp_value{};
         for (size_type points_number = 0; points_number < admin::SET_POINTS_SIZE; ++points_number) {
             stream >> tmp_value;

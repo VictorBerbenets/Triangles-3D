@@ -18,7 +18,7 @@ generator::generator(std::string file_name, u_int tests_number,
                         tr_confines_ {min_tria_side, max_tria_side} {
     create_resources();
     generator_.seed(static_cast<u_int>(std::time(nullptr)));
-    //std::cout << "MIN SIDE = " << min_tria_side << "\tMAX SIDE = " << max_tria_side << std::endl;
+    std::cout << "file name = " << file_name_ << "\tNumber = " << triangles_number_ << "\tMIN SIDE = " << min_tria_side << "\tMAX SIDE = " << max_tria_side << std::endl;
 };
 
 void generator::create_resources() {

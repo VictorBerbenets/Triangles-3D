@@ -16,10 +16,13 @@ auto get_data(int argc, const char* argv[]) {
         return std::array<int, 3>{triangles_number, gener::MIN_TRIA_SIDE, gener::MAX_TRIA_SIDE};
     } else if (argc == 4) {
         int min_point_coord = std::stoi(argv[3]);
+        min_point_coord = min_point_coord == 0 ? gener::MIN_TRIA_SIDE : min_point_coord;
         return std::array<int, 3>{triangles_number, min_point_coord, gener::MAX_TRIA_SIDE};
     } else if (argc == 5) {
         int min_point_coord = std::stoi(argv[3]);
         int max_point_coord = std::stoi(argv[4]);
+        min_point_coord = min_point_coord == 0 ? gener::MIN_TRIA_SIDE : min_point_coord;
+        max_point_coord = max_point_coord == 0 ? gener::MAX_TRIA_SIDE : max_point_coord;
         return std::array<int, 3>{triangles_number, min_point_coord, max_point_coord};
     } else {
         throw std::invalid_argument{"error: expected two main parameters: file name, number of triangles, and two optional params"};

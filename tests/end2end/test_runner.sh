@@ -29,7 +29,7 @@ function run_tests {
         do  
                 ${exe_main_file} < ${tests_dir}/test${i}.txt > compare_file
                 echo -n -e "${purple}Test ${i}: ${usual}"
-                if diff -w ${answs_dir}answ${i}.txt compare_file &>/dev/null
+                if diff -w ${answs_dir}answ_test${i}.txt compare_file &>/dev/null
                 then
                     echo -e "${green}passed${usual}" 
                 else
@@ -53,7 +53,7 @@ function generate_tests {
     do
         tmp_test_file="${def_file_name}${i}.txt"
         ${exe_test_file} ${tmp_test_file} ${triangles_number} ${min_bound} ${max_bound}
-        ${answ_generator} ${tests_dir}${tmp_test_file}
+        ${answ_generator} ${tests_dir}${tmp_test_file} ${i}
     done
 
 }
