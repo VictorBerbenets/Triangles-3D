@@ -11,7 +11,7 @@
 namespace yLAB {
 
 line_t::line_t(const point_t& pt1, const point_t& pt2):
-            dir_coords_{pt1.x_ - pt2.x_, pt1.y_ - pt2.y_, pt1.z_ - pt2.z_},
+            dir_coords_{pt1, pt2},
             point_{pt1}  {
     if (pt1 == pt2) {
         throw std::invalid_argument{"points are equal, can't create 'line_t'"};
@@ -27,21 +27,12 @@ line_t::line_t(const vector_t& dirr_vec, const point_t& pt):
 
 bool line_t::is_parallel(const line_t& other) const {
     vector_t vec_product = calc_vects_product(dir_coords_, other.dir_coords_);
-    if (vec_product.is_null()) {
-        return true;
-    }
-    return false; 
+    return vec_product.is_null();
 }
 
 bool line_t::operator==(const line_t& other) const {
-    if (!is_parallel(other)) {
-        return false;
-    }
     // if other line contain a point of *this* line then they are equal
-    if (other.contains(point_)) {
-        return true;
-    }
-    return false;
+    return is_parallel(other) && other.contains(point_);
 }
 // if lines don't intersects or they equal then return NAN point_t
 point_t line_t::get_intersec_point(const line_t& other) const {
@@ -79,17 +70,11 @@ bool line_t::contains(const point_t& pt) const {
 
 bool line_t::is_valid() const {
     return point_.is_valid() &&
-           !std::isnan(dir_coords_[0])  &&
-           !std::isnan(dir_coords_[1])  &&
-           !std::isnan(dir_coords_[2]) ;
+           dir_coords_.is_valid();
 }
 
-void line_t::print() const {
-    std::cout << "direct vector:" << std::endl;
-    std::cout << dir_coords_ << std::endl;
-    std::cout << "point: ";
-    std::cout << point_ << std::endl;
-    std::cout << std::endl;
+std::ostream& operator<<(std::ostream& os, const line_t& line) {
+    return os << line.dir_coords_ << std::endl << line.point_ << std::endl;
 }
 //----------------------------------------------------------------------//
 
@@ -124,7 +109,7 @@ bool segment_t::is_inside(const point_t& check_pt) const {
 }
 
 bool segment_t::is_intersect(const segment_t& other) const {
-    // especial case
+    // corner case
     if (is_degenerated()) {
         return other.is_inside(pt1_) ;
     }
@@ -144,13 +129,7 @@ bool segment_t::is_intersect(const segment_t& other) const {
     }
     // if not parallel
     point_t segm_pt = ln_this.get_intersec_point(ln_other);
-    if (!segm_pt.is_valid()) {
-        return false;
-    }
-    if (is_inside(segm_pt) && other.is_inside(segm_pt)) {
-        return true;
-    }
-    return false;
+    return segm_pt.is_valid() && is_inside(segm_pt) && other.is_inside(segm_pt);
 }
 
 bool segment_t::is_degenerated() const {
@@ -166,9 +145,8 @@ void segment_t::set_ends(const point_t& pt) {
     pt1_ = pt2_ = pt;
 }
 
-void segment_t::print() const {
-    std::cout << pt1_ << std::endl;
-    std::cout << pt2_ << std::endl;
+std::ostream& operator<<(std::ostream& os, const segment_t& segm) {
+    return os << segm.pt1_ << std::endl << segm.pt2_;
 }
 
 }// namespace yLAB

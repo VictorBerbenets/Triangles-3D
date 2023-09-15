@@ -5,6 +5,7 @@
 #include <utility>
 
 #include "point.hpp"
+#include "vector.hpp"
 #include "utils.hpp"
 
 namespace yLAB {
@@ -24,12 +25,12 @@ struct line_t final {
     
     point_t get_intersec_point(const line_t& other) const;
     point_t get_point(double coeff = DEFAULT_COEFF) const;
-    
-    void print() const;
 //------------------------------------------------------------------//
-    vector_t dir_coords_; // coordinates of the direct vector 
+    vector_t dir_coords_{}; // coordinates of the direct vector 
     point_t point_{};
 };
+
+std::ostream& operator<<(std::ostream& os, const line_t& line);
 
 struct segment_t final {
 
@@ -48,10 +49,11 @@ struct segment_t final {
     
     void set_ends(const point_t& pt1, const point_t& pt2);
     void set_ends(const point_t& pt);
-    void print() const;
 //------------------------------------------------------------------//
     point_t pt1_{}, pt2_{};
 };
+
+std::ostream& operator<<(std::ostream& os, const segment_t& segm);
 
 } // <--- namespace yLAB
 
