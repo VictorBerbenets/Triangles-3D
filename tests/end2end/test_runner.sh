@@ -21,28 +21,33 @@ function run_tests {
 
     generate_tests
 
-    touch compare_file
+    touch compare_file.txt
     if [ -d "${resource_dir}" ]
     then
-        echo -e "${white}lfu tests:${usual}"
+        echo -e "${white}end2end testing:${usual}"
         for ((i = 1; i <= ${tests_number}; ++i))
-        do  
-                ${exe_main_file} < ${tests_dir}/test${i}.txt > compare_file
-                echo -n -e "${purple}Test ${i}: ${usual}"
-                if diff -w ${answs_dir}answ_test${i}.txt compare_file &>/dev/null
+        do      
+                tmp_check=${tests_dir}/test${i}.txt
+                ${exe_main_file} < ${tmp_check} > compare_file.txt
+
+                echo -n -e "${purple}Test ${i}: ${usual}\n"
+                ans_file="${answs_dir}answ_${i}.txt"
+                if diff -w -n ${ans_file} compare_file.txt &>/dev/null
                 then
                     echo -e "${green}passed${usual}" 
                 else
                     echo -e "${red}failed${usual}"
                 fi
-                echo -en "${blue}hits:${usual} "
-                cat compare_file
+                echo -en "${blue}numbers of intersecting triangles:${usual}"
+                printf "\n"
+                cat ${ans_file}
+                printf "\n"
         done
     else
         echo -e "${blue}can't generate tests. ${usual}${resource_dir} is empty"
     fi
 
-    rm compare_file
+    rm compare_file.txt
 }
 ##------------------------------------------------------------------------------------------##
 
@@ -62,7 +67,10 @@ function generate_tests {
 ##------------------------------------------------------------------------------------------##
 function clear_old_data {
     rm ${tests_dir}test*
-    rm ${answs_dir}answ*
+    if !([ `ls ${answs_dir} | wc -l` -eq 0 ])
+    then
+        rm ${answs_dir}answ*
+    fi
 }
 ##------------------------------------------------------------------------------------------##
 

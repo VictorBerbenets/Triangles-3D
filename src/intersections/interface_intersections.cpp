@@ -36,7 +36,7 @@ void admin::print_intersected_triangles() const {
     for (auto val : intsec_triangles) {
         std::cout << val << ' ';
     }
-    std::cout << std::endl;
+   // std::cout << std::endl;
 }
 
 } // <--- namespace yLAB

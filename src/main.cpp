@@ -57,6 +57,6 @@ int main() {
    
     auto end = std::chrono::high_resolution_clock::now(); 
     std::chrono::duration<double> dur = end - start;
-    std::cout << "TIME: " << dur.count() << std::endl;
+    //std::cout << "TIME: " << dur.count() << std::endl;
 }
 

@@ -57,11 +57,11 @@ def generate_answ_file(intsec_trias, file_name, file_name_index):
     #print(answ_name)
     answ = open(answ_name, "a+")
     for i in range (0, len(intsec_trias)):
-        answ.write(intsec_trias[i] + ' ')
+        answ.write(str(intsec_trias[i]) + " ")
 
 def main ():
     intsec_trias = get_intersec_triangles(create_triangles(sys.argv[1]))
     generate_answ_file(intsec_trias, sys.argv[1], sys.argv[2])    
-    print("MAIN END")
+    #print("MAIN END")
 main()
 
