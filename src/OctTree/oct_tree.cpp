@@ -70,18 +70,17 @@ bool BoundingCube::is_point_inside(const point_t& pt) const {
 }
 /*------------------------------------------------------------------------------------------------------------------------*/
 
-Node::Node(const Node& parent, const point_t& center, double hlf_side, const Indicator& id, size_type deep):
+Node::Node(const point_t& center, double hlf_side, const Indicator& id, size_type deep):
             BoundingCube {center, hlf_side},
             ptrs_childs_ {std::make_unique<pointer_type[]>(VOLUMES_NUMBER)},
-            parent_ {parent},
             tree_deep_{deep},
             id_{id} {}
 
 Node::Node(double hlf_side):
-            Node{*this, {0, 0, 0}, hlf_side, Indicator::Tree_Root, 0} {}
+            Node{{0, 0, 0}, hlf_side, Indicator::Tree_Root, 0} {}
 
-Node::Node(const Node& parent, double hlf_side, const Indicator& id):
-            Node{parent, {0, 0, 0}, hlf_side, id, 0} {}
+Node::Node(double hlf_side, const Indicator& id):
+            Node{{0, 0, 0}, hlf_side, id, 0} {}
 
 void Node::insert(const data_type& tria) {
     auto [sub_cube_t, center, hlf_side] = what_subcube(tria);
@@ -91,7 +90,7 @@ void Node::insert(const data_type& tria) {
     }
     auto cube_sector = static_cast<size_type>(sub_cube_t);
     if (ptrs_childs_[cube_sector] == nullptr) {
-        ptrs_childs_[cube_sector] = std::make_unique<Node>(*this, center, hlf_side, Indicator::Work_Node, tree_deep_ + 1);
+        ptrs_childs_[cube_sector] = std::make_unique<Node>(center, hlf_side, Indicator::Work_Node, tree_deep_ + 1);
     }
     if (is_limit_reached()) {
         ptrs_childs_[cube_sector]->change_id(Indicator::Tree_List);
@@ -115,10 +114,6 @@ bool Node::is_limit_reached() const noexcept {
 
 const Node::pointer_type& Node::operator[](size_type cube_sector) const {
     return ptrs_childs_[cube_sector];
-}
-
-const Node& Node::parent() const noexcept {
-    return parent_;
 }
 
 Node::triangles_list Node::data() const noexcept {

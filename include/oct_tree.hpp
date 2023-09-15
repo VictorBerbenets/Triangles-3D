@@ -81,21 +81,19 @@ private:
     bool is_limit_reached() const noexcept;
 public:
     Node(double hlf_side);
-    Node(const Node& parent, double hlf_side, const Indicator& id);
-    Node(const Node& parent, const point_t& center, double hlf_side, const Indicator& id, size_type deep);
+    Node(double hlf_side, const Indicator& id);
+    Node(const point_t& center, double hlf_side, const Indicator& id, size_type deep);
     ~Node() = default;
 
     const pointer_type& operator[](size_type cube_sector) const;
 
     void insert(const data_type& tria);
     // geters
-    const Node& parent() const noexcept;
     triangles_list data() const noexcept;
     Indicator get_id() const noexcept;
 private:
     triangles_list inside_cube_trias_;
     pointers ptrs_childs_;
-    const Node& parent_;
     size_type tree_deep_{0};
     Indicator id_;
 }; // <--- class Node
