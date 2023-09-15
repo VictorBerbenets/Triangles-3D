@@ -122,11 +122,8 @@ bool segment_t::is_intersect(const segment_t& other) const {
     line_t ln_other {other.pt1_, other.pt2_};
     //if lie in one plane and parallel each other
     if( calc_vects_product(ln_this.dir_coords_, ln_other.dir_coords_).is_null() ) {
-        if (is_inside(other.pt1_) || is_inside(other.pt2_) ||
-            other.is_inside(pt1_) || other.is_inside(pt2_) ) {
-            return true;
-        }
-        return false;
+        return is_inside(other.pt1_) || is_inside(other.pt2_) ||
+              other.is_inside(pt1_) || other.is_inside(pt2_);
     }
     // if not parallel
     point_t segm_pt = ln_this.get_intersec_point(ln_other);
