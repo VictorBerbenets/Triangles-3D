@@ -13,11 +13,10 @@
 
 namespace yLAB {
 
-
 bool intersector::are_intersecting(const triangle_t& tria1, const triangle_t& tria2) {
         tria_plane pair1 = {tria1, tria1.get_plane()};
         tria_plane pair2 = {tria2, tria2.get_plane()};
-        
+
         if (!pair1.second.is_parallel(pair2.second)) {
             if (different_intersection(pair1, pair2)) {
                 return true;
@@ -36,7 +35,6 @@ void admin::print_intersected_triangles() const {
     for (auto val : intsec_triangles) {
         std::cout << val << ' ';
     }
-   // std::cout << std::endl;
 }
 
 } // <--- namespace yLAB

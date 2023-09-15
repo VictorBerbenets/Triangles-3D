@@ -47,13 +47,9 @@ bool intersector::check_inside_point(const triangle_t& tria1, const triangle_t& 
                                     tria1[(index2 + 2) % POINTS_TO_COMPARE] },
                                     tria2[index1]) ) {
                 ++count;
-            } else {
-                break;
-            }
+            } else { break; }
         }
-        if (count == 3) {
-            return true;
-        }
+        if (count == 3) { return true; }
     }
     return false;
 }

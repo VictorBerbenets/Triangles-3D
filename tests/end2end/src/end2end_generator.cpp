@@ -2,6 +2,7 @@
 #include <random>
 #include <ctime>
 #include <filesystem>
+#include <fstream>
 
 #include "end2end_generator.hpp"
 #include "intersector.hpp"
@@ -12,7 +13,7 @@
 namespace testing {
 
 generator::generator(std::string file_name, u_int tests_number,
-                     /*double space_confine,*/ int min_bound_box, int max_bound_box):
+                     int min_bound_box, int max_bound_box):
                         file_name_ {file_name},
                         triangles_number_ {tests_number},
                         tr_confines_ {min_bound_box, max_bound_box} {
@@ -33,13 +34,13 @@ void generator::create_resources() {
 
 void generator::generate_points() {
     using distribution = std::uniform_real_distribution<>;
-    
+
     std::ofstream test_file_(dirs::tests_dir + file_name_);
     test_file_ << triangles_number_ << ' ';
-    
+
     for (u_int count1 = 0; count1 < triangles_number_; ++count1) {
         auto center = random_point();
-        
+
         constexpr u_int POINTS_SET = TRIANGLES_POINTS*3;
         std::array<double, POINTS_SET> tria_coords {};
         for (u_int count2 = 0; count2 < POINTS_SET; ) {
@@ -64,3 +65,4 @@ point_t generator::random_point() {
 }
 
 } // <--- namespace testing
+
