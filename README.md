@@ -34,6 +34,5 @@ Two triangles are introduced here. The first consists of points formed by the fi
 bash ../tests/end2end/test_runner.sh <tests_number> <triangles_number> <min_box> <max_box>
 ```
 #### recommended test parameters: 
-**tests_number** <= 10; **triangles_number** <= 100; **min_box** and **max_box**  
-are optional parameters.  
+**tests_number** <= 10; **triangles_number** <= 100; **min_box** and **max_box** are optional parameters.  
 After running you can see generated directory: Triangles/tests/end2end/resources. There will be the tests themselves and the answers to them.

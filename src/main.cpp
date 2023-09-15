@@ -48,15 +48,9 @@ auto give_data(std::istream& stream) {
 
 int main() {
     using namespace yLAB;
-
-    auto start = std::chrono::high_resolution_clock::now(); 
-
+    
     auto data = give_data(std::cin); 
     admin ad{data.first.begin(), data.first.end(), data.second};
     ad.print_intersected_triangles();
-   
-    auto end = std::chrono::high_resolution_clock::now(); 
-    std::chrono::duration<double> dur = end - start;
-    //std::cout << "TIME: " << dur.count() << std::endl;
 }
 
