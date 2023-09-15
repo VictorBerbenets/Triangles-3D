@@ -6,6 +6,7 @@
 #include <algorithm>
 
 #include "line.hpp"
+#include "vector.hpp"
 #include "utils.hpp"
 
 namespace yLAB {
