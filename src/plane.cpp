@@ -25,40 +25,26 @@ plane_t::plane_t(double A, double B, double C, double D):
 
 
 bool plane_t::is_parallel(const plane_t& other) const {
-    if ( calc_vects_product(normal_coords_, other.normal_coords_).is_null() ) {
-        return true;
-    }
-    return false; 
+    return calc_vects_product(normal_coords_, other.normal_coords_).is_null();
 };
 
 bool plane_t::contains(const point_t& pt) const {
     return is_zero(normal_coords_[0] * pt.x_ + normal_coords_[1] * pt.y_ + normal_coords_[2] * pt.z_ + D_);
 }
-
+// return plane point by knowing D and normal vector
 point_t plane_t::get_plane_point() const {
     double vec_module = normal_coords_.get_module(); 
     if (is_zero(vec_module)) {
         throw std::invalid_argument{"Modulus of the vector = 0\n"};
     }
-    vector_t coords = normal_coords_;
-    //  normalization of the vector 
-    for (std::size_t id = 0; id < 3; ++id) {
-        coords[id] /= vec_module;
-    }
-    return {D_ * coords[0], D_ * coords[1], D_ * coords[2]};
-
+    double mul_component = D_ / vec_module;
+    return { mul_component * normal_coords_[0],
+             mul_component * normal_coords_[1],
+             mul_component * normal_coords_[2] };
 }
 
 bool plane_t::operator==(const plane_t& other) const {
-    bool result = is_parallel(other);
-    if (!result) {
-        return false;
-    }
-
-    if (other.contains(get_plane_point())) {
-        return true;
-    }
-    return false;
+    return is_parallel(other) && other.contains(get_plane_point());
 };
 
 void plane_t::print() const {

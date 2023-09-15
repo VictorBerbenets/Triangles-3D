@@ -5,8 +5,6 @@
 #include <cmath>
 #include <array>
 
-#include "point.hpp"
-
 namespace yLAB {
 
 
