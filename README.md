@@ -7,6 +7,8 @@ this program calculates the numbers of triangles that intersect with each other
 ```
 git clone git@github.com:VictorBerbenets/Triangles-3D.git
 cd Triangles/
+git submodule init
+git submodule update
 cmake -S ./ -B build/ -DCMAKE_BUILD_TYPE=Release ..
 cd build/
 cmake --build .
