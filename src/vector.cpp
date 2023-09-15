@@ -17,12 +17,12 @@ vector_t::vector_t(const point_t& pt1, const point_t& pt2):
 vector_t::vector_t(value_type coord):
                 coords_{coord, coord, coord} {}
 
-vector_t::vector_t(): coords_{NAN, NAN, NAN} {}
+vector_t::vector_t(): vector_t(NAN) {}
 
 bool vector_t::operator==(const vector_t& rhs) const noexcept {
-    return coords_[0] == rhs[0] &&
-           coords_[1] == rhs[1] &&
-           coords_[2] == rhs[2] ;
+    return are_equal(coords_[0], rhs[0]) &&
+           are_equal(coords_[1], rhs[1]) &&
+           are_equal(coords_[2], rhs[2]) ;
 }
 
 vector_t operator+(const vector_t& lhs, const vector_t& rhs) noexcept {
@@ -42,7 +42,7 @@ vector_t& vector_t::operator*=(value_type coeff) noexcept {
 
 vector_t& vector_t::operator/=(value_type coeff) {
     if (is_zero(coeff)) {
-        throw std::invalid_argument{"Attempt to divide by zero in vector's operator/=\n"};
+        throw std::invalid_argument{"Attempt to divide by 0 in vector's operator/=\n"};
     }
     for (auto& val : coords_) {
         val /= coeff;
@@ -56,9 +56,15 @@ vector_t operator*(const vector_t& vec, vector_t::value_type coeff) noexcept {
     return copy;
 }
 
+vector_t operator*(vector_t::value_type coeff, const vector_t& vec) noexcept {
+    vector_t copy = vec;
+    copy *= coeff;
+    return copy;
+}
+
 vector_t vector_t::operator/(value_type coeff) const {
     if (is_zero(coeff)) {
-        throw std::invalid_argument{"Attempt to divide by zero in vector's operator/\n"};
+        throw std::invalid_argument{"Attempt to divide by 0 in vector's operator/\n"};
     }
     return {coords_[0] / coeff, coords_[1] / coeff, coords_[2] / coeff};
 }
@@ -73,14 +79,14 @@ vector_t::value_type vector_t::operator[](size_type index) const {
 
 vector_t::value_type& vector_t::at(size_type index) {
     if (index > 2) {
-        throw std::invalid_argument{"index out of range in vector's operator()\n"};
+        throw std::out_of_range{"index out of range in vector's operator()\n"};
     }
     return coords_[index];
 }
 
 vector_t::value_type vector_t::at(size_type index) const {
     if (index > 2) {
-        throw std::invalid_argument{"index out of range in vector's operator()\n"};
+        throw std::out_of_range{"index out of range in vector's operator()\n"};
     }
     return coords_[index];
 }

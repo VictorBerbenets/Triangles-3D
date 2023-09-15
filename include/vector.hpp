@@ -39,14 +39,16 @@ public:
     bool is_null() const;
     bool is_valid() const;
 
-    friend std::ostream& operator<<(std::ostream& os, const vector_t& rhs);
 private:
     std::array<value_type, 3> coords_;
 };
 
+std::ostream& operator<<(std::ostream& os, const vector_t& rhs);
+
 vector_t operator+(const vector_t& lhs, const vector_t& rhs) noexcept;
 vector_t operator-(const vector_t& lhs, const vector_t& rhs) noexcept;
 vector_t operator*(const vector_t& vec, vector_t::value_type coeff) noexcept;
+vector_t operator*(vector_t::value_type coeff, const vector_t& vec)  noexcept;
 
 } // <--- namespace yLAB
 
