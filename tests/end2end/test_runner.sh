@@ -101,7 +101,7 @@ then
     min_bound=$3
     max_bound=$4
 else
-    error="false"
+    error="true"
     echo -e "${red}invalid number of arguments: expected 2 or 3 or 4, got $#"
 fi
 

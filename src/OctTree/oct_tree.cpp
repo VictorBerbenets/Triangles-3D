@@ -8,10 +8,10 @@
 namespace spaceBreaking {
 
 AABB::AABB(const point_t& pt1, const point_t& pt2, const point_t& pt3):
-           center_{ (pt1.x_ + pt2.x_) / 2, (pt1.y_ + pt2.y_) / 2, (pt1.z_ + pt2.z_) / 2},
-           radius_{ std::max(std::fabs(center_.x_ - pt1.x_), std::fabs(center_.x_ - pt3.x_)),
-                    std::max(std::fabs(center_.y_ - pt1.y_), std::fabs(center_.y_ - pt3.y_)),
-                    std::max(std::fabs(center_.z_ - pt1.z_), std::fabs(center_.z_ - pt3.z_)) } {}
+           center_ { (pt1 + pt2) / 2 },
+           radius_ { std::max(std::fabs(center_.x_ - pt1.x_), std::fabs(center_.x_ - pt3.x_)),
+                     std::max(std::fabs(center_.y_ - pt1.y_), std::fabs(center_.y_ - pt3.y_)),
+                     std::max(std::fabs(center_.z_ - pt1.z_), std::fabs(center_.z_ - pt3.z_)) } {}
 
 AABB::AABB(const triangle_t& tria):
            AABB(tria[0], tria[1], tria[2]) {}
@@ -25,8 +25,7 @@ bool AABB::is_intersect(const AABB& rhs) const {
 /*------------------------------------------------------------------------------------------------------------------------*/
 
 BoundingCube::BoundingCube():
-                            center_{0, 0, 0},
-                            hlf_side_{MAX_HLF_SIDE} {};
+                            BoundingCube({0, 0, 0}, MAX_HLF_SIDE) {}
 
 BoundingCube::BoundingCube(const point_t& center, double new_hlf_side):
                             center_{center},
