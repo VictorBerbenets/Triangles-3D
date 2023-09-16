@@ -47,7 +47,7 @@ def generate_answ_file(intsec_trias, file_name, file_name_index):
     answ_name = "../tests/end2end/resources/answers/answ_" + file_name_index + ".txt"
     answ = open(answ_name, "a+")
     for i in range (0, len(intsec_trias)):
-        answ.write(str(intsec_trias[i]) + " ")
+        answ.write(str(intsec_trias[i]) + "\n")
 
 def main ():
     intsec_trias = get_intersec_triangles(create_triangles(sys.argv[1]))
