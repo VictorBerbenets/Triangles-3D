@@ -5,7 +5,6 @@
 #include <random>
 
 #include "point.hpp"
-#include "triangle.hpp"
 
 namespace testing {
     using namespace yLAB;

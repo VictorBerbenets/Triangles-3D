@@ -5,10 +5,7 @@
 #include <fstream>
 
 #include "end2end_generator.hpp"
-#include "intersector.hpp"
 #include "point.hpp"
-#include "plane.hpp"
-#include "line.hpp"
 
 namespace testing {
 
