@@ -19,8 +19,8 @@ bool intersector::are_intersecting(const triangle_t& tria1, const triangle_t& tr
 
         if (!pair1.second.is_parallel(pair2.second)) {
             return different_intersection(pair1, pair2);
-        } else if (pair1.second == pair2.second) {    // both triangles lies in one plane
-            return same_intersection(pair1.first, pair2.first);
+        } else if (pair1.second.contains(pair2.second.get_plane_point())) { // if planes are parallel and one plane contains                                                                               
+            return same_intersection(pair1.first, pair2.first);             // a point of another plane --> they are the same
         }
         return false;
 }
