@@ -95,6 +95,10 @@ vector_t::value_type vector_t::get_module() const {
     return std::sqrt( coords_[0] * coords_[0] + coords_[1] * coords_[1] + coords_[2] * coords_[2] );
 }
 
+vector_t::array vector_t::coords() const noexcept {
+    return coords_;
+}
+
 bool vector_t::is_null() const {
     return is_zero(coords_[0]) &&
            is_zero(coords_[1]) &&

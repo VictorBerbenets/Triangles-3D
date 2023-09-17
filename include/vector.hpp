@@ -10,6 +10,7 @@ namespace yLAB {
 class vector_t final {
 public:
     using value_type     = double;
+    using array          = std::array<value_type, 3>;
     using size_type      = std::size_t;
     using iterator       = typename std::array<value_type, 3>::iterator;
     using const_iterator = typename std::array<value_type, 3>::const_iterator;
@@ -38,9 +39,11 @@ public:
 
     bool is_null() const;
     bool is_valid() const;
-
+    
+    array coords() const noexcept; // for structure binding
 private:
-    std::array<value_type, 3> coords_;
+    array coords_;
+    //std::array<value_type, 3> coords_;
 };
 
 std::ostream& operator<<(std::ostream& os, const vector_t& rhs);
