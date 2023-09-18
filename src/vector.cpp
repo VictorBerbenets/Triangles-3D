@@ -57,9 +57,7 @@ vector_t operator*(const vector_t& vec, vector_t::value_type coeff) noexcept {
 }
 
 vector_t operator*(vector_t::value_type coeff, const vector_t& vec) noexcept {
-    vector_t copy = vec;
-    copy *= coeff;
-    return copy;
+    return vec * coeff;
 }
 
 vector_t vector_t::operator/(value_type coeff) const {
