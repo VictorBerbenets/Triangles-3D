@@ -7,7 +7,6 @@
 
 namespace yLAB {
 
-
 struct point_t final {
     using coords = std::array<double, 3>;
 
@@ -17,16 +16,23 @@ struct point_t final {
 
     bool operator==(const point_t& other) const;
     
-    point_t operator+(const point_t& other) const;
-    point_t operator-(const point_t& other) const;
-    point_t operator*(double coeff) const;
-    point_t operator/(double coeff) const;
-    
-    coords get_coords() const;
+    point_t& operator+=(const point_t& other) noexcept;
+    point_t& operator-=(const point_t& other) noexcept;
+    point_t& operator*=(double coeff) noexcept;
+    point_t& operator/=(double coeff);
+
+    coords get_coords() const noexcept;
     bool is_valid() const noexcept;
 //--------------------------------------------------------//
     double x_ = NAN, y_ = NAN, z_ = NAN;
 };
+
+point_t operator+(const point_t& lhs, const point_t& rhs) noexcept;
+point_t operator-(const point_t& lhs, const point_t& rhs) noexcept;
+point_t operator*(const point_t& lhs, double coeff) noexcept;
+point_t operator*(double coeff, const point_t& rhs) noexcept;
+point_t operator/(const point_t& lhs, double coeff);
+point_t operator/(double coeff, const point_t& rhs);
 
 std::ostream& operator<<(std::ostream& os, const point_t& pt);
 
