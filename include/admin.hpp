@@ -24,13 +24,12 @@ private:
 };
 
 template<typename Iter>
-admin::admin(Iter begin, Iter end, double  space_limit):
-        oct_tree_{space_limit} {
-        for (; begin != end; ++begin) {
-            oct_tree_.insert_triangle(*begin);
+admin::admin(Iter begin, Iter end, double  space_limit)
+        : oct_tree_{space_limit} {
+            for (; begin != end; ++begin) {
+                oct_tree_.insert_triangle(*begin);
+            }
         }
-}
-
 }
 
 #endif
