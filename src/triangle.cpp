@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "triangle.hpp"
-//#include "intersector.hpp"
 
 namespace yLAB {
 

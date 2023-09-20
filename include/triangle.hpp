@@ -3,9 +3,6 @@
 
 #include <iostream>
 #include <array>
-#include <vector>
-#include <list>
-#include <utility>
 
 #include "point.hpp"
 #include "plane.hpp"
