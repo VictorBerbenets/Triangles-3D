@@ -188,4 +188,3 @@ void OctTree::check_collis_between_nodes(Collector& col, const collision_list& l
 } // <--- namespace spaceBreaking
 
 #endif
-

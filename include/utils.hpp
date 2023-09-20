@@ -39,12 +39,6 @@ inline bool are_coplanar(const vector_t& vec1, const vector_t& vec2, const vecto
                     vec1[2] * determ(vec2[0], vec2[1], vec3[0], vec3[1]) );
 }
 
-inline bool is_null_vector(const vector_t& vector) {
-    return is_zero(vector[0]) &&
-           is_zero(vector[1]) &&
-           is_zero(vector[2]);
-}
-
 inline double scalar_multiply(const vector_t& vec1, const vector_t& vec2) {            
     return vec1[0] * vec2[0] + vec1[1] * vec2[1] + vec1[2] * vec2[2];
 }

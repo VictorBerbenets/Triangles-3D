@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <array>
+#include <vector>
+#include <list>
+#include <utility>
 
 #include "point.hpp"
 #include "plane.hpp"
@@ -21,7 +24,7 @@ public:
 
     const point_t& operator[](std::size_t index) const;
     point_t& operator[](std::size_t index);
-
+    
     plane_t get_plane() const;
 private:
     pts_vector vertices_;

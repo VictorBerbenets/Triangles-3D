@@ -134,4 +134,3 @@ void OctTree::insert_triangle(const data_type& tria) {
 
 
 } // <--- namespace spaceBreaking
-
