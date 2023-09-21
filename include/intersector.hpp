@@ -36,7 +36,7 @@ namespace intersector {
     minor_pair find_not_zero_minor(const plane_coeffs& coeffs1, const plane_coeffs& coeffs2);
     void find_intsec_points(std::vector<point_t>& intsec_points, line_t& intsec_line,
                                 const point_t& pt1, const point_t& pt2); 
-}; // <--- namespace intersector
+} // <--- namespace intersector
 
 } // <--- namespace yLAB
 
