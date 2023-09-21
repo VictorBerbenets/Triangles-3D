@@ -13,22 +13,19 @@ inline double determ(double a, double b, double c, double d) { //|a b|
     return a * d - c * b;                                      //|c d| = a * d - c * b
 }
 
-struct double_comparing final {
-    static constexpr double epsilon = 1e-6;
-};
+static constexpr double epsilon = 1e-6;
 
 inline bool are_equal(double val1, double val2,
-                      double maxDiff    = double_comparing::epsilon,
-                      double maxRelDiff = double_comparing::epsilon) {
+                      double maxDiff    = epsilon,
+                      double maxRelDiff = epsilon) {
     double diff = fabs(val1 - val2);
-    if (diff <= maxDiff)
-        return true;
+    if (diff < maxDiff) { return true; }
 
     val1 = fabs(val1);
     val2 = fabs(val2);
-    double largest = (val2 > val1) ? val2 : val1;
+    double largest = std::max(val1, val2);
 
-    return diff <= largest * maxRelDiff;
+    return diff < largest * maxRelDiff;
 }
 
 inline bool is_zero(double expr) {
