@@ -2,6 +2,7 @@
 #define UTILS_
 
 #include <cmath>
+#include <climits>
 
 #include "vector.hpp"
 #include "point.hpp"
@@ -12,9 +13,22 @@ inline double determ(double a, double b, double c, double d) { //|a b|
     return a * d - c * b;                                      //|c d| = a * d - c * b
 }
 
-inline bool are_equal(double val1, double val2) {
-    static constexpr double EPSILON = 1e-6;
-    return std::fabs(val1 - val2) < EPSILON;
+struct double_comparing final {
+    static constexpr double epsilon = 1e-6;
+};
+
+inline bool are_equal(double val1, double val2,
+                      double maxDiff    = double_comparing::epsilon,
+                      double maxRelDiff = double_comparing::epsilon) {
+    float diff = fabs(val1 - val2);
+    if (diff <= maxDiff)
+        return true;
+
+    val1 = fabs(val1);
+    val2 = fabs(val2);
+    float largest = (val2 > val1) ? val2 : val1;
+
+    return diff <= largest * maxRelDiff;
 }
 
 inline bool is_zero(double expr) {
