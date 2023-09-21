@@ -20,13 +20,13 @@ struct double_comparing final {
 inline bool are_equal(double val1, double val2,
                       double maxDiff    = double_comparing::epsilon,
                       double maxRelDiff = double_comparing::epsilon) {
-    float diff = fabs(val1 - val2);
+    double diff = fabs(val1 - val2);
     if (diff <= maxDiff)
         return true;
 
     val1 = fabs(val1);
     val2 = fabs(val2);
-    float largest = (val2 > val1) ? val2 : val1;
+    double largest = (val2 > val1) ? val2 : val1;
 
     return diff <= largest * maxRelDiff;
 }
