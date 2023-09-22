@@ -52,8 +52,8 @@ protected:
     using subCubes  = std::array<BoundingCube, VOLUMES_NUMBER>;
     using cubeInfo  = std::tuple<SubCubes, point_t, double>;
 
-    static constexpr double MAX_HLF_SIDE        = std::pow(2, 32); // 2^32 - half side's length
-    static constexpr size_type MAX_TREE_DEEP    = 9;
+    static constexpr double MAX_HLF_SIDE     = std::pow(2, 32); // 2^32 - half side's length
+    static constexpr size_type MAX_TREE_DEEP = 9;
 
     BoundingCube();
     BoundingCube(const point_t& center, double hlf_side);

@@ -43,7 +43,6 @@ public:
     array coords() const noexcept; // for structure binding
 private:
     array coords_;
-    //std::array<value_type, 3> coords_;
 };
 
 std::ostream& operator<<(std::ostream& os, const vector_t& rhs);
