@@ -8,31 +8,31 @@ using namespace yLAB;
 TEST(Vector, Operators) {
     vector_t ml_vec1{1, 2, 3};
     ml_vec1 *= 15;
-    EXPECT_TRUE((ml_vec1 == vector_t{15, 30, 45}));
+    ASSERT_EQ(ml_vec1, (vector_t{15, 30, 45}));
 
     vector_t div_vec2{60, 30, 20};
     div_vec2 /= 15;
-    EXPECT_TRUE((div_vec2 == vector_t{4, 2, 4./3}));
+    ASSERT_EQ(div_vec2, (vector_t{4, 2, 4./3}));
     
     vector_t sum_vec3{1, 2, 34};
     vector_t sum_vec4{-532.5, 32, 3};
     auto sum_result = sum_vec3 + sum_vec4;
-    EXPECT_TRUE((sum_result == vector_t{-531.5, 34, 37}));
+    ASSERT_EQ(sum_result, (vector_t{-531.5, 34, 37}));
     
     vector_t sub_vec4{1, 2, 3};
     vector_t sub_vec5{1, 2, 3};
     auto sub_result = sub_vec4 - sub_vec5;
-    EXPECT_TRUE((sub_result == vector_t{0, 0, 0}));
+    ASSERT_EQ(sub_result, (vector_t{0, 0, 0}));
     
     vector_t div_vec5{300, 200, 3};
     double divider = 150;
     auto div_result = div_vec5 / divider;
-    EXPECT_TRUE((div_result == vector_t{2, 4./3, 1./50}));
+    ASSERT_EQ(div_result, (vector_t{2, 4./3, 1./50}));
     
     vector_t mul_vec5{-1, -1, -10};
     double coeff = 25;
     auto mul_result = mul_vec5 * coeff;
-    EXPECT_TRUE((mul_result == vector_t{-25, -25, -250}));
+    ASSERT_EQ(mul_result, (vector_t{-25, -25, -250}));
 }
 
 TEST(Vector, Module) {
