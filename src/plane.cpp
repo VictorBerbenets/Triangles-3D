@@ -25,9 +25,9 @@ plane_t::plane_t(double A, double B, double C, double D):
             normal_coords_ {A, B, C}, D_{D} {}
 
 
-bool plane_t::is_parallel(const plane_t& other) const {
-    vector_t vec = calc_vects_product(normal_coords_, other.normal_coords_);
-    return calc_vects_product(normal_coords_, other.normal_coords_).is_null();
+bool plane_t::is_parallel(const plane_t& rhs) const {
+    vector_t vec = calc_vects_product(normal_coords_, rhs.normal_coords_);
+    return calc_vects_product(normal_coords_, rhs.normal_coords_).is_null();
 };
 
 bool plane_t::contains(const point_t& pt) const {
@@ -116,8 +116,8 @@ line_t plane_t::get_intersec_line(const plane_t& rhs) const {
 
 }
 
-bool plane_t::operator==(const plane_t& other) const {
-   return is_parallel(other) && other.contains(get_plane_point());
+bool plane_t::operator==(const plane_t& rhs) const {
+   return is_parallel(rhs) && rhs.contains(get_plane_point());
 };
 
 void plane_t::print() const {
