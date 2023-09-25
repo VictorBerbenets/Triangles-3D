@@ -1,7 +1,7 @@
 #include <iostream>
-
 #include <cmath>
 #include <chrono>
+#include <vector>
 
 #include "admin.hpp"
 
@@ -44,9 +44,8 @@ auto give_data(std::istream& stream) {
 }
 
 int main() {
-    using namespace yLAB;
     auto data = give_data(std::cin); 
-    admin ad{data.first.begin(), data.first.end(), data.second};
+    yLAB::admin ad{data.first.begin(), data.first.end(), data.second};
     ad.print_intersected_triangles();
 }
 

@@ -10,6 +10,11 @@
 namespace yLAB {
 
 class triangle_t final {
+    using size_type = std::size_t;
+
+    bool check_segments_intersection(const triangle_t& rhs) const;
+    bool check_inside_point(const triangle_t& rhs) const;
+    bool same_intersection(const triangle_t& rhs) const;
 public:
     using pts_vector = std::array<point_t, 3>;
 
@@ -18,6 +23,8 @@ public:
                 double val4, double val5, double val6,
                 double val7, double val8, double val9 );
     ~triangle_t() = default;
+    
+    bool is_intersecting(const triangle_t& rhs) const;
 
     const point_t& operator[](std::size_t index) const;
     point_t& operator[](std::size_t index);

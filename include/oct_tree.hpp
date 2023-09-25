@@ -10,7 +10,6 @@
 #include <utility>
 
 #include "triangle.hpp"
-#include "intersector.hpp"
 
 namespace spaceBreaking {
 
@@ -161,7 +160,7 @@ void OctTree::check_collis_inside_node(Collector& col, const collision_list& ls)
         for (auto it2 = std::next(it1); it2 != ls.cend(); ++it2) {
             auto [tria2, aabb_2, number2] = *it2; 
             if (aabb_1.is_intersect(aabb_2)) {
-                if (intersector::are_intersecting(tria1, tria2)) {
+                if (tria1.is_intersecting(tria2)) {
                     col.insert({number1, number2});
                 }
             }
@@ -176,7 +175,7 @@ void OctTree::check_collis_between_nodes(Collector& col, const collision_list& l
         for (auto it2 = ls2.cbegin(); it2 != ls2.cend(); ++it2) {
             auto [tria2, aabb_2, number2] = *it2; 
             if (aabb_1.is_intersect(aabb_2)) {
-                if (intersector::are_intersecting(tria1, tria2)) {
+                if (tria1.is_intersecting(tria2)) {
                     col.insert({number1, number2});
                 }
             }
