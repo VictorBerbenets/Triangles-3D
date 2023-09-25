@@ -29,11 +29,6 @@ auto give_data(std::istream& stream) {
         double tmp_value{};
         for (size_type points_number = 0; points_number < admin::SET_POINTS_SIZE; ++points_number) {
             stream >> tmp_value;
-#if 0
-            if (!stream.good()) {
-                throw std::runtime_error{"data reading error\n"};
-            }
-#endif
             if (std::greater<double>{}(std::fabs(tmp_value), max_hlf_side)) {
                 max_hlf_side = std::fabs(tmp_value);
             }
@@ -50,7 +45,6 @@ auto give_data(std::istream& stream) {
 
 int main() {
     using namespace yLAB;
-    
     auto data = give_data(std::cin); 
     admin ad{data.first.begin(), data.first.end(), data.second};
     ad.print_intersected_triangles();
