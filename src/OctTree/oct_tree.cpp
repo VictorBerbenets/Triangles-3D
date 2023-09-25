@@ -17,9 +17,9 @@ AABB::AABB(const triangle_t& tria):
            AABB(tria[0], tria[1], tria[2]) {}
 
 bool AABB::is_intersect(const AABB& rhs) const {
-    if (std::fabs(center_.x_ - rhs.center_.x_) > (radius_[0] + rhs.radius_[0])) { return false; }
-    if (std::fabs(center_.y_ - rhs.center_.y_) > (radius_[1] + rhs.radius_[1])) { return false; }
-    if (std::fabs(center_.z_ - rhs.center_.z_) > (radius_[2] + rhs.radius_[2])) { return false; }
+    if (std::fabs(center_.x_ - rhs.center_.x_) > (radius_x() + rhs.radius_x())) { return false; }
+    if (std::fabs(center_.y_ - rhs.center_.y_) > (radius_y() + rhs.radius_y())) { return false; }
+    if (std::fabs(center_.z_ - rhs.center_.z_) > (radius_z() + rhs.radius_z())) { return false; }
     return true;
 }
 /*------------------------------------------------------------------------------------------------------------------------*/
