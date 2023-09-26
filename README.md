@@ -4,7 +4,7 @@ this program calculates the numbers of triangles that intersect with each other
 ## Requirements
 **cmake** version must be 3.15 or higher
 ## How to build
-```
+```bash
 git clone git@github.com:VictorBerbenets/Triangles-3D.git
 cd Triangles/
 git submodule init
@@ -15,7 +15,7 @@ cmake --build .
 ```
 After that you can run triangles program:
 
-```
+```bash
 ./triangles
 ```
 The program will be waiting for input data from stdin in such way:  
@@ -28,11 +28,11 @@ For example:
 Two triangles are introduced here. The first consists of points formed by the first nine numbers, and the second by the next nine.  
 ## How to run tests:
 ### You can run unit tests:
-```
+```bash
 ./tests/unit
 ```
 ### Or you can run end2end tests:
-```
+```bash
 bash ../tests/end2end/test_runner.sh <tests_number> <triangles_number> <min_box> <max_box>
 ```
 #### recommended test parameters: 
