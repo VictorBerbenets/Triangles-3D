@@ -26,7 +26,6 @@ plane_t::plane_t(double A, double B, double C, double D):
 
 
 bool plane_t::is_parallel(const plane_t& rhs) const {
-    vector_t vec = calc_vects_product(normal_coords_, rhs.normal_coords_);
     return calc_vects_product(normal_coords_, rhs.normal_coords_).is_null();
 };
 
