@@ -1,5 +1,4 @@
-#ifndef PLANE_TYPE_
-#define PLANE_TYPE_
+#pragma once
 
 #include "point.hpp"
 #include "line.hpp"
@@ -32,4 +31,4 @@ struct plane_t final { // plane equation: Ax + By + Cz + D = 0
 };
 
 } // <--- namespace yLAB
-#endif
+

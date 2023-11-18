@@ -1,5 +1,4 @@
-#ifndef END2END_GENERATOR_
-#define END2END_GENERATOR_
+#pragma once
 
 #include <iostream>
 #include <random>
@@ -46,6 +45,4 @@ private:
 };
 
 } // <--- namespace testing
-
-#endif
 

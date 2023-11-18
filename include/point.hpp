@@ -1,5 +1,4 @@
-#ifndef POINT_TYPE_
-#define POINT_TYPE_
+#pragma once
 
 #include <iostream>
 #include <cmath>
@@ -38,4 +37,3 @@ std::ostream& operator<<(std::ostream& os, const point_t& pt);
 
 } // <--- namespace yLAB
 
-#endif

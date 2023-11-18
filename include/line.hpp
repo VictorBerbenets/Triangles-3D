@@ -1,5 +1,4 @@
-#ifndef LINE_TYPE_
-#define LINE_TYPE_
+#pragma once
 
 #include <cmath>
 #include <utility>
@@ -57,4 +56,3 @@ std::ostream& operator<<(std::ostream& os, const segment_t& segm);
 
 } // <--- namespace yLAB
 
-#endif

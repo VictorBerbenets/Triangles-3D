@@ -1,5 +1,4 @@
-#ifndef ADMIN_CLASS_
-#define ADMIN_CLASS_
+#pragma once
 
 #include <istream>
 
@@ -31,6 +30,4 @@ admin::admin(Iter begin, Iter end, double  space_limit)
         }
     }
 }
-
-#endif
 

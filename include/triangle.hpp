@@ -1,5 +1,4 @@
-#ifndef TRIANGLE_TYPE_
-#define TRIANGLE_TYPE_
+#pragma once
 
 #include <iostream>
 #include <array>
@@ -38,4 +37,3 @@ std::ostream& operator<<(std::ostream& os, const triangle_t& tria);
 
 } // <--- namespace yLAB
 
-#endif

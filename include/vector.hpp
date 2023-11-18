@@ -1,5 +1,4 @@
-#ifndef VECTOR_
-#define VECTOR_
+#pragma once
 
 #include <array>
 
@@ -54,4 +53,3 @@ vector_t operator*(vector_t::value_type coeff, const vector_t& vec)  noexcept;
 
 } // <--- namespace yLAB
 
-#endif

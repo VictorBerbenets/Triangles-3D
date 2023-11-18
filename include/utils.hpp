@@ -1,5 +1,4 @@
-#ifndef UTILS_
-#define UTILS_
+#pragma once
 
 #include <cmath>
 #include <climits>
@@ -56,6 +55,4 @@ inline double scalar_multiply(const vector_t& vec1, const vector_t& vec2) {
 
 
 } // <--- namespace yLAB
-
-#endif
 
