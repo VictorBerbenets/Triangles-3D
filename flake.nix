@@ -1,5 +1,5 @@
 {
-  description = "The set of dependencies to build the paraCL project";
+  description = "The set of dependencies to build the project with Vulkan API";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -8,10 +8,11 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixGL.url = "github:nix-community/nixGL";
   };
 
   outputs =
-    { flake-parts, treefmt-nix, ... }@inputs:
+    { flake-parts, treefmt-nix, ... } @ inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [ treefmt-nix.flakeModule ];
 
@@ -23,21 +24,23 @@
       perSystem =
         { pkgs, ... }:
         let
-          llvmPackages = pkgs.llvmPackages_19;
+          VulkanPackages = pkgs.vulkan-headers;
         in
         rec {
           packages = rec {
-            graphicTriangles = pkgs.callPackage ./. { stdenv = llvmPackages.stdenv; };
+            graphicTriangles = pkgs.callPackage ./. { stdenv = VulkanPackages.stdenv; };
             default = graphicTriangles;
           };
 
-          devShells.default = (pkgs.mkShell.override { stdenv = llvmPackages.stdenv; }) {
-            nativeBuildInputs =
-              packages.graphicTriangles.nativeBuildInputs
-              ++ (with pkgs; [
-                valgrind
-              ]);
-            buildInputs = packages.graphicTriangles.buildInputs;
+          devShells.default = (pkgs.mkShell.override { stdenv = VulkanPackages.stdenv; }) {
+            nativeBuildInputs = packages.graphicTriangles.nativeBuildInputs;
+            buildInputs = with pkgs; [
+                glm
+                glfw-wayland
+                vulkan-loader
+                vulkan-validation-layers
+                vulkan-headers
+            ];
           };
         };
     };

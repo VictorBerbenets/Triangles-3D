@@ -6,28 +6,27 @@
 
 namespace yLAB {
 
-class admin {    
+class admin {
 public:
-    using size_type = std::size_t;
-    using data_type = spaceBreaking::OctTree::data_type;
+  using size_type = std::size_t;
+  using data_type = spaceBreaking::OctTree::data_type;
 
-    static constexpr size_type SET_POINTS_SIZE  = 9;
+  static constexpr size_type SET_POINTS_SIZE = 9;
 
-template<typename Iter>
-    admin(Iter begin, Iter end, double  space_limit);
-    ~admin() = default;
+  template <typename Iter> admin(Iter begin, Iter end, double space_limit);
+  ~admin() = default;
 
-    void print_intersected_triangles() const;
+  void print_intersected_triangles() const;
+
 private:
-    spaceBreaking::OctTree oct_tree_;
+  spaceBreaking::OctTree oct_tree_;
 };
 
-template<typename Iter>
-admin::admin(Iter begin, Iter end, double  space_limit)
+template <typename Iter>
+admin::admin(Iter begin, Iter end, double space_limit)
     : oct_tree_{space_limit} {
-        for (; begin != end; ++begin) {
-            oct_tree_.insert_triangle(*begin);
-        }
-    }
+  for (; begin != end; ++begin) {
+    oct_tree_.insert_triangle(*begin);
+  }
 }
-
+} // namespace yLAB
