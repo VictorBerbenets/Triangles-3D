@@ -24,6 +24,7 @@
       perSystem =
         { pkgs, ... }:
         let
+          stdenv = pkgs.llvmPackages.stdenv;
           VulkanPackages = pkgs.vulkan-headers;
         in
         rec {
@@ -33,6 +34,11 @@
           };
 
           devShells.default = (pkgs.mkShell.override { stdenv = VulkanPackages.stdenv; }) {
+            inherit stdenv;
+            packages = with pkgs; [
+              cmake
+              ninja  # Optional (faster builds)
+            ];
             nativeBuildInputs = packages.graphicTriangles.nativeBuildInputs;
             buildInputs = with pkgs; [
                 glm
@@ -40,6 +46,7 @@
                 vulkan-loader
                 vulkan-validation-layers
                 vulkan-headers
+                shaderc
             ];
           };
         };

@@ -4,9 +4,10 @@ stdenv.mkDerivation {
   pname = "triangles in 3D";
   version = "0.1.0";
   nativeBuildInputs = with pkgs; [
+    ninja
     cmake
-    lit
-    filecheck
+    clang-tools
+    clang
   ];
   buildInputs = with pkgs; [
     valgrind
@@ -14,7 +15,6 @@ stdenv.mkDerivation {
     vulkan-headers
     vulkan-tools
     spirv-tools
-    clang-tools
     glfw
     glade
     glm
