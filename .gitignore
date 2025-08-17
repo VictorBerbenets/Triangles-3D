@@ -1,6 +1,7 @@
 .vscode
 .cache
 .direnv
+vgcore*
 out
 **/build
 tests/end2end/resources/

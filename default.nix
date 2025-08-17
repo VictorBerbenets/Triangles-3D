@@ -6,11 +6,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = with pkgs; [
     ninja
     cmake
+    valgrind
     clang-tools
     clang
   ];
   buildInputs = with pkgs; [
-    valgrind
     vulkan-loader
     vulkan-headers
     vulkan-tools

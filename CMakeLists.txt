@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.28)
 
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_C_COMPILER "clang")
 set(CMAKE_CXX_COMPILER "clang++")
 set(CMAKE_COLOR_DIAGNOSTICS ON)
-set(CMAKE_CXX_STANDARD 23)
 
 project(triangles)
 
@@ -36,12 +36,7 @@ target_sources( VulkanHppModule PUBLIC
   FILES ${Vulkan_INCLUDE_DIR}/vulkan/vulkan.cppm
 )
 target_compile_features( VulkanHppModule PUBLIC cxx_std_20 )
-
-target_include_directories( VulkanHppModule PUBLIC Vulkan::Headers )
 target_link_libraries( VulkanHppModule PUBLIC Vulkan::Headers )
-
-target_link_libraries( VulkanHppModule PUBLIC Vulkan::Vulkan )
-
 target_compile_definitions( VulkanHppModule PUBLIC
   VULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1
 )
@@ -49,10 +44,9 @@ target_compile_definitions( VulkanHppModule PUBLIC
 add_executable( vulkan vulkan-triangles.cpp ${DISPLAY} )
 # link Vulkan C++ module into your project
 target_include_directories( vulkan PRIVATE ${INCLUDE_DIR} )
-target_link_libraries( vulkan PRIVATE VulkanHppModule glfw glm)
+target_link_libraries( vulkan PRIVATE Vulkan::Vulkan VulkanHppModule glfw glm)
 
 target_compile_definitions( VulkanHppModule PRIVATE
-  VULKAN_HPP_NO_EXCEPTIONS
   VULKAN_HPP_NO_SMART_HANDLE
   VULKAN_HPP_NO_CONSTRUCTORS
 )
