@@ -10,13 +10,4 @@ stdenv.mkDerivation {
     clang-tools
     clang
   ];
-  buildInputs = with pkgs; [
-    vulkan-loader
-    vulkan-headers
-    vulkan-tools
-    spirv-tools
-    glfw
-    glade
-    glm
-  ];
 }

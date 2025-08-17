@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string_view>
+#include <vector>
 
 #include "display/window.hpp"
 
@@ -30,18 +31,27 @@ private:
   void cleanup();
 
   void createInstance();
+  void createSurface();
   void pickPhysicalDevice();
   void createLogicalDevice();
+
+  unsigned getQueueFamilyGraphicsIndex(const std::vector<vk::QueueFamilyProperties> &QueueFamilyProps);
 
   static bool isDeviceSuitable(const vk::raii::PhysicalDevice &Dev);
 
   WindowDisplay Window;
-  unsigned QueueFamilyIndex;
   vk::raii::Context Context;
   vk::raii::PhysicalDevice PhysDevice = nullptr;
   vk::raii::Instance Instance = nullptr;
+  vk::raii::SurfaceKHR Surface = nullptr;
   vk::raii::Device Device = nullptr;
   vk::raii::Queue GraphicsQueue = nullptr;
+  vk::raii::Queue PresentQueue = nullptr;
+
+  const std::vector<const char *> DeviceExtensions = {
+      vk::KHRSwapchainExtensionName, vk::KHRSpirv14ExtensionName,
+      vk::KHRSynchronization2ExtensionName,
+      vk::KHRCreateRenderpass2ExtensionName};
 };
 
 } // namespace triangles

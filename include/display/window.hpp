@@ -7,6 +7,8 @@
 
 namespace triangles {
 
+class TrianglesContext;
+
 class WindowDisplay {
 
 public:
@@ -26,6 +28,8 @@ public:
   bool shouldClose() { return glfwWindowShouldClose(Window); }
 
   void display();
+
+  friend class TrianglesContext;
 
 private:
   void destroy();

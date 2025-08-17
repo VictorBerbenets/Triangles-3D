@@ -47,6 +47,7 @@
                 vulkan-validation-layers
                 vulkan-headers
                 vulkan-tools
+                pciutils
                 shaderc
             ];
           };
