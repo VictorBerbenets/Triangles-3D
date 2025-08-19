@@ -23,7 +23,9 @@ public:
   ~WindowDisplay();
 
   WindowDisplay(const WindowDisplay &) = delete;
+  WindowDisplay(WindowDisplay &&) = default;
   WindowDisplay &operator=(const WindowDisplay &) = delete;
+  WindowDisplay &operator=(WindowDisplay &&) = default;
 
   bool shouldClose() { return glfwWindowShouldClose(Window); }
 

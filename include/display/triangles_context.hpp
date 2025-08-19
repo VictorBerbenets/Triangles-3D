@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vulkan/vulkan.h>
+
 #include <string_view>
 #include <vector>
 
@@ -17,8 +19,8 @@ public:
 
   TrianglesContext(const TrianglesContext &Rhs) = delete;
   TrianglesContext &operator=(const TrianglesContext &Rhs) = delete;
-  TrianglesContext &operator=(TrianglesContext &&Rhs) = delete;
-  TrianglesContext(TrianglesContext &&Rhs) = delete;
+  TrianglesContext &operator=(TrianglesContext &&Rhs) = default;
+  TrianglesContext(TrianglesContext &&Rhs) = default;
   ~TrianglesContext() = default;
 
   void run();
@@ -28,14 +30,36 @@ private:
 
   void createWindow();
 
-  void cleanup();
-
   void createInstance();
   void createSurface();
   void pickPhysicalDevice();
   void createLogicalDevice();
+  void createSwapChain();
+  void createImageViews();
+  void createGraphicsPipeline();
+  void createCommandPool();
+  void createCommandBuffer();
+  void transition_image_layout(uint32_t imageIndex, vk::ImageLayout oldLayout,
+                               vk::ImageLayout newLayout,
+                               vk::AccessFlags2 srcAccessMask,
+                               vk::AccessFlags2 dstAccessMask,
+                               vk::PipelineStageFlags2 srcStageMask,
+                               vk::PipelineStageFlags2 dstStageMask);
+  void recordCommandBuffer(uint32_t imageIndex);
+  void createSyncObjects();
+  void drawFrame();
 
-  unsigned getQueueFamilyGraphicsIndex(const std::vector<vk::QueueFamilyProperties> &QueueFamilyProps);
+  vk::SurfaceFormatKHR chooseSwapSurfaceFormat(
+      const std::vector<vk::SurfaceFormatKHR> &AvailableFormats);
+  vk::PresentModeKHR chooseSwapPresentMode(
+      const std::vector<vk::PresentModeKHR> &AvailablePresentModes);
+  vk::Extent2D chooseSwapExtent(const vk::SurfaceCapabilitiesKHR &Capabilities);
+
+  [[nodiscard]] vk::raii::ShaderModule
+  createShaderModule(const std::vector<char> &code) const;
+
+  unsigned getQueueFamilyGraphicsIndex(
+      const std::vector<vk::QueueFamilyProperties> &QueueFamilyProps) const;
 
   static bool isDeviceSuitable(const vk::raii::PhysicalDevice &Dev);
 
@@ -47,8 +71,25 @@ private:
   vk::raii::Device Device = nullptr;
   vk::raii::Queue GraphicsQueue = nullptr;
   vk::raii::Queue PresentQueue = nullptr;
+  vk::raii::PipelineLayout PipelineLayout = nullptr;
+  vk::raii::Pipeline GraphicsPipeline = nullptr;
+  vk::raii::CommandPool CommandPool = nullptr;
+  vk::raii::CommandBuffer CommandBuffer = nullptr;
+  vk::raii::Semaphore PresentCompleteSemaphore = nullptr;
+  vk::raii::Semaphore RenderFinishedSemaphore = nullptr;
+  vk::raii::Fence DrawFence = nullptr;
 
-  const std::vector<const char *> DeviceExtensions = {
+  vk::raii::SwapchainKHR SwapChain = nullptr;
+  std::vector<vk::Image> SwapChainImages;
+  vk::SurfaceFormatKHR SwapChainSurfaceFormat;
+  vk::Format SwapChainImageFormat = vk::Format::eUndefined;
+  std::vector<vk::raii::ImageView> SwapChainImageViews;
+  vk::Extent2D SwapChainExtent;
+
+  uint32_t GraphicsFamilyIndex;
+  uint32_t PresentFamilyIndex;
+
+  std::vector<const char *> DeviceExtensions = {
       vk::KHRSwapchainExtensionName, vk::KHRSpirv14ExtensionName,
       vk::KHRSynchronization2ExtensionName,
       vk::KHRCreateRenderpass2ExtensionName};

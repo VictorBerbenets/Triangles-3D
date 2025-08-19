@@ -47,8 +47,8 @@ target_include_directories( vulkan PRIVATE ${INCLUDE_DIR} )
 target_link_libraries( vulkan PRIVATE Vulkan::Vulkan VulkanHppModule glfw glm)
 
 target_compile_definitions( VulkanHppModule PRIVATE
-  VULKAN_HPP_NO_SMART_HANDLE
-  VULKAN_HPP_NO_CONSTRUCTORS
+  VULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1
+  VULKAN_HPP_NO_STRUCT_CONSTRUCTORS=1
 )
 
 if (false)

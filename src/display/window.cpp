@@ -27,8 +27,9 @@ void WindowDisplay::destroy() {
 }
 
 void WindowDisplay::display() {
-  while (!glfwWindowShouldClose(Window))
+  while (!glfwWindowShouldClose(Window)) {
     glfwPollEvents();
+  }
 }
 
 } // namespace triangles
